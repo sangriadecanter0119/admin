@@ -1,0 +1,15 @@
+﻿/*
+ * 文字コードUTF-8
+ */
+
+.customertype a:link, .customertype a:visited, .customertype a:active {
+	padding: 4px 15px 1px 15px;
+}
+
+.customeriteminput {
+	white-space: nowrap;
+}
+
+.customeritemcheck {
+	text-align: center;
+}
