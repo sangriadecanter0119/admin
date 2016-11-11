@@ -24,108 +24,72 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
     $row_cnt = 2;
 
      /* コンテンツ作成 */
-/*
-      for($i=0;$i < count($data);$i++){
-
-        $atr = $data[$i]["LatestGoodsMstView"];
-
-        if($atr['set_goods_kbn'] == 1){
-           $sheet->setCellValue("A".$row_cnt, $atr['goods_cd']);
-        }
-        $sheet->setCellValue("B".$row_cnt, $atr['goods_cd']);
-        $sheet->setCellValue("C".$row_cnt, $atr['revision']);
-        $sheet->setCellValue("D".$row_cnt, $atr['goods_ctg_nm']);
-        $sheet->setCellValue("E".$row_cnt, $atr['goods_kbn_nm']);
-        $sheet->setCellValue("F".$row_cnt, $atr['goods_nm']);
-        $sheet->setCellValue("G".$row_cnt, $atr['vendor_nm']);
-        $sheet->setCellValue("H".$row_cnt, $atr['price']);
-        $sheet->setCellValue("I".$row_cnt, $atr['cost']);
-        $sheet->setCellValue("J".$row_cnt, $atr['price'] - $atr['cost']);
-        if($atr['price']==0){
-           $sheet->setCellValue("K".$row_cnt,0);
-        }else{
-           $sheet->setCellValue("K".$row_cnt, ($atr['price'] - $atr['cost']) / $atr['price']);
-        }
-        $sheet->setCellValue("K".$row_cnt, $atr['cost'] / $atr['price']);
-        $sheet->setCellValue("L".$row_cnt, $atr['rw_share']);
-        $sheet->setCellValue("M".$row_cnt, $atr['aw_share']);
-
-        if($atr['set_goods_kbn'] == 1){
-
-           for($j=0;$j < count($set_data);$j++){
-              if($setData[$j]["LatestSetGoodsMstView"]["set_goods_id"] == $atr['id']){
-
-                 $row_cnt++;
-                 $sheet->setCellValue("A".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['set_goods_cd']);
-                 $sheet->setCellValue("B".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['goods_cd']);
-                 $sheet->setCellValue("C".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['revision']);
-                 $sheet->setCellValue("D".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['goods_ctg_nm']);
-                 $sheet->setCellValue("E".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['goods_kbn_nm']);
-                 $sheet->setCellValue("F".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['goods_nm']);
-                 $sheet->setCellValue("G".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['vendor_nm']);
-                 $sheet->setCellValue("H".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['price']);
-                 $sheet->setCellValue("I".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['cost']);
-                 $sheet->setCellValue("J".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['price'] - $set_data[$j]["LatestSetGoodsMstView"]['cost']);
-                 if($setData[$j]["LatestSetGoodsMstView"]['price']==0){
-                    $sheet->setCellValue("K".$row_cnt,0);
-                 }else{
-                    $sheet->setCellValue("K".$row_cnt, ($set_data[$j]["LatestSetGoodsMstView"]['price'] - $set_data[$j]["LatestSetGoodsMstView"]['cost']) / $set_data[$j]["LatestSetGoodsMstView"]['price']);
-                 }
-                 $sheet->setCellValue("L".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['rw_share']);
-                 $sheet->setCellValue("M".$row_cnt, $set_data[$j]["LatestSetGoodsMstView"]['aw_share']);
-              }
-           }
-        }
-        $row_cnt++;
-     }
-*/
-
     for($i=0;$i < count($data);$i++){
 
       $atr = $data[$i]["LatestGoodsMstView"];
 
-      $sheet->setCellValue("A".$row_cnt, $atr['id']);
-      $sheet->setCellValue("B".$row_cnt, $atr['goods_cd']);
-      $sheet->setCellValue("C".$row_cnt, $atr['goods_ctg_id']);
-      $sheet->setCellValue("D".$row_cnt, $atr['goods_ctg_nm']);
-      $sheet->setCellValue("E".$row_cnt, $atr['goods_kbn_id']);
-      $sheet->setCellValue("F".$row_cnt, $atr['goods_kbn_nm']);
-      $sheet->setCellValue("G".$row_cnt, $atr['vendor_id']);
-      $sheet->setCellValue("H".$row_cnt, $atr['vendor_nm']);
-      $sheet->setCellValue("I".$row_cnt, $atr['goods_nm']);
-      $sheet->setCellValue("J".$row_cnt, $atr['tax']);
-      $sheet->setCellValue("K".$row_cnt, $atr['service_rate']);
-      $sheet->setCellValue("L".$row_cnt, $atr['profit_rate']);
+      $sheet->setCellValue("B".$row_cnt, $atr['id']);
+      $sheet->setCellValue("C".$row_cnt, $atr['goods_cd']);
+      $sheet->setCellValue("D".$row_cnt, $atr['goods_ctg_id']);
+      $sheet->setCellValue("E".$row_cnt, $atr['goods_ctg_nm']);
+      $sheet->setCellValue("F".$row_cnt, $atr['goods_kbn_id']);
+      $sheet->setCellValue("G".$row_cnt, $atr['goods_kbn_nm']);
+      $sheet->setCellValue("H".$row_cnt, $atr['vendor_id']);
+      $sheet->setCellValue("I".$row_cnt, $atr['vendor_nm']);
+      $sheet->setCellValue("J".$row_cnt, $atr['goods_nm']);
+      $sheet->setCellValue("K".$row_cnt, $atr['tax']);
+      $sheet->setCellValue("L".$row_cnt, $atr['service_rate']);
+      $sheet->setCellValue("M".$row_cnt, $atr['profit_rate']);
 
       if(empty($atr['cost1']) || $atr['cost1']==0 || $atr['cost1']==null ){
-         $sheet->setCellValue("M".$row_cnt, $atr['cost']);
+         $sheet->setCellValue("N".$row_cnt, $atr['cost']);
       }else{
-         $sheet->setCellValue("M".$row_cnt, $atr['cost1']);
+         $sheet->setCellValue("N".$row_cnt, $atr['cost1']);
       }
 
-      $sheet->setCellValue("N".$row_cnt, $atr['cost2']);
-      $sheet->setCellValue("O".$row_cnt, $atr['cost3']);
-      $sheet->setCellValue("P".$row_cnt, $atr['cost4']);
-      $sheet->setCellValue("Q".$row_cnt, $atr['cost5']);
-      $sheet->setCellValue("R".$row_cnt, $atr['cost6']);
-      $sheet->setCellValue("S".$row_cnt, $atr['cost7']);
-      $sheet->setCellValue("T".$row_cnt, $atr['cost8']);
-      $sheet->setCellValue("U".$row_cnt, $atr['cost9']);
-      $sheet->setCellValue("V".$row_cnt, $atr['cost10']);
+      $sheet->setCellValue("O".$row_cnt, $atr['cost2']);
+      $sheet->setCellValue("P".$row_cnt, $atr['cost3']);
+      $sheet->setCellValue("Q".$row_cnt, $atr['cost4']);
+      $sheet->setCellValue("R".$row_cnt, $atr['cost5']);
+      $sheet->setCellValue("S".$row_cnt, $atr['cost6']);
+      $sheet->setCellValue("T".$row_cnt, $atr['cost7']);
+      $sheet->setCellValue("U".$row_cnt, $atr['cost8']);
+      $sheet->setCellValue("V".$row_cnt, $atr['cost9']);
+      $sheet->setCellValue("W".$row_cnt, $atr['cost10']);
 
-      $sheet->setCellValue("W".$row_cnt, "=ROUNDDOWN((1+J".$row_cnt.") * "."(M".$row_cnt."+N".$row_cnt."+O".$row_cnt."+P".$row_cnt."+Q".$row_cnt."+R".$row_cnt."+S".$row_cnt."+T".$row_cnt."+U".$row_cnt."+V".$row_cnt."),2)");
-      $sheet->setCellValue("X".$row_cnt, "=ROUNDDOWN((1+K".$row_cnt.") * "."W".$row_cnt.",2)");
-      $sheet->setCellValue("Y".$row_cnt, "=ROUNDDOWN((1+L".$row_cnt.") * "."X".$row_cnt.",2)");
+      $cost_cols = "N".$row_cnt."+O".$row_cnt."+P".$row_cnt."+Q".$row_cnt."+R".$row_cnt."+S".$row_cnt."+T".$row_cnt."+U".$row_cnt."+V".$row_cnt."+W".$row_cnt;
+      $sheet->setCellValue("X".$row_cnt, "=IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1)) >= 6,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),-3),".
+                                          "IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1))  = 5,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),-3),".
+                                          "IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1))  = 4,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),-2),".
+                                          "IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1))  = 3,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),-1),".
+                                          "IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1))  = 2,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),0),".
+                                          "IF(LEN(FLOOR(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),1))  = 1,ROUNDUP(((1+K".$row_cnt.") * (".$cost_cols."))*(1+L".$row_cnt."),0),0))))))");
 
-      $sheet->setCellValue("Z".$row_cnt,  $atr['price']);
-      $sheet->setCellValue("AA".$row_cnt, "=Z".$row_cnt." - "."X".$row_cnt);
+     if(empty($atr['profit_rate']) || $atr['profit_rate']==0 || $atr['profit_rate']==null ){
+       $sheet->setCellValue("Y".$row_cnt, $atr['price']);
+     }else{
+       $sheet->setCellValue("Y".$row_cnt, "=IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1)) >= 6,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",-3),".
+                                           "IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1))  = 5,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",-3),".
+                                           "IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1))  = 4,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",-2),".
+                                           "IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1))  = 3,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",-1),".
+                                           "IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1))  = 2,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",0),".
+                                           "IF(LEN(FLOOR((1+M".$row_cnt.") * X".$row_cnt.",1))  = 1,ROUNDUP((1+M".$row_cnt.") * X".$row_cnt.",0),0))))))");
+     }
 
-      $sheet->setCellValue("AB".$row_cnt, $atr['internal_pay_flg']);
-      $sheet->setCellValue("AC".$row_cnt, $atr['payment_kbn_id']);
-      $sheet->setCellValue("AD".$row_cnt, $atr['currency_kbn']);
-      $sheet->setCellValue("AE".$row_cnt, $atr['aw_share']);
-      $sheet->setCellValue("AF".$row_cnt, $atr['rw_share']);
-      $sheet->setCellValue("AG".$row_cnt, $atr['revision']);
+      $sheet->setCellValue("Z".$row_cnt, $atr['cost_exchange_rate']);
+      $sheet->setCellValue("AA".$row_cnt, "=ROUNDUP(X".$row_cnt."*Z".$row_cnt.",-1)");
+
+      $sheet->setCellValue("AB".$row_cnt, $atr['sales_exchange_rate']);
+      $sheet->setCellValue("AC".$row_cnt, "=ROUNDUP(Y".$row_cnt."*AB".$row_cnt.",-1)");
+      $sheet->setCellValue("AD".$row_cnt, "=IF(AC".$row_cnt." = 0,0,(AC".$row_cnt." - AA".$row_cnt.")/AC".$row_cnt.")");
+
+      $sheet->setCellValue("AE".$row_cnt, $atr['internal_pay_flg']);
+      $sheet->setCellValue("AF".$row_cnt, $atr['payment_kbn_id']);
+      $sheet->setCellValue("AG".$row_cnt, $atr['currency_kbn']);
+      $sheet->setCellValue("AH".$row_cnt, $atr['aw_share']);
+      $sheet->setCellValue("AI".$row_cnt, $atr['rw_share']);
+      $sheet->setCellValue("AJ".$row_cnt, $atr['revision']);
+      $sheet->setCellValue("AL".$row_cnt, $atr['note']);
 
       $row_cnt++;
     }
