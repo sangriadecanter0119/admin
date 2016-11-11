@@ -206,13 +206,14 @@ JSPROG
    <table class="list" cellspacing="0" style="width:410px;">
    <tr>
    <?php
-    /* ヘッダ作成  */
+      /* ヘッダ作成  */
       $estimate_id = -1;
       $customer_pos = array();
+
       for($i=0;$i < count($data);$i++){
       	/* 重複して顧客が取得されているのでユニークな顧客名のみを抽出してヘッダとする */
-      	if($estimate_id != $data[$i]["EstimateDtlTrnView"]['estimate_id']){
-           echo "<th style='text-align:center;width:100px'><a href='".$html->url('/customersList/goToCustomerInfo/'.$data[$i]["EstimateDtlTrnView"]['customer_id'])."'>{$data[$i]["EstimateDtlTrnView"]['grmls_kj']}様 {$common->evalNbspForDayOnly($data[$i]["EstimateDtlTrnView"]['wedding_dt'])}</a></th>";
+      	if(in_array($data[$i]["EstimateDtlTrnView"]['customer_id'],$customer_pos)==false){
+      	   echo "<th style='text-align:center;width:100px'><a href='".$html->url('/customersList/goToCustomerInfo/'.$data[$i]["EstimateDtlTrnView"]['customer_id'])."'>{$data[$i]["EstimateDtlTrnView"]['grmls_kj']}様 {$common->evalNbspForDayOnly($data[$i]["EstimateDtlTrnView"]['wedding_dt'])}</a></th>";
            $estimate_id = $data[$i]["EstimateDtlTrnView"]['estimate_id'];
            array_push($customer_pos,$data[$i]["EstimateDtlTrnView"]['customer_id']);
       	}

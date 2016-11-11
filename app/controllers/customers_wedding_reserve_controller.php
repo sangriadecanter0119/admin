@@ -107,16 +107,16 @@ class CustomersWeddingReserveController extends AppController
  	$this->set("page_limit"                     ,$this->Session->read('filter_ws_page_limit'));
 
  	//フィルターリスト
- 	$this->set("list_wedding_place"       ,"");
- 	$this->set("list_first_contact_person","");
- 	$this->set("list_process_person"      ,"");
- 	$this->set("list_hotel"               ,"");
- 	$this->set("list_reception_place"     ,"");
- 	$this->set("list_camera"              ,"");
- 	$this->set("list_hairmake"            ,"");
- 	$this->set("list_video"               ,"");
- 	$this->set("list_flower"              ,"");
- 	$this->set("list_attend"              ,"");
+ 	$this->set("list_wedding_place"       ,$this->WeddingReservingStateService->getWeddingList());
+ 	$this->set("list_first_contact_person",$this->WeddingReservingStateService->getFirstContactPersonList());
+ 	$this->set("list_process_person"      ,$this->WeddingReservingStateService->getProcessPersonList());
+ 	$this->set("list_hotel"               ,$this->WeddingReservingStateService->getHotelList());
+ 	$this->set("list_reception_place"     ,$this->WeddingReservingStateService->getReceptionPlaceList());
+ 	$this->set("list_camera"              ,$this->WeddingReservingStateService->getCameraList());
+ 	$this->set("list_hairmake"            ,$this->WeddingReservingStateService->getHairmakeList());
+ 	$this->set("list_video"               ,$this->WeddingReservingStateService->getVideoList());
+ 	$this->set("list_flower"              ,$this->WeddingReservingStateService->getFlowerList());
+ 	$this->set("list_attend"              ,$this->WeddingReservingStateService->getAttendList());
 
  	//導線1リスト
  	$this->set("leading1_list",$this->CustomerMst->getLeading1List());
@@ -237,10 +237,10 @@ class CustomersWeddingReserveController extends AppController
 		if (is_uploaded_file($this->data['ImgForm']['ImgFile']['tmp_name']) && end(explode(".",$this->data['ImgForm']['ImgFile']['name'])) == "csv") {
 
 			$result = $this->WeddingReservingStateService->CreateAndImport($this->data['ImgForm']['ImgFile']['tmp_name']);
-			if($result["isSuccess"]){
+			if($result['result']){
 				$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"true" ,'message'=>"ファイル取り込みに成功しました。"))));
 			}else{
-				$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> $result["message"]))));
+				$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> $result["message"],'reason'=> $result["reason"]))));
 			}
 		}else{
 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> "ファイルの種類が違います。(CSVファイル)　　ファイルサイズの上限は128Mです。"))));

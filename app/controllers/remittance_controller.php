@@ -65,6 +65,7 @@ class RemittanceController extends AppController
  	$this->set("sub_menu_fund","");
  	$this->set("sub_menu_remittance","current");
  	$this->set("sub_menu_payment","");
+ 	$this->set("sub_menu_vendor_sales","");
 
  	$this->set("sub_title","送金一覧");
  	$this->set("user",$this->Auth->user());

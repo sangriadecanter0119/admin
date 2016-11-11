@@ -65,17 +65,6 @@ $(function(){
 
     $("input:submit").button();
 
-    function getGoodsKbnNo(str)
-    {
-      var arr = str.split('_');
-      return arr[1];
-    }
-    function getGoodsNo(str)
-    {
-      var arr = str.split('[');
-      return arr[2].split(']')[0];
-    }
-
     //税金が変更されたので再計算
     $("#taxRate").change(function(){recalculate();});
     //割引率が変更されたので再計算
@@ -1258,6 +1247,17 @@ $(function(){
          alert("振込期限を入力して下さい。");
          return false;
        }
+
+       //「未定」ベンダー存在チェック
+       var hasNoVender = false;
+       for(var i=1;i <= table_counter;i++){
+         if($("#vendor_nm"+i).text()=="未定"){
+           hasNoVender = true;
+           break;
+         }
+       }
+       if(hasNoVender){ alert("ベンダーが未定の明細がありますので注意してください。");}
+
        deadline = deadline.split("/");
        var url = $(this).attr("href") + "/" + $("#credit_amount").text().split(",").join("") + "/" + deadline[0]+deadline[1]+deadline[2];
 
@@ -1266,7 +1266,6 @@ $(function(){
 
     /* 見積書発行の事前チェック処理 */
     $(".export_estimate").click(function(){
-
        var url = $(this).attr("href") + "/" + $("#credit_amount").text().split(",").join("");
        $(this).attr("href",url);
     });
@@ -1614,6 +1613,293 @@ function recalculate()
         changeEstimateSummary();
     }
 
+function getGoodsKbnNo(str){
+      var arr = str.split('_');
+      return arr[1];
+}
+function getGoodsNo(str){
+      var arr = str.split('[');
+      return arr[2].split(']')[0];
+}
+
+/* 行コピー
+---------------------------------------------------------------*/
+function copyRow(){
+
+	   //ヘッダ分のTRがあるのでカウンター+1になる
+	   var cloned = $(".list tr:nth-child("+(table_counter+1)+")");
+	   $(cloned).clone(true).insertAfter(cloned);
+	   table_counter++;
+
+	   var btd_category = $("td:nth-child(3)",cloned);
+	   var btd_kbn = $("td:nth-child(4)",cloned);
+
+	   var new_row = $(".list tr:nth-child("+(table_counter+1)+")");
+	   var td_delete = $("td:nth-child(1)" ,new_row);
+	   var td_toiawase = $("td:nth-child(2)" ,new_row);
+	   var td_money_receive = "";
+	   var td_category = $("td:nth-child(3)" ,new_row);
+	   var td_kbn = $("td:nth-child(4)" ,new_row);
+	   var td_goods = $("td:nth-child(5)" ,new_row);
+	   var td_vendor = $("td:nth-child(6)" ,new_row);
+	   var td_qty = $("td:nth-child(7)" ,new_row);
+       var td_total_price = $("td:nth-child(8)",new_row);
+	   var td_unit = $("td:nth-child(9)" ,new_row);
+	   var td_cost = $("td:nth-child(10)" ,new_row);
+
+	   var td_total_cost = $("td:nth-child(11)",new_row);
+	   var td_profit = $("td:nth-child(12)",new_row);
+	   var td_profit_rate = $("td:nth-child(13)",new_row);
+	   var td_aw_share = $("td:nth-child(14)",new_row);
+	   var td_rw_share = $("td:nth-child(15)",new_row);
+	   var td_f_total_price = $("td:nth-child(16)",new_row);
+	   var td_f_unit = $("td:nth-child(17)",new_row);
+	   var td_f_cost = $("td:nth-child(18)",new_row);
+	   var td_f_total_cost = $("td:nth-child(19)",new_row);
+	   var td_f_profit = $("td:nth-child(20)",new_row);
+	   var td_f_profit_rate = $("td:nth-child(21)",new_row);
+	   var td_f_aw_share = $("td:nth-child(22)",new_row);
+	   var td_f_rw_share = $("td:nth-child(23)",new_row);
+	   var td_aw_rate = $("td:nth-child(24)",new_row);
+	   var td_rw_rate = $("td:nth-child(25)",new_row);
+	   var td_sales_ex_rate = $("td:nth-child(26)",new_row);
+	   var td_cost_ex_rate = $("td:nth-child(27)",new_row);
+	   var td_payment_kbn = $("td:nth-child(28)",new_row);
+
+	   if("$adopt_flg" == 1){
+	      btd_category = $("td:nth-child(4)",cloned);
+	      btd_kbn = $("td:nth-child(5)",cloned);
+
+	      new_row = $(".list tr:nth-child("+(table_counter+1)+")");
+	      td_delete = $("td:nth-child(1)" ,new_row);
+	      td_toiawase = $("td:nth-child(2)" ,new_row);
+	      td_money_receive = $("td:nth-child(3)",new_row);
+	      td_category = $("td:nth-child(4)" ,new_row);
+	      td_kbn = $("td:nth-child(5)" ,new_row);
+	      td_goods = $("td:nth-child(6)" ,new_row);
+	      td_vendor = $("td:nth-child(7)" ,new_row);
+	      td_qty = $("td:nth-child(8)" ,new_row);
+	      td_total_price = $("td:nth-child(9)",new_row);
+		  td_unit = $("td:nth-child(10)" ,new_row);
+	      td_cost = $("td:nth-child(11)" ,new_row);
+
+	      td_total_cost = $("td:nth-child(12)",new_row);
+	      td_profit = $("td:nth-child(13)",new_row);
+	      td_profit_rate = $("td:nth-child(14)",new_row);
+	      td_aw_share = $("td:nth-child(15)",new_row);
+	      td_rw_share = $("td:nth-child(16)",new_row);
+	      td_f_total_price = $("td:nth-child(17)",new_row);
+		  td_f_unit = $("td:nth-child(18)",new_row);
+	      td_f_cost = $("td:nth-child(19)",new_row);
+	      td_f_total_cost = $("td:nth-child(20)",new_row);
+	      td_f_profit = $("td:nth-child(21)",new_row);
+	      td_f_profit_rate = $("td:nth-child(22)",new_row);
+	      td_f_aw_share = $("td:nth-child(23)",new_row);
+	      td_f_rw_share = $("td:nth-child(24)",new_row);
+	      td_aw_rate = $("td:nth-child(25)",new_row);
+	      td_rw_rate = $("td:nth-child(26)",new_row);
+	      td_sales_ex_rate = $("td:nth-child(27)",new_row);
+	      td_cost_ex_rate = $("td:nth-child(28)",new_row);
+	      td_payment_kbn = $("td:nth-child(29)",new_row);
+       }
+
+	   //新規作成した行のIDを設定
+	   $(new_row).attr("id","row"+table_counter);
+	   //削除ボタンの属性[name]を設定
+	   $("a",td_delete).attr("name","row"+table_counter);
+	   //明細IDの属性を設定
+	   $("input",td_delete).attr("id","estimate_dtl_id_"+table_counter);
+	   $("input",td_delete).attr("name","data[EstimateDtlTrn][" + table_counter + "][id]");
+	     //明細IDを初期化
+	   $("#estimate_dtl_id_"+table_counter).val("");
+	   //新規追加の行は問合せボタンは無効にする
+	   $(td_toiawase).html("<span class='disabled'>問</span>");
+
+  	   //入金ボタンの属性[name]を設定
+		if("$adopt_flg" == 1){
+	      $("input",td_money_receive).attr("name","data[EstimateDtlTrn][" + table_counter + "][money_received_flg]");
+	      $("input",td_money_receive).val(1);
+	      $("input",td_money_receive).attr("checked",false);
+        }
+
+	   //商品分類のタグを設定
+	   $(td_category).html( "<select class='goods_ctg' id='goodsCtg_" + table_counter + "' name='goodsCtg_" + table_counter + "'>" + $("select",btd_category).html() + "</select>");
+	   //動的にタグを作成したらイベントを追加しないと動作しない
+	   $("select",td_category).bind("change",function(){
+		                                             updateGoodsCtg($("select",td_category));
+		                                             });
+	   //前の商品分類の値を引き継ぐ
+	   $("select",td_category).val($("select",btd_category).val());
+
+	   //商品区分のタグを設定(selectタグごと切り替えないと後でoptionを追加しようとしても上手く追加できない)
+	   $(td_kbn).html( "<select class='goods_kbn' id='goodsKbn_" + table_counter + "' name='goodsKbn_" + table_counter + "'>" + $("select",btd_kbn).html() + "</select>");
+	   //動的にタグを作成したらイベントを追加しないと動作しない
+	   $("select",td_kbn).bind("change",function(){
+		                                             updateGoodsKbn($("select",td_kbn));
+		                                             });
+       //前の商品区分の値を引き継ぐ
+	   $("select",td_kbn).val($("select",btd_kbn).val());
+
+       //商品の属性を設定
+	    $("input:nth-child(1)",td_goods).attr("name", "data[EstimateDtlTrn][" + table_counter + "][goods_id]");
+	    $("input:nth-child(1)",td_goods).attr("id", "goods_id" + table_counter);
+        $("textarea",td_goods).attr("name", "data[EstimateDtlTrn][" + table_counter + "][sales_goods_nm]");
+        $("textarea",td_goods).attr("id", "sales_goods_nm" + table_counter);
+        $("textarea",td_goods).attr("rows","1");
+        $("textarea",td_goods).val("");
+
+        $("textarea",td_goods).bind("keyup",function(){
+                                                       resizeTextarea($(this));
+                                                      });
+          //クローンの行からクラスを引き継いでしまっている場合は取り除く
+	      if($("textarea",td_goods).hasClass("changedField"))
+	      {
+	        $("textarea",td_goods).removeClass("changedField");
+	        $("textarea",td_goods).addClass("focusField");
+	      }
+        $("input:nth-child(3)",td_goods).attr("id", "original_goods_nm" + table_counter);
+        $("input:nth-child(3)",td_goods).val("");
+
+       //ベンダー名
+       $(td_vendor).attr('id','vendor_nm' + table_counter);
+
+	   //数量の属性[name]を設定
+	   $("select",td_qty).attr("name","data[EstimateDtlTrn][" + table_counter + "][num]");
+	   $("select",td_qty).val(1);
+
+	   //単価の属性[name]を設定
+	   $("input:nth-child(1)",td_unit).attr("name","data[EstimateDtlTrn][" + table_counter + "][sales_price]");
+	   $("input:nth-child(1)",td_unit).attr("id"  ,"unit_price" + table_counter);
+	   $("input:nth-child(1)",td_unit).val("0");
+	       //クローンの行からクラスを引き継いでしまっている場合は取り除く
+	      if($("input:nth-child(1)",td_unit).hasClass("changedField"))
+	      {
+	        $("input:nth-child(1)",td_unit).removeClass("changedField");
+	        $("input:nth-child(1)",td_unit).addClass("focusField");
+	      }
+	   //単価オリジナルの属性[id]を設定
+	   $("input:nth-child(2)",td_unit).attr("id","original_unit_price" + table_counter);
+	   $("input:nth-child(2)",td_unit).val("0");
+	    //編集不可になっている場合があるので解除する
+	    $("#unit_price" + table_counter).removeClass("inputdisable");
+	    $("#unit_price" + table_counter).attr("disabled",false);
+	    $("#unit_price" + table_counter).attr("readonly",false);
+	   //原価の属性[id]を設定
+	   $("input:nth-child(1)",td_cost).attr("name","data[EstimateDtlTrn][" + table_counter + "][sales_cost]");
+	   $("input:nth-child(1)",td_cost).attr("id"  ,"unit_cost" + table_counter);
+	   $("input:nth-child(1)",td_cost).val("0");
+	     //クローンの行からクラスを引き継いでしまっている場合は取り除く
+	     if($("input:nth-child(1)",td_cost).hasClass("changedField"))
+	     {
+	        $("input:nth-child(1)",td_cost).removeClass("changedField");
+	        $("input:nth-child(1)",td_cost).addClass("focusField");
+	     }
+	   //原価オリジナルの属性[id]を設定
+	   $("input:nth-child(2)",td_cost).attr("id","original_unit_cost" + table_counter);
+	   $("input:nth-child(2)",td_cost).val("0");
+	     //編集不可になっている場合があるので解除する
+	    $("#unit_cost" + table_counter).removeClass("inputdisable");
+	    $("#unit_cost" + table_counter).attr("disabled",false);
+	    $("#unit_cost" + table_counter).attr("readonly",false);
+	   //総全価の属性[id]を設定
+	   $(td_total_price).attr("id","amount_price" + table_counter);
+	   $(td_total_price).text("0");
+	   //総原価の属性[id]を設定
+	   $(td_total_cost).attr("id","cost" + table_counter);
+	   $(td_total_cost).text("0");
+	   //利益の属性[id]を設定
+	   $(td_profit).attr("id","net" + table_counter);
+	   $(td_profit).text("0");
+	   //利益率の属性[id]を設定
+	   $(td_profit_rate).attr("id","profit_rate" + table_counter);
+	   $(td_profit_rate).text("0");
+	   //awシェアの属性[id]を設定
+	   $(td_aw_share).attr("id","aw_share" + table_counter);
+	   $(td_aw_share).text("0");
+	   //rwシェアの属性[id]を設定
+	   $(td_rw_share).attr("id","rw_share" + table_counter);
+	   $(td_rw_share).text("0");
+
+	   //単価(外貨)の属性[name]を設定
+	   $("input:nth-child(1)",td_f_unit).attr("name","data[EstimateDtlTrn][" + table_counter + "][foreign_sales_price]");
+	   $("input:nth-child(1)",td_f_unit).attr("id"  ,"foreign_unit_price" + table_counter);
+	   $("input:nth-child(1)",td_f_unit).val("0");
+	     //クローンの行からクラスを引き継いでしまっている場合は取り除く
+	     if($("input:nth-child(1)",td_f_unit).hasClass("changedField"))
+	     {
+	        $("input:nth-child(1)",td_f_unit).removeClass("changedField");
+	        $("input:nth-child(1)",td_f_unit).addClass("focusField");
+	     }
+	   //単価(外貨)オリジナルの属性[id]を設定
+	   $("input:nth-child(2)",td_f_unit).attr("id","foreign_original_unit_price" + table_counter);
+	   $("input:nth-child(2)",td_f_unit).val("0");
+	     //編集不可になっている場合があるので解除する
+	    $("#foreign_unit_price" + table_counter).removeClass("inputdisable");
+	    $("#foreign_unit_price" + table_counter).attr("disabled",false);
+	    $("#foreign_unit_price" + table_counter).attr("readonly",false);
+       //原価(外貨)の属性[id]を設定
+	   $("input:nth-child(1)",td_f_cost).attr("name","data[EstimateDtlTrn][" + table_counter + "][foreign_sales_cost]");
+	   $("input:nth-child(1)",td_f_cost).attr("id"  ,"foreign_unit_cost" + table_counter);
+	   $("input:nth-child(1)",td_f_cost).val("0");
+	      //クローンの行からクラスを引き継いでしまっている場合は取り除く
+	     if($("input:nth-child(1)",td_f_cost).hasClass("changedField"))
+	     {
+	        $("input:nth-child(1)",td_f_cost).removeClass("changedField");
+	        $("input:nth-child(1)",td_f_cost).addClass("focusField");
+	     }
+	   //原価(外貨)オリジナルの属性[id]を設定
+	   $("input:nth-child(2)",td_f_cost).attr("id","foreign_original_unit_cost" + table_counter);
+	   $("input:nth-child(2)",td_f_cost).val("0");
+	     //編集不可になっている場合があるので解除する
+	    $("#foreign_unit_cost" + table_counter).removeClass("inputdisable");
+	    $("#foreign_unit_cost" + table_counter).attr("disabled",false);
+	    $("#foreign_unit_cost" + table_counter).attr("readonly",false);
+	   //総代価(外貨)の属性[name]を設定
+	   $(td_f_total_price).attr("id","foreign_amount_price" + table_counter);
+	   $(td_f_total_price).text("0");
+	   //総原価(外貨)の属性[id]を設定
+	   $(td_f_total_cost).attr("id","foreign_cost" + table_counter);
+	   $(td_f_total_cost).text("0");
+	   //利益(外貨)の属性[id]を設定
+	   $(td_f_profit).attr("id","foreign_net" + table_counter);
+	   $(td_f_profit).text("0");
+	   //利益率(外貨)の属性[id]を設定
+	   $(td_f_profit_rate).attr("id","foreign_profit_rate" + table_counter);
+	   $(td_f_profit_rate).text("0");
+	   //awシェア(外貨)の属性[id]を設定
+	   $(td_f_aw_share).attr("id","foreign_aw_share" + table_counter);
+	   $(td_f_aw_share).text("0");
+	   //rwシェア(外貨)の属性[id]を設定
+	   $(td_f_rw_share).attr("id","foreign_rw_share" + table_counter);
+	   $(td_f_rw_share).text("0");
+	   //awレートの属性[id]を設定
+	   $("input:nth-child(1)",td_aw_rate).attr("name","data[EstimateDtlTrn][" + table_counter + "][aw_share]");
+	   $("input:nth-child(1)",td_aw_rate).attr("id"  ,"aw_rate" + table_counter);
+	   $("input:nth-child(1)",td_aw_rate).val("0");
+	   //rwレートの属性[id]を設定
+	   $("input:nth-child(1)",td_rw_rate).attr("name","data[EstimateDtlTrn][" + table_counter + "][rw_share]");
+	   $("input:nth-child(1)",td_rw_rate).attr("id"  ,"rw_rate" + table_counter);
+	   $("input:nth-child(1)",td_rw_rate).val("0");
+
+	   //販売為替レートの属性[name]を設定
+	   $("input",td_sales_ex_rate).attr("name","data[EstimateDtlTrn][" + table_counter + "][sales_exchange_rate]");
+	   $("input",td_sales_ex_rate).attr("id","sales_exchange_rate" + table_counter);
+	  // $("input",td_sales_ex_rate).val($("#exchangeRate").text());
+	   $("input",td_sales_ex_rate).val("");
+
+	   //通貨区分の[id]と[name]設定
+	   $("input:nth-child(2)",td_sales_ex_rate).attr("id"  ,"currency_kbn" + table_counter);
+	   $("input:nth-child(2)",td_sales_ex_rate).attr("name","data[EstimateDtlTrn][" + table_counter + "][currency_kbn]");
+	    //コスト為替レートの属性[name]を設定
+	   $("input",td_cost_ex_rate).attr("name","data[EstimateDtlTrn][" + table_counter + "][cost_exchange_rate]");
+	   $("input",td_cost_ex_rate).attr("id","cost_exchange_rate" + table_counter);
+	   $("input",td_cost_ex_rate).val($("#costExchangeRate").text());
+
+	   //支払区分の属性[name]を設定
+	   $("select",td_payment_kbn).attr("id","payment_kbn"+table_counter);
+	   $("select",td_payment_kbn).attr("name","data[EstimateDtlTrn][" + table_counter + "][payment_kbn_id]");
+	}
+
  /* 商品詳細の再表示
  ---------------------------------------------------------------*/
  function updateGoodsDetail(goods_id,current_line_no){
@@ -1643,11 +1929,14 @@ function recalculate()
         $("#vendor_nm" + current_line_no).text(obj.GoodsMstView.vendor_nm);
 
         /* 国内支払の場合は支払区分を国内に変更する */
+        /*
         if(obj.GoodsMstView.internal_pay_flg == 1){
          	  $("[name='data[EstimateDtlTrn][" + current_line_no + "][payment_kbn_id]']").val($domestic_direct_pay);
         }else{
               $("[name='data[EstimateDtlTrn][" + current_line_no + "][payment_kbn_id]']").val($aboard_indirect_pay);
-        }
+        }*/
+
+        $("[name='data[EstimateDtlTrn][" + current_line_no + "][payment_kbn_id]']").val(obj.GoodsMstView.payment_kbn_id);
 
 		//テキストエリアの幅調整
 		resizeTextarea($("#sales_goods_nm" + current_line_no));

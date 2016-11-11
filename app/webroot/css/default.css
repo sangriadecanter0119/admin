@@ -646,3 +646,9 @@ a:link.sort {
    border:1px solid #f7c455;
    color:#222;
 }
+/* MISC
+-------------------------------------------*/
+.digit{
+	text-align:right;
+}
+

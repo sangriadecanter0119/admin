@@ -109,8 +109,8 @@ function StartSubmit(type){
 <li><a href="#" id='clear_invoice_dt'>請求書日付を消去・成約に戻す</a></li>
 <li><a href="#" id='non_adopt_estimate'>未採用見積一覧</a>
 <li><a href="#" id='non_paied'>お内金未入金一覧</a>
-<li><a href="#" id='move_estimate'>見積提出済みに移行</a>-->
-<li><a href="#" id='update_contract_dt'>成約日を入金日で更新</a>
+<li><a href="#" id='move_estimate'>見積提出済みに移行</a>
+<li><a href="#" id='update_contract_dt'>成約日を入金日で更新</a>-->
 </ul>
 <?php
   if(empty($result)==false){

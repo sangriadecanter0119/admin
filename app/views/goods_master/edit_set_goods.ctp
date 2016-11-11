@@ -8,6 +8,7 @@
   //セット商品更新URL
   $edit_set_goods_url = $html->url('editSetGoods');
   $main_url = $html->url('.');
+  $payment_list_url = $html->url('paymentKbnList');
   //明細行数
   $count = count($goods);
   $confirm_image_path = $html->webroot("/images/confirm_result.png");
@@ -32,6 +33,13 @@ $(function(){
       var arr = str.split('[');
       return arr[2].split(']')[0];
     }
+
+    $("#internal_pay_flg").change(function() {
+          var val = $(this).prop("checked") ? 1:0;
+		  $.get("$payment_list_url" + "/" + val, function(data) {
+		  $("#payment_kbn_list").html(data);
+		});
+	});
 
     //商品分類が選択されたら属する商品区分リストを表示する
     $(".goods_ctg").change(function() {
@@ -435,15 +443,30 @@ JSPROG
           <tr>
              <th>国内払い</th>
              <?php
-               if($goods[0]['LatestSetGoodsMstView']['set_internal_pay_flg'] == 0)
-               {
-                echo "<td><input type='checkbox' name='data[GoodsMst][internal_pay_flg]' /></td>";
-               }
-               else
-               {
-               	echo "<td><input type='checkbox' name='data[GoodsMst][internal_pay_flg]' checked /></td>";
+               if($goods[0]['LatestSetGoodsMstView']['set_internal_pay_flg'] == 0){
+                    echo "<td><input type='checkbox' id='internal_pay_flg' name='data[GoodsMst][internal_pay_flg]' /></td>";
+               }else{
+                 	echo "<td><input type='checkbox' id='internal_pay_flg' name='data[GoodsMst][internal_pay_flg]' checked /></td>";
                }
              ?>
+          </tr>
+           <tr>
+             <th>支払区分</th>
+             <td>
+                 <select id="payment_kbn_list" name="data[GoodsMst][payment_kbn_id]">
+   			        <?php
+   			           for($i=0;$i < count($payment_kbn_list);$i++){
+
+   			             $atr = $payment_kbn_list[$i]['PaymentKbnMst'];
+   			             if($goods[0]['LatestSetGoodsMstView']['set_payment_kbn_id'] == $atr['id']){
+                           echo "<option value='{$atr['id']}' selected>{$atr['payment_kbn_nm']}</option>";
+   			             }else{
+                           echo "<option value='{$atr['id']}'>{$atr['payment_kbn_nm']}</option>";
+   			             }
+   			           }
+   			        ?>
+                 </select>
+             </td>
           </tr>
           <tr>
              <th>商品名<span class="necessary">(必須)</span></th>

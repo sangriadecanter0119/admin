@@ -78,6 +78,10 @@ $(function(){
       }
       $("#CustomerMstIndexForm").submit();
    });
+   $("#search_phone_no_button").click(function(){
+      $("#GoodsMstViewPhoneNo").val($("#phone_no").val());
+      $("#CustomerMstIndexForm").submit();
+   });
 
    /* フィルターの設定値を全てALLに戻す */
    $("#clear_filter").click(function(){
@@ -90,6 +94,7 @@ $(function(){
       $("#GoodsMstViewFirstContacntPersonName").val("");
       $("#GoodsMstViewProcessPersonName").val("");
       $("#GoodsMstViewNonDisplayFlg").val(0);
+      $("#GoodsMstViewPhoneNo").val("");
       $("#CustomerMstIndexForm").submit();
    });
 
@@ -99,6 +104,14 @@ $(function(){
             $("#search_customer_button").click();
        }
    });
+
+   /* 顧客番号検索フィールドでEnter keyが押下されたら実行する */
+   $("#phone_no").keydown(function(e){
+       if(e.keyCode == 13){
+            $("#search_phone_no_button").click();
+       }
+   });
+
    //顧客名フィールドにフォーカス
    $("#customer_name").focus();
 
@@ -158,6 +171,7 @@ $(function(){
     <li><a href="<?php echo $html->url('addCustomer') ?>">顧客追加</a></li>
     <li><a href="<?php echo $html->url('export/excel_customer_list') ?>" id="">EXCEL出力</a></li>
     <li><a href="<?php echo $html->url('export/excel_new_years_card') ?>" id="">EXCEL出力【年賀状用】</a></li>
+    <li><a href="<?php echo $html->url('export/excel_customer_mail') ?>" id="">EXCEL出力【メール用】</a></li>
     <!-- <li><a href="#" id="update_customer_code_link">顧客コード更新</a></li> -->
     <li><a href="#" id="update_customer_status_link">顧客ステータス更新</a></li>
 </ul>
@@ -171,7 +185,8 @@ $(function(){
                                                        'customer_name' => $customer_name,
                                                        'first_contact_person_name' => $first_contact_person_name,
                                                        'process_person_name' => $process_person_name,
-                                                       'estimate_issued_dt'=>$estimate_issued_dt
+                                                       'estimate_issued_dt'=>$estimate_issued_dt,
+                                                       'phone_no'=>$phone_no
                                   )));
        ?>
 
@@ -188,6 +203,7 @@ $(function(){
 	   <?php echo $form->text('GoodsMstView.wedding_planned_dt_order' ,array('value' => $wedding_planned_dt_order)); ?>
 	   <?php echo $form->text('GoodsMstView.first_contact_person_name' ,array('value' => $first_contact_person_name)); ?>
 	   <?php echo $form->text('GoodsMstView.process_person_name' ,array('value' => $process_person_name)); ?>
+	   <?php echo $form->text('GoodsMstView.phone_no' ,array('value' => $phone_no)); ?>
        <?php echo $form->end(); ?>
        </div>
 
@@ -222,7 +238,10 @@ $(function(){
 		       ?>
 		      </select>
 		   </td>
-		   <td>&nbsp;</td>
+		   <td>
+		      <input type="text" id="phone_no" value="<?php echo $phone_no ?>" />
+		      <input id="search_phone_no_button" type="image"  src="<?php echo $html->webroot("/images/search.png"); ?>"  style="margin-left:3px;" />
+		   </td>
            <td>&nbsp;</td>
            <td>
              <select id='wedding_dt'>
@@ -382,13 +401,20 @@ $(function(){
 		  	                 "<td><div class='address'>".$common->evalNbsp($atr['brd_address'])."</div></td>";
 		  	         }
 
-		  	         if($atr['prm_phone_no_flg'] == 0)
-		  	         {
-		  	         	 echo "<td>".$common->evalNbsp($atr['grm_phone_no'])."</td>";
+		  	         if($atr['prm_phone_no_flg'] == 0){
+
+		  	             if(empty($atr['grm_cell_no'])){
+		  	               echo "<td>".$common->evalNbsp($atr['grm_phone_no'])."</td>";
+		  	             }else{
+		  	               echo "<td>".$common->evalNbsp($atr['grm_cell_no'])."</td>";
+		  	             }
 		  	         }
-		  	         else
-		  	        {
-		  	         	 echo "<td>".$common->evalNbsp($atr['brd_phone_no'])."</td>";
+		  	         else{
+		  	             if(empty($atr['brd_cell_no'])){
+		  	               echo "<td>".$common->evalNbsp($atr['brd_phone_no'])."</td>";
+		  	             }else{
+		  	               echo "<td>".$common->evalNbsp($atr['brd_cell_no'])."</td>";
+		  	             }
 		  	         }
 
 		            if($atr['prm_email_flg'] == 0)

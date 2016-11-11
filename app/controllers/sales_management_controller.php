@@ -15,31 +15,42 @@ class SalesManagementController extends AppController
   */
  function index()
  {
- 	$wedding_dt = null;
+ 	$start_wedding_dt = null;
+ 	$end_wedding_dt = null;
 
  	if (!empty($this->data)) {
  		/* フィルタ条件変更*/
- 		$wedding_dt = $this->data['GoodsMstView']['wedding_planned_dt'];
- 		$this->Session->write("filter_wedding_dt",$wedding_dt);
+ 		$start_wedding_dt = $this->data['GoodsMstView']['start_wedding_planned_dt'];
+ 		$end_wedding_dt = $this->data['GoodsMstView']['end_wedding_planned_dt'];
+ 		$this->Session->write("filter_start_wedding_dt",$start_wedding_dt);
+ 		$this->Session->write("filter_end_wedding_dt",$end_wedding_dt);
  	}
  	/* デフォルト値 :処理年月に挙式予定の成約の顧客を表示 */
  	else{
- 		if($this->Session->read("filter_wedding_dt") == null){
- 			$this->Session->write("filter_wedding_dt",date("Y-m"));
- 			$wedding_dt = date("Y-m");
+ 		if($this->Session->read("filter_start_wedding_dt") == null){
+ 			$this->Session->write("filter_start_wedding_dt",date("Y-m"));
+ 			$start_wedding_dt = date("Y-m");
  		}else{
- 			$wedding_dt = $this->Session->read("filter_wedding_dt");
+ 			$start_wedding_dt = $this->Session->read("filter_start_wedding_dt");
+ 		}
+
+ 		if($this->Session->read("filter_end_wedding_dt") == null){
+ 			$this->Session->write("filter_end_wedding_dt",date("Y-m"));
+ 			$end_wedding_dt = date("Y-m");
+ 		}else{
+ 			$end_wedding_dt = $this->Session->read("filter_end_wedding_dt");
  		}
  	}
 
  	//売上一覧を取得
- 	$data = $this->SalesManagementService->GetSalesList($wedding_dt);
+ 	$data = $this->SalesManagementService->GetSalesList($start_wedding_dt,$end_wedding_dt);
  	$this->set('data',$data);
 
  	/* 成約年月一覧を取得 */
- 	$this->set("wedding_dt_list",$this->ContractTrnView->getGroupOfWeddingMonthInInvoiced());
+ 	//$this->set("wedding_dt_list",$this->ContractTrnView->getGroupOfWeddingMonthInInvoiced());
  	/* フィルタ条件をVIEWで保持する */
- 	$this->set("wedding_dt" ,$this->Session->read("filter_wedding_dt"));
+ 	$this->set("start_wedding_dt" ,$this->Session->read("filter_start_wedding_dt"));
+ 	$this->set("end_wedding_dt" ,$this->Session->read("filter_end_wedding_dt"));
 
     $this->set("menu_customers","");
  	$this->set("menu_customer","disable");
@@ -50,6 +61,7 @@ class SalesManagementController extends AppController
  	$this->set("sub_menu_fund","");
  	$this->set("sub_menu_remittance","");
  	$this->set("sub_menu_payment","");
+ 	$this->set("sub_menu_vendor_sales","");
 
  	$this->set("sub_title","売上一覧");
  	$this->set("user",$this->Auth->user());
@@ -62,14 +74,14 @@ class SalesManagementController extends AppController
  function export(){
 
  	//売上一覧を取得
- 	$data = $this->SalesManagementService->GetSalesList($this->Session->read("filter_wedding_dt"));
+ 	$data = $this->SalesManagementService->GetSalesList($this->Session->read("filter_start_wedding_dt"),$this->Session->read("filter_end_wedding_dt"));
  	$this->set('data',$data);
 
  	$temp_filename = "sales_template.xlsx";
- 	$save_filename = mb_convert_encoding("売上", "SJIS", "AUTO").$this->Session->read("filter_wedding_dt").".xlsx";
+ 	$save_filename = mb_convert_encoding("売上", "SJIS", "AUTO").$this->Session->read("filter_start_wedding_dt").'_'.$this->Session->read("filter_end_wedding_dt").".xlsx";
 
  	$this->layout = false;
- 	$this->set( "sheet_name", $this->Session->read("filter_wedding_dt") );
+ 	$this->set( "sheet_name", $this->Session->read("filter_start_wedding_dt").'_'.$this->Session->read("filter_end_wedding_dt") );
  	$this->set( "filename", $save_filename );
  	$this->set( "template_file", $temp_filename);
  	$this->render("excel");

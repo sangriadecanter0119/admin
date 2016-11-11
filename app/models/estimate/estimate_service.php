@@ -50,13 +50,17 @@ class EstimateService extends AppModel {
 	    //複数禁止カテゴリの存在チェック
 	    $final_sheet->checkIfDuplicatedCategory($estimate_data['EstimateDtlTrn']);
 
-	    /** 既に正式採用されている場合は関連テーブルのデータを全て削除し、仮採用に戻す  **/
+	    $contract_dt = null;
+	    /** 既に正式採用されている場合は関連テーブルのデータを全て削除し、見積採用フラグをリセットする  **/
 	    if($estimate->isAdoptedEstimateHadByCustomer($customer_id)){
 
- 	      /** 仮採用に戻す **/
+ 	      /** 見積採用フラグリセット **/
  	      if($estimate->updateAll(array('adopt_flg'=>ESTIMATE_UNADOPTED),array('customer_id'=>$customer_id))==false){
  	        return array('result'=>false,'message'=>"見積仮採用更新に失敗しました。",'reason'=>$this->getDbo()->error."[".date('Y-m-d H:i:s')."]");
  	      }
+
+ 	      /* 成約ステータス以降の場合は成約日を保持しておく */
+ 	      $contract_dt = $contract->getContractedDateByCustomer($customer_id);
 
 	      /**  契約テーブル、資金管理テーブル、送金テーブルのデータを削除(カスケード削除) **/
  	      if($contract->deleteAll(array('customer_id'=>$customer_id),true)==false){
@@ -94,7 +98,7 @@ class EstimateService extends AppModel {
  	    $reception_place =  empty($goods_reception_place) ? $wedding_basic_info['reception_planned_place'] : $goods_reception_place;
  	    $reception_time =  $wedding_basic_info['reception_planned_time'];
 
- 	    $ret = $contract->createNew($last_estimate_id,$customer_id, $weddding_date,$weddding_place,$weddding_time, $reception_place,$reception_time, $username);
+ 	    $ret = $contract->createNew($last_estimate_id,$customer_id,$contract_dt,$weddding_date,$weddding_place,$weddding_time, $reception_place,$reception_time, $username);
         if($ret['result']==false){ return $ret; }
  	    $last_contract_id = $ret['newID'];
 

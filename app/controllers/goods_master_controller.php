@@ -2,8 +2,8 @@
 class GoodsMasterController extends AppController
 {
  public $name = 'GoodsMaster';
- public $uses = array('GoodsService','GoodsMst','GoodsCtgMst','GoodsMstView','LatestGoodsMstView','GoodsKbnMst',
-                      'VendorKbnMst','SetGoodsMst','VendorMst','LatestSetGoodsMstView','EstimateDtlTrn');
+ public $uses = array('GoodsService','GoodsMst','GoodsCtgMst','GoodsMstView','LatestGoodsMstView','GoodsKbnMst','EnvMst',
+                      'VendorKbnMst','SetGoodsMst','VendorMst','LatestSetGoodsMstView','EstimateDtlTrn','PaymentKbnMst');
  public $layout = 'edit_mode';
  public $components = array('Auth','RequestHandler');
  public $helpers = array('Html','common','javascript');
@@ -134,6 +134,10 @@ class GoodsMasterController extends AppController
       $this->data['GoodsMst']['rw_share'] = $this->data['GoodsMst']['rw_share'] / 100;
       $this->data['GoodsMst']['start_valid_dt'] = empty($this->data['GoodsMst']['start_valid_dt']) ? "1000-01-01" :$this->data['GoodsMst']['start_valid_dt'] ;
       $this->data['GoodsMst']['end_valid_dt']   = empty($this->data['GoodsMst']['end_valid_dt'])   ? "9999-12-31" :$this->data['GoodsMst']['end_valid_dt'] ;
+      $this->data['GoodsMst']['tax']   = empty($this->data['GoodsMst']['tax'])   ? 0 :$this->data['GoodsMst']['tax'] / 100 ;
+      $this->data['GoodsMst']['service_rate']   = empty($this->data['GoodsMst']['service_rate'])   ? 0 :$this->data['GoodsMst']['service_rate'] / 100 ;
+      $this->data['GoodsMst']['profit_rate']   = empty($this->data['GoodsMst']['profit_rate'])   ? 0 :$this->data['GoodsMst']['profit_rate'] / 100 ;
+
  	  $this->data['GoodsMst']['reg_nm'] = $this->Auth->user('username');
       $this->data['GoodsMst']['reg_dt'] = date('Y-m-d H:i:s');
       $this->GoodsMst->create();
@@ -151,6 +155,10 @@ class GoodsMasterController extends AppController
  	  $this->set("goods_ctg_list",$this->GoodsCtgMst->find('all',array('conditions'=>array('del_kbn'=>EXISTS))));
  	  //業者リスト
  	  $this->set("vendor_list",$this->VendorMst->find('all',array('conditions'=>array('del_kbn'=>EXISTS))));
+ 	  //支払区分リスト
+ 	  $this->set("payment_kbn_list", $this->PaymentKbnMst->find('all',array('conditions'=>array('internal_payment_flg'=>0))));
+ 	  //環境設定情報を取得
+ 	  $this->set("env_data", $this->EnvMst->findById(1));
 
  	  $this->set("menu_customers","");
  	  $this->set("menu_customer","disable");
@@ -225,6 +233,8 @@ class GoodsMasterController extends AppController
  	  $this->set("goods_ctg_list",$this->GoodsCtgMst->find('all',array('conditions'=>array('del_kbn'=> EXISTS))));
  	  //業者リスト
  	  $this->set("vendor_list",$this->VendorMst->find('all',array('conditions'=>array('del_kbn'=> EXISTS))));
+ 	  //支払区分リスト
+ 	  $this->set("payment_kbn_list", $this->PaymentKbnMst->find('all',array('conditions'=>array('internal_payment_flg'=>0))));
  	  $this->set("menu_customers","");
  	  $this->set("menu_customer","disable");
  	  $this->set("menu_fund","");
@@ -302,6 +312,9 @@ class GoodsMasterController extends AppController
       	$this->data['GoodsMst']['rw_share'] = $this->data['GoodsMst']['rw_share'] / 100;
       	$this->data['GoodsMst']['start_valid_dt'] = empty($this->data['GoodsMst']['start_valid_dt']) ? "1000-01-01" :$this->data['GoodsMst']['start_valid_dt'] ;
       	$this->data['GoodsMst']['end_valid_dt']   = empty($this->data['GoodsMst']['end_valid_dt'])   ? "9999-12-31" :$this->data['GoodsMst']['end_valid_dt'] ;
+      	$this->data['GoodsMst']['tax']   = empty($this->data['GoodsMst']['tax'])   ? 0 :$this->data['GoodsMst']['tax'] / 100 ;
+      	$this->data['GoodsMst']['service_rate']   = empty($this->data['GoodsMst']['service_rate'])   ? 0 :$this->data['GoodsMst']['service_rate'] / 100 ;
+      	$this->data['GoodsMst']['profit_rate']   = empty($this->data['GoodsMst']['profit_rate'])   ? 0 :$this->data['GoodsMst']['profit_rate'] / 100 ;
       	$this->data['GoodsMst']['reg_nm'] = $this->Auth->user('username');
       	$this->data['GoodsMst']['reg_dt'] = date('Y-m-d H:i:s');
       	$this->GoodsMst->create();
@@ -324,9 +337,12 @@ class GoodsMasterController extends AppController
  	}
  	else{
  	  //該当商品
- 	  $this->set("data",$this->LatestGoodsMstView->findById($id));
+ 	  $data = $this->LatestGoodsMstView->findById($id);
+ 	  $this->set("data",$data);
       //業者リスト
  	  $this->set("vendor_list",$this->VendorMst->find('all',array('conditions'=>array('del_kbn'=>EXISTS))));
+ 	  //支払区分リスト
+ 	  $this->set("payment_kbn_list", $this->PaymentKbnMst->find('all',array('conditions'=>array('internal_payment_flg'=>$data['LatestGoodsMstView']['internal_pay_flg']))));
 
       $this->set("menu_customers","");
  	  $this->set("menu_customer","disable");
@@ -551,8 +567,11 @@ class GoodsMasterController extends AppController
  	//商品分類リストの取得
  	$this->set("goods_ctg_list",$this->GoodsCtgMst->find('all',array('conditions'=>array('del_kbn'=>EXISTS))));
 
- 	$this->set("goods",$this->LatestSetGoodsMstView->find('all',array("conditions"=>array("set_goods_id"=>$id))));
+ 	$goods = $this->LatestSetGoodsMstView->find('all',array("conditions"=>array("set_goods_id"=>$id)));
+ 	$this->set("goods",$goods);
 
+ 	//支払区分リスト
+ 	$this->set("payment_kbn_list", $this->PaymentKbnMst->find('all',array('conditions'=>array('internal_payment_flg'=>$goods[0]['LatestSetGoodsMstView']['set_internal_pay_flg']))));
  	$this->set("menu_customers","");
  	$this->set("menu_customer","disable");
  	$this->set("menu_fund","");
@@ -576,6 +595,17 @@ class GoodsMasterController extends AppController
  	 configure::write('debug', 0);
 	 $this->layout = '';
 	 $this->set('goods', $data);
+ }
+
+ function paymentKbnList($internal_payment_flg=0)
+ {
+ 	if (!$this->RequestHandler->isAjax()) { die('Not found'); }
+
+ 	$data = $this->PaymentKbnMst->find('all',array('conditions'=>array('internal_payment_flg'=>$internal_payment_flg)));
+
+ 	configure::write('debug', 0);
+ 	$this->layout = '';
+ 	$this->set('payment_kbn_list', $data);
  }
 
 /**
@@ -658,6 +688,95 @@ class GoodsMasterController extends AppController
  	 //$this->set("year",$this->Session->read("goods_mst_year"));
  	 $this->set('current_line_no',$current_line_no);
  }
+
+ /**
+  *
+  * [AJAX]EXCELファイルアップロード画面を表示する
+  */
+ function fileUploadForm() {
+ 	if (!$this->RequestHandler->isAjax()){ $this->cakeError('error404'); }
+ 	configure::write('debug', 0);
+ 	$this->layout = '';
+ }
+
+ /**
+  * EXCELファイル取り込み
+  */
+ function uploadFile()
+ {
+ 	$this->layout = "";
+ 	if (is_uploaded_file($this->data['ImgForm']['ImgFile']['tmp_name']) && end(explode(".",$this->data['ImgForm']['ImgFile']['name'])) == "xlsx") {
+
+ 		//アップロードファイルを仮保存
+ 		$ret = $this->GoodsService->uploadFile($this->data['ImgForm']['ImgFile']['tmp_name'],$this->data['ImgForm']['ImgFile']['name']);
+ 		if($ret['result']==false){
+ 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=>$ret['message']))));
+ 			return;
+ 		}
+ 		$tr = ClassRegistry::init('TransactionManager');
+ 		$tr->begin();
+
+ 		//ファイルから商品マスタを更新
+ 		$ret = $this->GoodsService->updateByFile($ret['filePath'],$this->Auth->user('username'));
+ 		if($ret['result']==true){
+ 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"true",'message'=>"ファイル取り込みに成功しました。"))));
+ 			$tr->commit();
+ 		}else{
+ 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> $ret["message"]))));
+ 		}
+ 	}else{
+ 		$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> "ファイルの種類が違います。(EXCELファイル) ファイルサイズの上限は128Mです。"))));
+ 	}
+ }
+
+ /**
+  * 商品マスタのEXCEL出力
+  */
+ function export(){
+
+ 	$search = array('year'=>GOODS_YEAR,'del_kbn'=>EXISTS);
+
+ 	if($this->Session->read('filter_goods_mst_ctg_id') != -1){
+ 		$search += array("goods_ctg_id"=>$this->Session->read('filter_goods_mst_ctg_id'));
+ 	}
+ 	if($this->Session->read('filter_goods_mst_kbn_id') != -1){
+ 		$search += array("goods_kbn_id"=>$this->Session->read('filter_goods_mst_kbn_id'));
+ 	}
+ 	if($this->Session->read('filter_goods_mst_set_id') != -1){
+ 		$search += array("set_goods_kbn"=>$this->Session->read('filter_goods_mst_set_id'));
+ 	}
+ 	if($this->Session->read('filter_goods_mst_vendor_id') != -1){
+ 		$search += array("vendor_id"=>$this->Session->read('filter_goods_mst_vendor_id'));
+ 	}
+ 	if($this->Session->read('filter_goods_mst_internal_pay_id') != -1){
+ 		$search += array("internal_pay_flg"=>$this->Session->read('filter_goods_mst_internal_pay_id'));
+ 	}
+/*
+ 	$this->paginate = array (
+ 			'LatestGoodsMstView' => array(
+ 					'limit' => 20,
+ 					'page'=>$this->Session->read('filter_goods_mst_page'),
+ 					'sort'=>$this->Session->read('filter_goods_mst_sort'),
+ 					'conditions'=>array('year'=>GOODS_YEAR,'del_kbn'=>EXISTS)
+ 			)
+ 	);
+
+ 	$this->set("data",$this->paginate('LatestGoodsMstView',$search));
+ */
+    $this->set("data",$this->LatestGoodsMstView->find('all',array('conditions'=>$search)));
+    //$this->set("set_data",$this->LatestSetGoodsMstView->find('all'));
+
+ 	$temp_filename = "goods_mst_template.xlsx";
+ 	$save_filename = mb_convert_encoding("商品マスタ", "SJIS", "AUTO").date('Ymd').".xlsx";
+
+ 	$this->layout = false;
+ 	$this->set( "sheet_name", "商品マスタ" );
+ 	$this->set( "filename", $save_filename );
+ 	$this->set( "template_file", $temp_filename);
+ 	$this->render("excel");
+ }
+
+
 
  /**
   * 引数の回数未満しか見積で使用されていない商品を削除する(一度も使用されていない商品以外は論理削除)

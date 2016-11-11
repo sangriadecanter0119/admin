@@ -471,7 +471,7 @@ class CustomerWeddingReserveController extends AppController
     $render_name = null;
 
     $customer_id = $this->Session->read('customer_id');
- 	$customer = $this->CustomerMst->findById($customer_id);
+ 	$customer = $this->CustomerMstView->findById($customer_id);
     $this->set(	"customer",$customer);
     $contract = $this->ContractTrnView->find('all',array('conditions'=>array('customer_id'=>$customer_id)));
 

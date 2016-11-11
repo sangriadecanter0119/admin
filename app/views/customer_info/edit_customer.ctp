@@ -1,6 +1,7 @@
 <?php
 //郵便番号から自動住所入力のライブラリ[ajaxzip3]
-echo $html->script("http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js",false);
+//echo $html->script("http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js",false);
+echo $html->script("https://ajaxzip3.github.io/ajaxzip3.js",false);
 ?>
 <script type='text/javascript'>
 $(function(){
@@ -278,6 +279,19 @@ function SetIntroducerField(){
    			     }
    	    ?>
    	    <span style="margin-right:10px">非表示</span>
+
+   	    <?php
+   			     if($data['CustomerMstView']['contact_prohibition_flg'] == 1){
+   			     	echo  "<input type='checkbox' name='data[CustomerMst][contact_prohibition_flg]' checked />";
+   			     }else{
+   			   	    echo  "<input type='checkbox' name='data[CustomerMst][contact_prohibition_flg]' />";
+   			     }
+   	    ?>
+   	    <span style="margin-right:10px">挙式後の連絡不可</span>
+
+        <span style="margin-left:5px">理由：</span>
+        <input type='text' name='data[CustomerMst][contact_prohibition_reason]' value='<?php echo $data['CustomerMstView']['contact_prohibition_reason'] ?>' style="width:250px" />
+
      </div>
 
      <fieldset class="headerlegend">

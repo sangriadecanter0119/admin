@@ -59,6 +59,7 @@
                  echo "<td><a class='{$sub_menu_fund}'       href='{$html->url('/fundManagement')}'>資金管理一覧</a></td>";
 	             echo "<td><a class='{$sub_menu_remittance}' href='{$html->url('/remittance')}'>送金一覧</a></td>";
                  echo "<td><a class='{$sub_menu_payment}'    href='{$html->url('/payment')}'>現地支払い一覧</a></td>";
+                 echo "<td><a class='{$sub_menu_vendor_sales}' href='{$html->url('/vendorSales')}'>ベンダー売上一覧</a></td>";
 			   }
 		  ?>
      </tr>

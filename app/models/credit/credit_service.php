@@ -254,7 +254,7 @@ class CreditService extends AppModel {
     		if($customer_data[0]['CustomerMst']['status_id'] == CS_CONTRACTING){
 
     			//内金入金済み
-    			if($this->isPrepaidIncludingZero($customer_id)){   	
+    			if($this->isPrepaidIncludingZero($customer_id)){
 			//お内金入金日を成約日に設定
     				$ret =$contract->setContractedDate($this->getFirstPrepaiedDate($customer_id),$customer_id,$username);
     				if($ret['result']==false){ return $ret; }
@@ -472,8 +472,8 @@ class CreditService extends AppModel {
 
     	$sql = "SELECT amount FROM credit_trns where customer_id = ".$customer_id." AND credit_type_id = ".NC_UCHIKIN;
     	$data = $this->query($sql);
-        
-    	return $data[0]['credit_trns']['amount'] >= 0 ? true : false;
+
+    	return count($data) > 0 && $data[0]['credit_trns']['amount'] >= 0 ? true : false;
     }
 
     /**

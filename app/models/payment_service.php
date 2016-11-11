@@ -29,7 +29,7 @@ class PaymentService extends AppModel {
  	           foreach($estimate_dtl_data as $cnt => $val){
                   $sort_key2[$cnt] = $val['EstimateDtlTrnView']['goods_id'];
                }
-               array_multisort($sort_key1,SORT_ASC,$sort_key2, SORT_ASC, $estimate_dtl_data);
+               if(count($estimate_dtl_data) != 0){ array_multisort($sort_key1,SORT_ASC,$sort_key2, SORT_ASC, $estimate_dtl_data); }
    			   return $estimate_dtl_data;
    		default:
    			  $estimate_dtl_data = $estimate_dtl->find("all",array("conditions"=>array("estimate_id"=>$estimate_ids),'order'=>'estimate_id,no'));
@@ -38,7 +38,8 @@ class PaymentService extends AppModel {
    			  foreach($estimate_dtl_data as $cnt => $val){
    			  	$sort_key1[$cnt] = $val['EstimateDtlTrnView']['wedding_dt'];
    			  }
-   			  array_multisort($sort_key1,SORT_ASC, $estimate_dtl_data);
+
+   			  if(count($estimate_dtl_data) != 0){ array_multisort($sort_key1,SORT_ASC, $estimate_dtl_data); }
    			  return $estimate_dtl_data;
    	}
   }

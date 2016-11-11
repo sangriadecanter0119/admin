@@ -67,8 +67,23 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
         $row_cnt++;
         $sheet->insertNewRowBefore( $row_cnt, 1 );
      }
-     $row_cnt++;
-     $row_cnt++;
+
+     $sheet->removeRow($row_cnt);
+     $sheet->removeRow($row_cnt);
+
+     //合計行
+     $sheet->setCellValue("E".$row_cnt, "=SUM(E5:E".($row_cnt-1).")");
+     $sheet->setCellValue("F".$row_cnt, "=SUM(F5:F".($row_cnt-1).")");
+     $sheet->setCellValue("G".$row_cnt, "=SUM(G5:G".($row_cnt-1).")");
+     $sheet->setCellValue("H".$row_cnt, "=SUM(H5:H".($row_cnt-1).")");
+     $sheet->setCellValue("I".$row_cnt, "=SUM(I5:I".($row_cnt-1).")");
+     $sheet->setCellValue("J".$row_cnt, "=SUM(J5:J".($row_cnt-1).")");
+     $sheet->setCellValue("K".$row_cnt, "=SUM(K5:K".($row_cnt-1).")");
+     $sheet->setCellValue("L".$row_cnt, "=SUM(L5:L".($row_cnt-1).")");
+     $sheet->setCellValue("M".$row_cnt, "=SUM(M5:M".($row_cnt-1).")");
+     $sheet->setCellValue("N".$row_cnt, "=SUM(N5:N".($row_cnt-1).")");
+     $sheet->setCellValue("P".$row_cnt, "=SUM(P5:P".($row_cnt-1).")");
+
      $sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
      $sheet->getStyle("F".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
      $sheet->getStyle("G".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
@@ -82,6 +97,35 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
      $sheet->getStyle("O".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
      $sheet->getStyle("P".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
      $sheet->getStyle("Q".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+
+     //平均行
+     $row_cnt++;
+     $sheet->setCellValue("E".$row_cnt, "=AVERAGE(E5:E".($row_cnt-2).")");
+     $sheet->setCellValue("F".$row_cnt, "=AVERAGE(F5:F".($row_cnt-2).")");
+     $sheet->setCellValue("G".$row_cnt, "=AVERAGE(G5:G".($row_cnt-2).")");
+     $sheet->setCellValue("H".$row_cnt, "=AVERAGE(H5:H".($row_cnt-2).")");
+     $sheet->setCellValue("I".$row_cnt, "=AVERAGE(I5:I".($row_cnt-2).")");
+     $sheet->setCellValue("J".$row_cnt, "=AVERAGE(J5:J".($row_cnt-2).")");
+     $sheet->setCellValue("K".$row_cnt, "=AVERAGE(K5:K".($row_cnt-2).")");
+     $sheet->setCellValue("L".$row_cnt, "=AVERAGE(L5:L".($row_cnt-2).")");
+     $sheet->setCellValue("M".$row_cnt, "=AVERAGE(M5:M".($row_cnt-2).")");
+     $sheet->setCellValue("N".$row_cnt, "=AVERAGE(N5:N".($row_cnt-2).")");
+     $sheet->setCellValue("P".$row_cnt, "=AVERAGE(P5:P".($row_cnt-2).")");
+
+     $sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("F".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("G".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("H".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("I".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("J".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("K".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("L".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("M".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("N".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("O".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+     $sheet->getStyle("P".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
+     $sheet->getStyle("Q".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+
      /* 羅線 */
      /*
      $sheet->getStyle("B4:".$cols[$col_cnt].$row_cnt)->getBorders()->getRight()->setBorderStyle(PHPExcel_Style_Border::BORDER_MEDIUM);
@@ -97,7 +141,7 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
     // PHPの日時出力
     $time = time();                 // 現在日時(Unix Timestamp)
     $sheet->setCellValue("Q2", '出力日：'.date('Y/m/d'));
-    $sheet->setCellValue("C2", date('Y-m',strtotime($data[0]['wedding_dt']))."分売上一覧");
+    $sheet->setCellValue("C2", $sheet_name."分売上一覧");
 
     /* 円表記
      --------------------------------------------------------*/
@@ -151,8 +195,50 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
     	$sheet->insertNewRowBefore( $row_cnt, 1 );
     }
 
+    $sheet->removeRow($row_cnt);
+    $sheet->removeRow($row_cnt);
+
+    //合計行
+    $sheet->setCellValue("E".$row_cnt, "=SUM(E5:E".($row_cnt-1).")");
+    $sheet->setCellValue("F".$row_cnt, "=SUM(F5:F".($row_cnt-1).")");
+    $sheet->setCellValue("G".$row_cnt, "=SUM(G5:G".($row_cnt-1).")");
+    $sheet->setCellValue("H".$row_cnt, "=SUM(H5:H".($row_cnt-1).")");
+    $sheet->setCellValue("I".$row_cnt, "=SUM(I5:I".($row_cnt-1).")");
+    $sheet->setCellValue("J".$row_cnt, "=SUM(J5:J".($row_cnt-1).")");
+    $sheet->setCellValue("K".$row_cnt, "=SUM(K5:K".($row_cnt-1).")");
+    $sheet->setCellValue("L".$row_cnt, "=SUM(L5:L".($row_cnt-1).")");
+    $sheet->setCellValue("M".$row_cnt, "=SUM(M5:M".($row_cnt-1).")");
+    $sheet->setCellValue("N".$row_cnt, "=SUM(N5:N".($row_cnt-1).")");
+    $sheet->setCellValue("P".$row_cnt, "=SUM(P5:P".($row_cnt-1).")");
+
+    $sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("F".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("G".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("H".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("I".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("J".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("K".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("L".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("M".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("N".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("O".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+    $sheet->getStyle("P".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
+    $sheet->getStyle("Q".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00);
+
+    //平均行
     $row_cnt++;
-    $row_cnt++;
+    $sheet->setCellValue("E".$row_cnt, "=AVERAGE(E5:E".($row_cnt-2).")");
+    $sheet->setCellValue("F".$row_cnt, "=AVERAGE(F5:F".($row_cnt-2).")");
+    $sheet->setCellValue("G".$row_cnt, "=AVERAGE(G5:G".($row_cnt-2).")");
+    $sheet->setCellValue("H".$row_cnt, "=AVERAGE(H5:H".($row_cnt-2).")");
+    $sheet->setCellValue("I".$row_cnt, "=AVERAGE(I5:I".($row_cnt-2).")");
+    $sheet->setCellValue("J".$row_cnt, "=AVERAGE(J5:J".($row_cnt-2).")");
+    $sheet->setCellValue("K".$row_cnt, "=AVERAGE(K5:K".($row_cnt-2).")");
+    $sheet->setCellValue("L".$row_cnt, "=AVERAGE(L5:L".($row_cnt-2).")");
+    $sheet->setCellValue("M".$row_cnt, "=AVERAGE(M5:M".($row_cnt-2).")");
+    $sheet->setCellValue("N".$row_cnt, "=AVERAGE(N5:N".($row_cnt-2).")");
+    $sheet->setCellValue("P".$row_cnt, "=AVERAGE(P5:P".($row_cnt-2).")");
+
     $sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
     $sheet->getStyle("F".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
     $sheet->getStyle("G".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
@@ -170,7 +256,7 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
     // PHPの日時出力
     $time = time();                 // 現在日時(Unix Timestamp)
     $sheet->setCellValue("Q2", '出力日：'.date('Y/m/d'));
-    $sheet->setCellValue("C2", date('Y-m',strtotime($data[0]['wedding_dt']))."分売上一覧");
+    $sheet->setCellValue("C2", $sheet_name."分売上一覧");
 
 // Excelファイルの保存
 // 保存ファイルフルパス

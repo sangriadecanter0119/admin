@@ -1,6 +1,7 @@
 <?php
 //郵便番号から自動住所入力のライブラリ[ajaxzip3]
-echo $html->script("http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js",false);
+//echo $html->script("http://ajaxzip3.googlecode.com/svn/trunk/ajaxzip3/ajaxzip3.js",false);
+echo $html->script("https://ajaxzip3.github.io/ajaxzip3.js",false);
 ?>
 <script type='text/javascript'>
 $(function(){

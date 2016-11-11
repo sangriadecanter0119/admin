@@ -66,10 +66,11 @@
 
                        if (result.data.isSuccess == "true") {
                           var imgSrc = <?php echo "'".$html->webroot("/images/confirm_result.png")."'" ?>;
+                          var tag = "<p id='result_message'><img src='" + imgSrc + "'  />" + result.data.message + "</p>";
                         } else {
-                          var imgSrc = <?php echo "'".$html->webroot("/images/error_result.png")."'" ?>;
+                           var imgSrc = <?php echo "'".$html->webroot("/images/error_result.png")."'" ?>;
+                           var tag = "<p id='result_message'><img src='" + imgSrc + "'  />" + result.data.message +  result.data.reason + "</p>";
                         }
-                       var tag = "<p id='result_message'><img src='" + imgSrc + "'  />" + result.data.message + "</p>";
                        $("#upload_result_dialog").append(tag);
                        $("#upload_result_dialog").dialog("open");
                     }catch(ex){

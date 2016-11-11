@@ -76,22 +76,21 @@ class DATABASE_CONFIG {
 	var $default = array(
 		'driver' => 'mysql_log',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
+		'host' => 'mysql304.db.sakura.ne.jp',
+		'login' => 'iyua',
 		'password' => '12p12p12p3',
 		'database' => 'iyua_ver2',
 		'prefix' => '',
-	    'encoding' => 'utf8'
+	    'encoding' => 'utf8'	
 	);
-
 
 	var $test = array(
 		'driver' => 'mysql_log',
 		'persistent' => false,
-		'host' => 'localhost',
-		'login' => 'root',
+		'host' => 'mysql304.db.sakura.ne.jp',
+		'login' => 'iyua',
 		'password' => '12p12p12p3',
 		'database' => 'iyua_ver2',
-		'prefix' => 'utf8',
+		'prefix' => '',
 	);
 }

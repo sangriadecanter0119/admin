@@ -7,7 +7,7 @@ class SalesManagementService extends AppModel {
 	 * @param unknown $wedding_dt
 	 * @return multitype:unknown
 	 */
-	function GetSalesList($wedding_dt){
+	function GetSalesList($start_wedding_dt,$end_wedding_dt){
 
 		App::import("Model", "RemittanceTrnView");
 		$remittance_trn_view = new RemittanceTrnView();
@@ -15,9 +15,26 @@ class SalesManagementService extends AppModel {
 		App::import("Model", "RemittanceTrn");
 		$remittance_trn = new RemittanceTrn();
 
-		$data = $remittance_trn_view->find('all',
-				array('conditions'=>
-						array('SUBSTR(wedding_dt,1,7)'=>$wedding_dt,'status_id'=>array(CS_INVOICED,CS_PAIED,CS_UNPAIED)),'order'=>'wedding_dt'));
+		if(empty($start_wedding_dt) && empty($end_wedding_dt)){
+			$data = $remittance_trn_view->find('all',
+					array('conditions'=>
+							array('status_id'=>array(CS_INVOICED,CS_PAIED,CS_UNPAIED)),'order'=>'wedding_dt'));
+		}else if(empty($start_wedding_dt)){
+			$data = $remittance_trn_view->find('all',
+					array('conditions'=>
+							array('SUBSTR(wedding_dt,1,7) <='=>$end_wedding_dt,
+									'status_id'=>array(CS_INVOICED,CS_PAIED,CS_UNPAIED)),'order'=>'wedding_dt'));
+		}else if(empty($end_wedding_dt)){
+				$data = $remittance_trn_view->find('all',
+						array('conditions'=>
+								array('SUBSTR(wedding_dt,1,7) >='=>$start_wedding_dt,
+										'status_id'=>array(CS_INVOICED,CS_PAIED,CS_UNPAIED)),'order'=>'wedding_dt'));
+		}else{
+			$data = $remittance_trn_view->find('all',
+					array('conditions'=>
+							array('SUBSTR(wedding_dt,1,7) >='=>$start_wedding_dt,'SUBSTR(wedding_dt,1,7) <='=>$end_wedding_dt,
+									'status_id'=>array(CS_INVOICED,CS_PAIED,CS_UNPAIED)),'order'=>'wedding_dt'));
+		}
 
 		$result = array();
 		for($i=0; $i < count($data);$i++){

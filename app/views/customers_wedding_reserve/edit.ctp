@@ -195,29 +195,29 @@ $(function(){
 
            <tr>
              <th>Slide Show</th>
-             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][slide_show]" class="validate[max[10000000]]"
+             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][slide_show]" class="validate[max[10000000]]" style='width:400px'
                                     value="<?php echo $data['WeddingReservingStateTrnView']['slide_show'] ?>" /></td>
            </tr>
 
            <tr>
              <th>Short Film1</th>
-             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][short_film1]" class="validate[max[10000000]]"
+             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][short_film1]" class="validate[max[10000000]]" style='width:400px'
                                     value="<?php echo $data['WeddingReservingStateTrnView']['short_film1'] ?>" /></td>
            </tr>
            <tr>
              <th>Short Film2</th>
-             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][short_film2]" class="validate[max[10000000]]"
+             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][short_film2]" class="validate[max[10000000]]" style='width:400px'
                                     value="<?php echo $data['WeddingReservingStateTrnView']['short_film2'] ?>" /></td>
            </tr>
 
            <tr>
              <th>Visionari SS</th>
-             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][visionari_ss]" class="validate[max[10000000]]"
+             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][visionari_ss]" class="validate[max[10000000]]" style='width:300px'
                                     value="<?php echo $data['WeddingReservingStateTrnView']['visionari_ss'] ?>" /></td>
            </tr>
            <tr>
              <th>Visionari Dater</th>
-             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][visionari_dater]" class="validate[max[10000000]]"
+             <td colspan="3"><input type="text" name="data[WeddingReservingStateTrn][visionari_dater]" class="validate[max[10000000]]" style='width:300px'
                                     value="<?php echo $data['WeddingReservingStateTrnView']['visionari_dater'] ?>" /></td>
            </tr>
           </tr>

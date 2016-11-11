@@ -50,6 +50,7 @@ class BankManagementController extends AppController
  	$this->set("sub_menu_fund","");
  	$this->set("sub_menu_remittance","");
  	$this->set("sub_menu_payment","");
+ 	$this->set("sub_menu_vendor_sales","");
 
     $this->set("sub_title","入金管理一覧");
     $this->set("user",$this->Auth->user());

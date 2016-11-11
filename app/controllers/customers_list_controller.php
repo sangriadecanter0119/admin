@@ -33,6 +33,7 @@ class CustomersListController extends AppController
 	     $this->Session->write('filter_pref',$this->data['GoodsMstView']['pref']);
 	     $this->Session->write('filter_first_contact_person_name',$this->data['GoodsMstView']['first_contact_person_name']);
 	     $this->Session->write('filter_process_person_name',$this->data['GoodsMstView']['process_person_name']);
+	     $this->Session->write('filter_phone_no',$this->data['GoodsMstView']['phone_no']);
  	 }
 	 /* デフォルト値 :処理年月に挙式予定の成約の顧客を表示 */
 	 else if($this->Session->read('filter_status_id')==null){
@@ -46,6 +47,7 @@ class CustomersListController extends AppController
 		$this->Session->write('filter_first_contact_person_name',"");
 		$this->Session->write('filter_process_person_name',"");
 		$this->Session->write('filter_non_display_flg',0);
+		$this->Session->write('filter_phone_no',"");
 	}
 
 	/* フィルター条件がALL(-1)でない場合のみ設定 */
@@ -59,6 +61,15 @@ class CustomersListController extends AppController
 
 	if($this->Session->read('filter_process_person_name') != ""){
 		$search += array("process_person_nm"=>$this->Session->read('filter_process_person_name'));
+	}
+
+	if($this->Session->read('filter_phone_no') != ""){
+		 $search += array("OR"=>array(
+   	       		                        "grm_phone_no LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+   	                                    "grm_cell_no  LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+   	       		                        "brd_phone_no LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+   	       		                        "brd_cell_no  LIKE"=>'%'.$this->Session->read('filter_phone_no').'%'
+   	       ));
 	}
 
     if($this->Session->read('filter_wedding_planned_dt') != -1){
@@ -193,6 +204,7 @@ class CustomersListController extends AppController
  	$this->set("pref" ,$this->Session->read('filter_pref'));
  	$this->set("first_contact_person_name" ,$this->Session->read('filter_first_contact_person_name'));
  	$this->set("process_person_name" ,$this->Session->read('filter_process_person_name'));
+ 	$this->set("phone_no" ,$this->Session->read('filter_phone_no'));
 
  	$this->set("page_limit",$this->Session->read('cust_list_page_limit'));
  	$this->set("customer_status",$this->CustomerStatusMst->find('all'));
@@ -312,15 +324,22 @@ class CustomersListController extends AppController
 
    	case "EXCEL_CUSTOMER_LIST":
    		$sheet_name = "顧客リスト";
-   		$save_filename = "顧客リスト.xlsx";
+   		$save_filename = mb_convert_encoding("顧客リスト.xlsx", "SJIS", "AUTO");
    		$render_name = "excel_customer_list";
    		break;
 
    	case "EXCEL_NEW_YEARS_CARD":
    		         $sheet_name = "年賀状リスト";
-   		         $save_filename = "年賀状リスト.xlsx";
+   		         $save_filename = mb_convert_encoding("年賀状リスト.xlsx", "SJIS", "AUTO");
                  $render_name = "excel";
    	       	     break;
+
+   	case "EXCEL_CUSTOMER_MAIL":
+   	    	     $sheet_name = "メールリスト";
+   	       	     $save_filename = mb_convert_encoding("メールリスト.xlsx", "SJIS", "AUTO");
+   	       	     $render_name = "excel_customer_mail";
+   	       	     break;
+
    	default:
    		    $this->cakeError("error", array("message" => "予期しないファイルタイプ[{$file_type}]です。"));
        	    break;
@@ -337,6 +356,15 @@ class CustomersListController extends AppController
 
 	if($this->Session->read('filter_process_person_name') != ""){
 		$search += array("process_person_nm"=>$this->Session->read('filter_process_person_name'));
+	}
+
+	if($this->Session->read('filter_phone_no') != ""){
+		$search += array("OR"=>array(
+				"grm_phone_no LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+				"grm_cell_no  LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+				"brd_phone_no LIKE"=>'%'.$this->Session->read('filter_phone_no').'%',
+				"brd_cell_no  LIKE"=>'%'.$this->Session->read('filter_phone_no').'%'
+		));
 	}
 
     if($this->Session->read('filter_wedding_planned_dt') != -1){
@@ -442,6 +470,11 @@ class CustomersListController extends AppController
  	$this->set("customers",$this->CustomerMstView->find('all',array('conditions'=>$search,'order'=>$order)));
 
    $this->layout = false;
+
+   //導線1リスト
+   $this->set("leading1_list",$this->CustomerMst->getLeading1List());
+   //導線2リスト
+   $this->set("leading2_list",$this->CustomerMst->getLeading2List());
 
    $this->set( "sheet_name", $sheet_name);
    $this->set( "filename", $save_filename );

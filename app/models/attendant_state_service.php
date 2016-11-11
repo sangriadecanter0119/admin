@@ -38,8 +38,7 @@ class AttendantStateService extends AppModel {
     	App::import("Model", "EstimateService");
     	$estimate = new EstimateService();
 
-    	$data = $contract->find("all",array("fields"=>array("customer_id","customer_cd","status_nm",
-    			                                            "contract_dt","wedding_dt","grmls_kj","grmfs_kj","brdls_kj","brdfs_kj"),
+    	$data = $contract->find("all",array("fields"=>array("customer_id","status_nm","process_person_nm","contract_dt","wedding_dt","grmls_kj","grmfs_kj","brdls_kj","brdfs_kj"),
     			"conditions"=>array("SUBSTR(wedding_dt,1,7)"=>$wedding_dt,"status_id"=>array(CS_CONTRACTED,CS_INVOICED,CS_PAIED,CS_UNPAIED)),"order"=>array("process_person_nm","wedding_dt")));
 
     	for($i=0;$i < count($data);$i++){

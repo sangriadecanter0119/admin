@@ -44,6 +44,7 @@ class PaymentController extends AppController
  	$this->set("sub_menu_fund","");
  	$this->set("sub_menu_remittance","");
  	$this->set("sub_menu_payment","current");
+ 	$this->set("sub_menu_vendor_sales","");
 
  	$this->set("sub_title","現地支払い");
  	$this->set("user",$this->Auth->user());
@@ -66,7 +67,7 @@ class PaymentController extends AppController
    $save_filename = mb_convert_encoding("支払", "SJIS", "AUTO").$this->Session->read("filter_wedding_dt").".xlsx";
 
    $this->layout = false;
-   $this->set( "sheet_name", "PD振込用" );
+   $this->set( "sheet_name", "HI振込用" );
    $this->set( "filename", $save_filename );
    $this->set( "template_file", $temp_filename);
    $this->render("excel");

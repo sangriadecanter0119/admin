@@ -7,6 +7,7 @@
   $goodsFormUrl = $html->url('goodsDetailForm');
   //セット商品追加URL
   $add_set_goods_url = $html->url('addSetGoods');
+  $payment_list_url = $html->url('paymentKbnList');
   $confirm_image_path = $html->webroot("/images/confirm_result.png");
   $error_image_path = $html->webroot("/images/error_result.png");
 
@@ -35,6 +36,13 @@ $(function(){
       var arr = str.split('[');
       return arr[2].split(']')[0];
     }
+
+    $("#internal_pay_flg").change(function() {
+          var val = $(this).prop("checked") ? 1:0;
+		  $.get("$payment_list_url" + "/" + val, function(data) {
+		  $("#payment_kbn_list").html(data);
+		});
+	});
 
     /* セット商品分類が選択されたら属する商品区分リストを表示する */
     $("#goodsCtg_0").change(function(){
@@ -380,7 +388,20 @@ JSPROG
           </tr>
           <tr>
              <th>国内払い</th>
-             <td><input type="checkbox" value="1"  name="data[GoodsMst][internal_pay_flg]" /></td>
+             <td><input type="checkbox" value="1"  id="internal_pay_flg" name="data[GoodsMst][internal_pay_flg]" /></td>
+          </tr>
+          <tr>
+             <th>支払区分</th>
+             <td>
+                 <select id="payment_kbn_list" name="data[GoodsMst][payment_kbn_id]">
+   			        <?php
+   			           for($i=0;$i < count($payment_kbn_list);$i++){
+   			             $atr = $payment_kbn_list[$i]['PaymentKbnMst'];
+   			             echo "<option value='{$atr['id']}'>{$atr['payment_kbn_nm']}</option>";
+   			           }
+   			        ?>
+                 </select>
+             </td>
           </tr>
           <tr>
              <th>商品名<span class="necessary">(必須)</span></th>

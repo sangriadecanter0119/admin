@@ -41,8 +41,13 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
     $sheet->setCellValue( 'K' . $row_cnt, "新規担当者");
     $sheet->setCellValue( 'L' . $row_cnt, "プラン担当者");
     $sheet->setCellValue( 'M' . $row_cnt, "最新アクション");
-    $sheet->setCellValue( 'N' . $row_cnt, "初回見積提出日");
-	$sheet->setCellValue( 'O' . $row_cnt, "問い合わせ日");
+	$sheet->setCellValue( 'N' . $row_cnt, "導線1");
+	$sheet->setCellValue( 'O' . $row_cnt, "導線2");
+	$sheet->setCellValue( 'P' . $row_cnt, "紹介者");
+	$sheet->setCellValue( 'Q' . $row_cnt, "問い合わせ日");
+	$sheet->setCellValue( 'R' . $row_cnt, "初回見積提出日");
+	$sheet->setCellValue( 'S' . $row_cnt, "仮約定日");
+	$sheet->setCellValue( 'T' . $row_cnt, "成約日");
 
     $row_cnt++;
 
@@ -96,8 +101,23 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
       $sheet->setCellValue( 'K' . $row_cnt, $atr['first_contact_person_nm']);
       $sheet->setCellValue( 'L' . $row_cnt, $atr['process_person_nm']);
       $sheet->setCellValue( 'M' . $row_cnt, $atr['action_nm1']);
-      $sheet->setCellValue( 'N' . $row_cnt, $common->evalNbspForShortDate($atr['estimate_issued_dt']));
-	  $sheet->setCellValue( 'O' . $row_cnt, $common->evalNbspForShortDate($atr['first_contact_dt']));
+      for($k=0;$k < count($leading1_list);$k++){
+        if($atr['leading1'] == $k){
+          $sheet->setCellValue( 'N' . $row_cnt, $leading1_list[$k]);
+          break;
+        }
+	  }
+	  for($k=0;$k < count($leading2_list);$k++){
+        if($atr['leading2'] == $k){
+          $sheet->setCellValue( 'O' . $row_cnt, $leading2_list[$k]);
+          break;
+        }
+	  }
+	  $sheet->setCellValue( 'P' . $row_cnt, $atr['introducer']);
+      $sheet->setCellValue( 'Q' . $row_cnt, $common->evalNbspForShortDate($atr['first_contact_dt']));
+      $sheet->setCellValue( 'R' . $row_cnt, $common->evalNbspForShortDate($atr['estimate_issued_dt']));
+	  $sheet->setCellValue( 'S' . $row_cnt, $common->evalNbspForShortDate($atr['contracting_dt']));
+	  $sheet->setCellValue( 'T' . $row_cnt, $common->evalNbspForShortDate($atr['contract_dt']));
 
 	  $row_cnt++;
     }

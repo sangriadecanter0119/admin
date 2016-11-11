@@ -147,7 +147,7 @@ function Search(){
 </style>
 
 <ul class="operate">
-    <li><a href="<?php echo $html->url('export/excel_customer_list') ?>" >EXCEL出力</a></li>
+    <!--<li><a href="<?php echo $html->url('export/excel_customer_list') ?>" >EXCEL出力</a></li>-->
     <!--<li><a href="#" id="import_link">IMPORT</a></li>-->
 	<!--<li><a href="#" id='file_upload_link'>ファイル取り込み(CSV)</a></li>-->
 </ul>
@@ -195,10 +195,24 @@ function Search(){
 
 		    <!-- 挙式会場フィルター -->
 		    <td>
-		      <select id='filter_wedding_place'>
-		        <option value='-1' selected>ALL</option>
+		      <select id='filter_wedding_place' class="filter">
+				  <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_wedding_place);$i++){
+		  	         $val = $list_wedding_place[$i]['WeddingReservingStateTrnView']['wedding_place'];
+
+		            if($filter_ws_wedding_place == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				      }else{
+				         echo "<option value='".$val."'>{$val}</option>";
+				      }
+				  }
+				  ?>
 		      </select>
 		    </td>
+
+			<!-- 挙式時間 -->
+			<td></td>
 
             <!-- 新郎・新婦 -->
 		    <td></td>
@@ -206,29 +220,73 @@ function Search(){
 
             <!-- 成約担当者フィルター -->
 		    <td>
-		      <select id='filter_first_contact_person'>
+		      <select id='filter_first_contact_person' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_first_contact_person);$i++){
+		  	         $val = $list_first_contact_person[$i]['WeddingReservingStateTrnView']['first_contact_person_nm'];
+
+		            if($filter_ws_first_contact_person == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 
 		    <!-- 製作担当者フィルター -->
 		    <td>
-		      <select id='filter_process_person'>
+		      <select id='filter_process_person' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_process_person);$i++){
+		  	         $val = $list_process_person[$i]['WeddingReservingStateTrnView']['process_person_nm'];
+
+		            if($filter_ws_process_person == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 
 		    <!-- Hotelフィルター -->
 		    <td>
-		      <select id='filter_hotel'>
+		      <select id='filter_hotel' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_hotel);$i++){
+		  	         $val = $list_hotel[$i]['WeddingReservingStateTrnView']['wedding_day_hotel'];
+
+		            if($filter_ws_hotel == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 
 		    <!-- レセプション会場フィルター -->
 		    <td>
-		      <select id='filter_reception_place'>
+		      <select id='filter_reception_place' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_reception_place);$i++){
+		  	         $val = $list_reception_place[$i]['WeddingReservingStateTrnView']['reception_place'];
+
+		            if($filter_ws_reception_place == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 
@@ -239,16 +297,38 @@ function Search(){
 
 		    <!-- Cameraフィルター -->
 		    <td>
-		      <select id='filter_camera'>
+		      <select id='filter_camera' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_camera);$i++){
+		  	         $val = $list_camera[$i]['WeddingReservingStateTrnView']['camera'];
+
+		            if($filter_ws_camera == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 		    <td></td>
 
 		    <!-- HariMakeフィルター -->
 		    <td>
-		      <select id='filter_hairmake'>
+		      <select id='filter_hairmake' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_hairmake);$i++){
+		  	         $val = $list_hairmake[$i]['WeddingReservingStateTrnView']['hair_make'];
+
+		            if($filter_ws_hairmake == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 		    <td></td>
@@ -258,24 +338,56 @@ function Search(){
 
 		    <!-- Videoフィルター -->
 		    <td>
-		      <select id='filter_video'>
+		      <select id='filter_video' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_video);$i++){
+		  	         $val = $list_video[$i]['WeddingReservingStateTrnView']['video'];
+
+		            if($filter_ws_video == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 		    <td></td>
 
 		    <!-- FLowerフィルター -->
 		    <td>
-		      <select id='filter_flower'>
+		      <select id='filter_flower' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_flower);$i++){
+		  	         $val = $list_flower[$i]['WeddingReservingStateTrnView']['flower'];
+
+		            if($filter_ws_flower == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 		    <td></td>
 
 		    <!-- Attendフィルター -->
 		    <td>
-		      <select id='filter_attend'>
+		      <select id='filter_attend' class="filter">
 		        <option value='-1' selected>ALL</option>
+				  <?php
+		  	     for($i=0;$i < count($list_attend);$i++){
+		  	         $val = $list_attend[$i]['WeddingReservingStateTrnView']['attend'];
+		            if($filter_ws_attend == $val){
+		           	 echo "<option value='".$val."' selected>{$val}</option>";
+				  }else{
+				  echo "<option value='".$val."'>{$val}</option>";
+				  }
+				  }
+				  ?>
 		      </select>
 		    </td>
 		    <td></td>
@@ -295,7 +407,8 @@ function Search(){
 		<tr>
 		    <th>No</th>
 		    <th><a href="#" >挙式日</a></th>
-		    <th>場所・時間</th>
+		    <th>場所</th>
+			<th>時間</th>
 		    <th><a href="">新郎</a></th>
 		    <th><a href="">新婦名</a></th>
 		    <th>成約担当者</th>
@@ -334,8 +447,15 @@ function Search(){
 		   	 $atr = $data[$i]['WeddingReservingStateTrnView'];
 		  	  echo "<tr class='ws_status_{$atr['status_id']}'>".
 		  	         "<td><a href='".$html->url('edit')."/{$atr['id']}'>".($i+1)."</a></td>".
-		  	         "<td>".$common->evalNbspForShortDate($atr['wedding_dt'])."</td>".
-		  	         "<td class='ws_status_{$atr['site_status']}'>".$common->evalNbsp($atr['wedding_place'])."</td>";
+		  	         "<td>".$common->evalNbspForShortDate($atr['wedding_dt'])."</td>";
+
+		             if($atr['church_code'] == ""){
+		               echo "<td class='ws_status_{$atr['site_status']}'>".$common->evalNbsp($atr['wedding_place'])."</td>";
+		             }else{
+		               echo "<td class='ws_status_{$atr['site_status']}'>".$common->evalNbsp($atr['church_code'])."</td>";
+		             }
+
+		      echo  "<td>".$atr['wedding_time']."</td>";
 
 		  	         if($atr['grmls_kj'] != "" || $atr['grmfs_kj'] != ""){
 		  	         	echo "<td>".$common->evalNbsp($atr['grmls_kj'])."&nbsp".$common->evalNbsp($atr['grmfs_kj'])."</td>";
@@ -371,7 +491,7 @@ function Search(){
 		  	         "<td class='ws_status_{$atr['attend_status']}'>".$common->evalNbsp($atr['attend'])."</td>".
 		  	         "<td>".$common->evalNbsp($atr['attend_note'])."</td>".
 
-		  	         "<td>".$common->evalNbspForShortDate($atr['briefing_dt'])."</td>".
+		  	         "<td>".$atr['briefing_dt']."</td>".
 
 
 		  	         "<td>".$leading1_list[$atr['leading1']]."</td>".

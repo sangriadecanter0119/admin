@@ -46,11 +46,11 @@ class EstimateDtlTrn extends AppModel {
  	        $estimate_dtl_data[$i]['reg_dt'] = date('Y-m-d H:i:s');
 
  	        //シングルクオートのエスケープ処理
- 	        $estimate_dtl_data[$i]['sales_goods_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['sales_goods_nm']);
- 	        $estimate_dtl_data[$i]['original_sales_goods_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['original_sales_goods_nm']);
- 	        $estimate_dtl_data[$i]['vendor_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['vendor_nm']);
- 	        $estimate_dtl_data[$i]['goods_kbn_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['goods_kbn_nm']);
- 	        $estimate_dtl_data[$i]['goods_ctg_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['goods_ctg_nm']);
+ 	        //$estimate_dtl_data[$i]['sales_goods_nm'] = str_replace("'","\'",$estimate_dtl_data[$i]['sales_goods_nm']);
+ 	        //$estimate_dtl_data[$i]['original_sales_goods_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['original_sales_goods_nm']);
+ 	        //$estimate_dtl_data[$i]['vendor_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['vendor_nm']);
+ 	        //$estimate_dtl_data[$i]['goods_kbn_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['goods_kbn_nm']);
+ 	        //$estimate_dtl_data[$i]['goods_ctg_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['goods_ctg_nm']);
 
  	        //フィールドの初期化
   	        $this->create();
@@ -117,7 +117,7 @@ class EstimateDtlTrn extends AppModel {
     for($i=1;$i <= count($estimate_dtl_data);$i++)
     {
     	//シングルクオートのエスケープ処理
-    	$estimate_dtl_data[$i]['sales_goods_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['sales_goods_nm']);
+    	//$estimate_dtl_data[$i]['sales_goods_nm'] = str_replace("'","''",$estimate_dtl_data[$i]['sales_goods_nm']);
 
        //商品が選択されていない(空の明細)行があったらスキップする
        if(!empty($estimate_dtl_data[$i]['goods_id']) &&  $estimate_dtl_data[$i]['goods_id'] > 0 )

@@ -890,6 +890,7 @@ class CustomerEstimateController extends AppController
       $this->data['GoodsMst']['rw_share'] = $this->data['GoodsMst']['rw_share'] / 100;
       $this->data['GoodsMst']['start_valid_dt'] = empty($this->data['GoodsMst']['start_valid_dt']) ? "1000-01-01" :$this->data['GoodsMst']['start_valid_dt'] ;
       $this->data['GoodsMst']['end_valid_dt']   = empty($this->data['GoodsMst']['end_valid_dt'])   ? "9999-12-31" :$this->data['GoodsMst']['end_valid_dt'] ;
+      $this->data['GoodsMst']['cost1']   = $this->data['GoodsMst']['cost'];
  	  $this->data['GoodsMst']['reg_nm'] = $this->Auth->user('username');
       $this->data['GoodsMst']['reg_dt'] = date('Y-m-d H:i:s');
       $this->GoodsMst->create();

@@ -43,13 +43,14 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
      /* ヘッダ作成  */
       $estimate_id = -1;
       $customer_pos = array();
+
       for($i=0;$i < count($data);$i++){
       	/* 重複して顧客が取得されているのでユニークな顧客名のみを抽出してヘッダとする */
-      	if($estimate_id != $data[$i]["EstimateDtlTrnView"]['estimate_id']){
+       	if(in_array($data[$i]["EstimateDtlTrnView"]['customer_id'],$customer_pos)==false){
       	   $sheet->setCellValueByColumnAndRow($col_cnt, $row_cnt, $data[$i]["EstimateDtlTrnView"]['grmls_kj']."様 ".$common->evalNbspForDayOnly($data[$i]["EstimateDtlTrnView"]['wedding_dt']));
            $estimate_id = $data[$i]["EstimateDtlTrnView"]['estimate_id'];
            //顧客IDを保持
-           array_push($customer_pos,$data[$i]["EstimateDtlTrnView"]['customer_id']);
+           $customer_pos[]=$data[$i]["EstimateDtlTrnView"]['customer_id'];
            $col_cnt++;
       	}
       }

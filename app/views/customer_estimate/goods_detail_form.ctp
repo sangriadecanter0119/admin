@@ -8,9 +8,19 @@
  	                 id:"ConfirmGoodsListBotton",
  	                 click: function () {
  	                     var current_line_no = <?php echo $current_line_no ?>;
- 	                     var id = $('#goods_list').jqGrid('getGridParam','selrow');
+ 	                     //var id = $('#goods_list').jqGrid('getGridParam','selrow');
 
- 	                     updateGoodsDetail(id ,current_line_no);
+                         var selrows = jQuery('#goods_list').getGridParam('selarrrow');
+
+	                     if (selrows.length > 0){
+		                    for (var i = 0; i < selrows.length; i++){
+		                       if(i > 0){
+		                          copyRow();
+		                          current_line_no++;
+		                       }
+		                       updateGoodsDetail(selrows[i],current_line_no);
+		                    }
+	                     }
   		                 $("#goods_list_dialog").dialog('close');
  	                 }
  	             },
@@ -63,6 +73,7 @@
           rowNum: 20,
           rowList: [10, 20, 30, 40, 50],
           loadonce: true,
+          multiselect: true,
           grouping:true,
    	      groupingView : {
    		      groupField : ['Dummy'],

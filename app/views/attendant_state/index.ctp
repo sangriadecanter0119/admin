@@ -82,7 +82,7 @@ function ResizeTable(){
     <tr>
   </table>
 
-  <div style="margin-top:20px;margin-bottom:10px;font-size:1.2em">【製作担当】
+  <div style="margin-top:20px;margin-bottom:10px;font-size:1.2em">【制作担当】
     <span style="margin-left:30px;"><?php echo "全".count($invoice_data)."件" ?></span>
     <span style="margin-left:30px;margin-right:5px">請求額総合計：</span><span id="invoice_total_amount" class="yen"></span></div>
     <table id="customers_table" class="list" cellspacing="0" style="width:100%;height:90%">

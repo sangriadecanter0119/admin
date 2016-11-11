@@ -4,9 +4,19 @@ $index_url = $html->url('index');
 $this->addScript($javascript->codeBlock( <<<JSPROG
 $(function(){
 
+   $("#start_date").mask("9999-99");
+   $("#end_date").mask("9999-99");
+
    $("#wedding_dt").change(function(){
 
       $("#GoodsMstViewWeddingPlannedDt").val($(this).val());
+      $("#CustomerMstIndexForm").submit();
+   });
+
+    $("#search_button").click(function(){
+
+      $("#GoodsMstViewStartWeddingPlannedDt").val($("#start_date").val());
+      $("#GoodsMstViewEndWeddingPlannedDt").val($("#end_date").val());
       $("#CustomerMstIndexForm").submit();
    });
 
@@ -45,12 +55,19 @@ JSPROG
  <!-- フィルター用の条件を保持   -->
  <div style="display:none;">
    <?php echo $form->create(null);
-         echo $form->text('GoodsMstView.wedding_planned_dt' ,array('value' => $wedding_dt));
+         echo $form->text('GoodsMstView.start_wedding_planned_dt' ,array('value' => $start_wedding_dt));
+         echo $form->text('GoodsMstView.end_wedding_planned_dt'   ,array('value' => $end_wedding_dt));
          echo $form->end(); ?>
  </div>
 
  <div class='notation'>
    <label>表示年月：</label>
+   <input type="text" id="start_date" name="start_date" class="inputdate" value="<?php echo $start_wedding_dt ?>" />
+   <span>～</span>
+   <input type="text" id="end_date"   name="end_date" class="inputdate" value="<?php echo $end_wedding_dt ?>" />
+   <input id="search_button" type="image"  src="<?php echo $html->webroot("/images/search.png"); ?>"  style="margin-left:3px;" />
+
+   <!--
    <select id='wedding_dt'>
 		<?php
 		  $found = false;
@@ -69,6 +86,7 @@ JSPROG
 		   }
 	    ?>
    </select>
+   -->
 
    <div id="country_selector" style="display:inline;margin-left:10px;">
     <label>【邦貨】</label><input type="radio" name='view' value="yen" checked/>
@@ -226,6 +244,23 @@ JSPROG
           "<td class='dollar'>".number_format($sum_foreign_gross_total,2)."</td>".
           "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_gross_total/$sum_foreign_total)*100,2))."%</td>".
           "</tr>";
+
+     $c = count($data);
+      echo "<tr><td>&nbsp;</td><td>&nbsp;</td><td>平均</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_total/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_credit/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_service_fee/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_hi_total/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_rw_total/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_hawaii_tax/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_remittance_hawaii_tax/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_rw_discount/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_total_discount/$c,2))."</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_rw/$c,2))."</td>".
+          "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_rw/$sum_foreign_total)*100,2))."%</td>".
+          "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_gross_total/$c,2))."</td>".
+          "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_gross_total/$sum_foreign_total)*100,2))."%</td>".
+          "</tr>";
 ?>
     </table>
 
@@ -307,6 +342,23 @@ JSPROG
           "<td class='yen'>".number_format($sum_rw)."</td>".
           "<td class='yen'>".($sum_total== 0 ? 0 : number_format(($sum_rw/$sum_total)*100,2))."%</td>".
           "<td class='yen'>".number_format($sum_gross_total)."</td>".
+          "<td class='yen'>".($sum_total== 0 ? 0 :number_format(($sum_gross_total/$sum_total)*100,2)) ."%</td>".
+          "</tr>";
+
+     $c = count($data);
+     echo "<tr><td>&nbsp;</td><td>&nbsp;</td><td>平均</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_total/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_credit_pay/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_service_fee/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_hi_total/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_rw_total/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_hawaii_tax/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_remittance_hawaii_tax/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_rw_discount/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_total_discount/$c))."</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_rw/$c))."</td>".
+          "<td class='yen'>".($sum_total== 0 ? 0 : number_format(($sum_rw/$sum_total)*100,2))."%</td>".
+          "<td class='yen'>".($c==0 ? 0 : number_format($sum_gross_total/$c))."</td>".
           "<td class='yen'>".($sum_total== 0 ? 0 :number_format(($sum_gross_total/$sum_total)*100,2)) ."%</td>".
           "</tr>";
 ?>

@@ -42,7 +42,7 @@ class Configure extends Object {
  * @return Configure instance
  * @access public
  */
-	static function &getInstance($boot = true) {
+	function &getInstance($boot = true) {
 		static $instance = array();
 		if (!$instance) {
 			if (!class_exists('Set')) {
@@ -78,7 +78,7 @@ class Configure extends Object {
  * @return boolean True if write was successful
  * @access public
  */
-	static function write($config, $value = null) {
+	function write($config, $value = null) {
 		$_this =& Configure::getInstance();
 
 		if (!is_array($config)) {
@@ -151,7 +151,7 @@ class Configure extends Object {
  * @return string value of Configure::$var
  * @access public
  */
-	static function read($var = 'debug') {
+	function read($var = 'debug') {
 		$_this =& Configure::getInstance();
 
 		if ($var === 'debug') {
@@ -201,7 +201,7 @@ class Configure extends Object {
  * @return void
  * @access public
  */
-	static function delete($var = null) {
+	function delete($var = null) {
 		$_this =& Configure::getInstance();
 
 		if (strpos($var, '.') === false) {
@@ -229,7 +229,7 @@ class Configure extends Object {
  * @return mixed false if file not found, void if load successful
  * @access public
  */
-	static function load($fileName) {
+	function load($fileName) {
 		$found = $plugin = $pluginPath = false;
 		list($plugin, $fileName) = pluginSplit($fileName);
 		if ($plugin) {
@@ -278,7 +278,7 @@ class Configure extends Object {
  * @return string Current version of CakePHP
  * @access public
  */
-	static function version() {
+	function version() {
 		$_this =& Configure::getInstance();
 
 		if (!isset($_this->Cake['version'])) {
@@ -303,7 +303,7 @@ class Configure extends Object {
  * @return void
  * @access public
  */
-	static function store($type, $name, $data = array()) {
+	function store($type, $name, $data = array()) {
 		$write = true;
 		$content = '';
 
@@ -326,7 +326,7 @@ class Configure extends Object {
  * @return void
  * @access private
  */
-	static function __writeConfig($content, $name, $write = true) {
+	function __writeConfig($content, $name, $write = true) {
 		$file = CACHE . 'persistent' . DS . $name . '.php';
 
 		if (Configure::read() > 0) {
@@ -356,7 +356,7 @@ class Configure extends Object {
  * @deprecated
  * @see App::objects()
  */
-	static function listObjects($type, $path = null, $cache = true) {
+	function listObjects($type, $path = null, $cache = true) {
 		return App::objects($type, $path, $cache);
 	}
 
@@ -364,7 +364,7 @@ class Configure extends Object {
  * @deprecated
  * @see App::core()
  */
-	static function corePaths($type = null) {
+	function corePaths($type = null) {
 		return App::core($type);
 	}
 
@@ -372,7 +372,7 @@ class Configure extends Object {
  * @deprecated
  * @see App::build()
  */
-	static function buildPaths($paths) {
+	function buildPaths($paths) {
 		return App::build($paths);
 	}
 
@@ -385,7 +385,7 @@ class Configure extends Object {
  * @return void
  * @access private
  */
-	static function __loadBootstrap($boot) {
+	function __loadBootstrap($boot) {
 		if ($boot) {
 			Configure::write('App', array('base' => false, 'baseUrl' => false, 'dir' => APP_DIR, 'webroot' => WEBROOT_DIR, 'www_root' => WWW_ROOT));
 
@@ -735,7 +735,7 @@ class App extends Object {
  * @return array numeric keyed array of core lib paths
  * @access public
  */
-	static function core($type = null) {
+	function core($type = null) {
 		static $paths = false;
 		if ($paths === false) {
 			$paths = Cache::read('core_paths', '_cake_core_');
@@ -1284,18 +1284,18 @@ class App extends Object {
 		}
 		return $items;
 	}
-
+	
 /**
  * Determines if $__maps, $__objects and $__paths cache should be reset.
  *
- * @param boolean $reset
+ * @param boolean $reset 
  * @return boolean
  * @access private
- */
+ */	
 	function __resetCache($reset = null) {
 		static $cache = array();
 		if (!$cache && $reset === true) {
-			$cache = true;
+			$cache = true;	
 		}
 		return $cache;
 	}

@@ -31,6 +31,7 @@
    echo $html->script('jquery/jquery.common.js');
    echo $html->script('common.js');
    echo $scripts_for_layout;
+   echo $html->script('bignumber.js');
  ?>
 <script type="text/javascript">
 

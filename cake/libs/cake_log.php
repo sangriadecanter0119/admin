@@ -62,7 +62,7 @@ class CakeLog {
  * @return void
  * @static
  */
-	static function &getInstance() {
+	function &getInstance() {
 		static $instance = array();
 		if (!isset($instance[0])) {
 			$instance[0] =& new CakeLog();
@@ -96,7 +96,7 @@ class CakeLog {
  * @return boolean success of configuration.
  * @static
  */
-	static function config($key, $config) {
+	function config($key, $config) {
 		if (empty($config['engine'])) {
 			trigger_error(__('Missing logger classname', true), E_USER_WARNING);
 			return false;
@@ -150,7 +150,7 @@ class CakeLog {
  * @access public
  * @static
  */
-	static function configured() {
+	function configured() {
 		$self =& CakeLog::getInstance();
 		return array_keys($self->_streams);
 	}
@@ -164,7 +164,7 @@ class CakeLog {
  * @access public
  * @static
  */
-	static function drop($streamName) {
+	function drop($streamName) {
 		$self =& CakeLog::getInstance();
 		unset($self->_streams[$streamName]);
 	}
@@ -175,7 +175,7 @@ class CakeLog {
  * @return void
  * @access protected
  */
-     function _autoConfig() {
+	function _autoConfig() {
 		if (!class_exists('FileLog')) {
 			App::import('Core', 'log/FileLog');
 		}
@@ -199,7 +199,7 @@ class CakeLog {
  * ### Usage:
  *
  * Write a message to the 'warning' log:
- *
+ * 
  * `CakeLog::write('warning', 'Stuff is broken here');`
  *
  * @param string $type Type of message being written
@@ -208,7 +208,7 @@ class CakeLog {
  * @access public
  * @static
  */
-	static function write($type, $message) {
+	function write($type, $message) {
 		if (!defined('LOG_ERROR')) {
 			define('LOG_ERROR', 2);
 		}
@@ -241,7 +241,7 @@ class CakeLog {
 
 /**
  * An error_handler that will log errors to file using CakeLog::write();
- * You can control how verbose and what type of errors this error_handler will
+ * You can control how verbose and what type of errors this error_handler will 
  * catch using `Configure::write('log', $value)`.  See core.php for more information.
  *
  *
@@ -252,7 +252,7 @@ class CakeLog {
  * @param array $context Context
  * @return void
  */
-	static function handleError($code, $description, $file = null, $line = null, $context = null) {
+	function handleError($code, $description, $file = null, $line = null, $context = null) {
 		if ($code === 2048 || $code === 8192 || error_reporting() === 0) {
 			return;
 		}

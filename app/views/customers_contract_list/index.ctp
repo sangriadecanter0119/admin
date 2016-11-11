@@ -1,4 +1,4 @@
-<script type='text/javascript'>
+﻿<script type='text/javascript'>
 $(function(){
 
    $("#wedding_dt").change(function(){
@@ -116,8 +116,11 @@ function ColorNameSake(obj){
 
     for($i=0;;$i++)
     {
-    	if(count($wedding_data[0]) <= $i && count($wedding_data[1]) <= $i && count($wedding_data[2]) <= $i &&
-    	count($wedding_data[3]) <= $i && count($wedding_data[4]) <= $i && count($wedding_data[5]) <= $i){break;}
+        $count = 0;
+        for($j=0 ; $j < $showing_month_count;$j++){
+           if(count($wedding_data[$j]) <= $i){ $count++; }
+        }
+        if($count == $showing_month_count){break;}
 
     	$customers = array();
     	for($j=0 ; $j < $showing_month_count ;$j++){
@@ -156,8 +159,11 @@ function ColorNameSake(obj){
 
     for($i=0;;$i++)
     {
-    	if(count($contract_data[0]) <= $i && count($contract_data[1]) <= $i && count($contract_data[2]) <= $i &&
-    	count($contract_data[3]) <= $i && count($contract_data[4]) <= $i && count($contract_data[5]) <= $i){break;}
+        $count = 0;
+        for($j=0 ; $j < $showing_month_count;$j++){
+           if(count($contract_data[$j]) <= $i){ $count++; }
+        }
+        if($count == $showing_month_count){break;}
 
     	$customers = array();
     	for($j=0 ; $j < $showing_month_count;$j++){

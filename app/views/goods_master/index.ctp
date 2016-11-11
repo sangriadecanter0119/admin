@@ -3,6 +3,7 @@ $url = $html->url('filterData');
 $delete_unused_goods_url = $html->url("deleteGoodsUsingLessThan");
 $confirm_image_path = $html->webroot("/images/confirm_result.png");
 $error_image_path = $html->webroot("/images/error_result.png");
+$upload_url = $html->url("fileUploadForm");
 
 $this->addScript($javascript->codeBlock( <<<JSPROG
 $(function(){
@@ -51,6 +52,18 @@ $(function(){
       $("#GoodsServiceIndexForm").submit();
    });
 
+   /*  ファイル取り込みフォームの表示開始
+    -------------------------------------------------*/
+    $("#file_upload_link").click(function(){
+
+         $(this).simpleLoading('show');
+         $.post("$upload_url",function(html){
+             $('body').append(html);
+             $(this).simpleLoading('hide');
+         });
+         return false;
+       });
+
    /* 小頻度使用の商品の削除
    ----------------------------------------------------------------------*/
    $("#delete_unused_goods_link").click(function(){
@@ -93,6 +106,8 @@ JSPROG
      <li><a href="<?php echo $html->url('/systemManager') ?>">戻る</a></li>
      <li><a href="<?php echo $html->url('addGoods') ?>">商品追加</a></li>
      <li><a href="<?php echo $html->url('addSetGoods') ?>">セット商品追加</a></li>
+     <li><a href="<?php echo $html->url('export') ?>">EXCEL出力</a></li>
+     <li><a href="#" id='file_upload_link'>【テスト中】EXCEL取り込み</a></li>
     <!-- <li><a href="<?php echo $html->url('duplicateGoods') ?>">商品マスタ複製</a></li> -->
     <!-- <li><a href="#" id="delete_unused_goods_link">使用頻度の少ない商品削除</a></li> -->
     </ul>

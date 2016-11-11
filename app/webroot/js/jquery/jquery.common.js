@@ -14,7 +14,7 @@
             defaults = $.extend(defaults, options);
         },
         show: function (options) {
-
+       
             var settings ={};
             //Deep Copy
             $.extend(true,settings,defaults);
@@ -62,7 +62,7 @@
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
 
         }
-        /* ①引数にオブジェクトが指定された場合は初期設定のためのオプションが渡されたとみなす
+        /* ①引数にオブジェクトが指定された場合は初期設定のためのオプションが渡されたとみなす 
         * ②メソッド名が空の場合は初期化処理を実行
         */
         else if (typeof method === 'object' || !method) {

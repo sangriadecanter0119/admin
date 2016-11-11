@@ -67,18 +67,16 @@ class WeddingReservingStateService extends AppModel {
        */
       function Import(){
 
-      	$tr = ClassRegistry::init('TransactionManager');
-      	$tr->begin();
-
       	App::import("Model", "WeddingReservingStateTrn");
       	$reserving = new WeddingReservingStateTrn();
 
       	App::import("Model", "ContractTrn");
       	$contract = new ContractTrn();
 
-		$reserving->deleteAll();
-
-      	$data = $contract->find("all");
+		if($reserving->deleteAll(array('1=1'))==false) {
+			return array('result' => false, 'message' => "挙式予約状況の取り込みに失敗しました。", 'reason' => $reserving->getDbo()->error . "[" . date('Y-m-d H:i:s') . "]");
+		}
+		$data = $contract->find("all");
 
       	for($i=0;$i < count($data);$i++){
       		$new_data = array(
@@ -91,7 +89,6 @@ class WeddingReservingStateService extends AppModel {
       			return array('result'=>false,'message'=>"挙式予約状況の取り込みに失敗しました。",'reason'=>$reserving->getDbo()->error."[".date('Y-m-d H:i:s')."]");
       		}
       	}
-      	$tr->commit();
       	return array('result'=>true);
       }
 
@@ -100,14 +97,16 @@ class WeddingReservingStateService extends AppModel {
 		$tr = ClassRegistry::init('TransactionManager');
 		$tr->begin();
 
-		$this->Import();
+		$ret = $this->Import();
+		if($ret['result'] == false){return $ret;}
 
 		$ret = $this->getCsvFileInfo($filename);
 		if($ret['result'] == false){return $ret;}
 
         $ret = $this->registerFile($ret['csv']);
-		if($ret['result'] == true){ $tr->commit();}
+		if($ret['result'] == false){return $ret;}
 
+		$tr->commit();
 		return $ret;
 	}
 	/**
@@ -126,17 +125,18 @@ class WeddingReservingStateService extends AppModel {
 
 		while (($data = fgetcsv($temp, 0, ",")) !== FALSE) {
 
-			if(count($data) >= 20){
+			if(count($data) >= 17){
 
 				//$customer = $this->getCustomerCodeByKana(mb_convert_kana(preg_replace('/[ ]/', '', $data[4]),"KV"));
 				//	if(count($customer)==0){  return array("isSuccess"=>false , "message"=>"顧客名「".mb_convert_kana($data[4],"KV")."」に該当する顧客情報が見つかりませんでした。");   }
 
 				$csv[] = array(
-					"customer_cd"=>$data[0]   ,"recep_note"=>$data[1]    ,"hotel_note"=>$data[2]  ,"max_pax"=>$data[3],
-				    "camera"=>$data[4]         ,"camera_note"=>$data[5]   ,"hair_make"=>$data[6],
-					"hair_make_note"=>$data[7],"hair_make_dt"=>$data[8] ,"video"=>$data[9]        ,"flower"=>$data[10],
-					"attend"=>$data[11]        ,"attend_note"=>$data[12]  ,"briefing_dt"=>$data[13],"introducer"=>$data[14],
-					"slide_show"=>$data[15]    ,"short_film1"=>$data[16] ,"short_film2"=>$data[17],"visionari_ss"=>$data[18],"visionari_dater"=>$data[19]
+					"customer_cd"=>trim($data[0])    , "camera"=>trim($data[1])         ,"camera_note"=>trim($data[2])   ,"hair_make"=>trim($data[3]),
+					"hair_make_note"=>trim($data[4]) ,"hair_make_dt"=>empty($data[5]) ? null:trim($data[5])    ,"video"=>trim($data[6])          ,
+					"flower"=>trim($data[7])          ,"attend"=>trim($data[8])          ,"attend_note"=>trim($data[9])    ,
+					"briefing_dt"=>empty($data[10]) ? null:trim($data[10])      ,"introducer"=>trim($data[11]),
+					"slide_show"=>trim($data[12])    ,"short_film1"=>trim($data[13])   ,"short_film2"=>trim($data[14])  ,"visionari_ss"=>trim($data[15]),
+					"visionari_dater"=>trim($data[16])
 				);
 			}else{
 				return array('result'=>false,'message'=>"ファイル取り込みに失敗しました。",
@@ -190,6 +190,56 @@ class WeddingReservingStateService extends AppModel {
 			}
 		}
 		return array('result'=>true);
+	}
+	function getWeddingList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT wedding_place'));
+	}
+	function getFirstContactPersonList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT first_contact_person_nm'));
+	}
+	function getProcessPersonList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT process_person_nm'));
+	}
+	function getHotelList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT wedding_day_hotel'));
+	}
+	function getReceptionPlaceList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT reception_place'));
+	}
+	function getCameraList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT camera'));
+	}
+	function getHairmakeList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT hair_make'));
+	}
+	function getVideoList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT video'));
+	}
+	function getFlowerList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT flower'));
+	}
+	function getAttendList(){
+		App::import("Model", "WeddingReservingStateTrnView");
+		$reservingView = new WeddingReservingStateTrnView();
+		return $reservingView->find('all', array('fields'=>'DISTINCT attend'));
 	}
 }
 ?>

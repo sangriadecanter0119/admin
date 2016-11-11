@@ -14,7 +14,7 @@ class ContractTrn extends AppModel {
    * @return 正常：新規データのID　
    *         異常：
    */
-  function createNew($estimate_id,$customer_id,$wedding_date=null,$wedding_place=null,$wedding_time=null,$reception_place=null,$reception_time=null,$user_name){
+  function createNew($estimate_id,$customer_id,$contract_dt=null,$wedding_date=null,$wedding_place=null,$wedding_time=null,$reception_place=null,$reception_time=null,$user_name){
 
   	//シングルクオートのエスケープ処理
   	$wedding_place = str_replace("'","''",$wedding_place);
@@ -23,6 +23,7 @@ class ContractTrn extends AppModel {
  	$contract_data = array(
  	                       "customer_id"=>$customer_id,
  	                       "estimate_id"=>$estimate_id,
+ 			               "contract_dt"=>$contract_dt,
  	                       "wedding_dt"=>$wedding_date,
  	                       "wedding_place"=>$wedding_place,
  			               "wedding_time"=>$wedding_time,
@@ -175,7 +176,7 @@ class ContractTrn extends AppModel {
   }
 
   /**
-   * 契約日を取得する
+   * 成約日を取得する
    * @param unknown $customer_id
    * @return NULL
    */

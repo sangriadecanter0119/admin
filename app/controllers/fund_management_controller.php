@@ -46,6 +46,7 @@ class FundManagementController extends AppController
  	$this->set("sub_menu_fund","current");
  	$this->set("sub_menu_remittance","");
  	$this->set("sub_menu_payment","");
+ 	$this->set("sub_menu_vendor_sales","");
 
  	$this->set("sub_title","資金管理");
  	$this->set("user",$this->Auth->user());
