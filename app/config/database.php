@@ -73,24 +73,25 @@
  */
 class DATABASE_CONFIG {
 
+	var $product = array(
+		'driver' => 'mysql_log',
+		'persistent' => false,
+		'host' => 'mysql304.db.sakura.ne.jp',
+		'login' => 'iyua',
+		'password' => '12p12p12p3',
+		'database' => 'iyua_ver2',
+		'prefix' => '',
+	    'encoding' => 'utf8'
+	);
+
 	var $default = array(
 		'driver' => 'mysql_log',
 		'persistent' => false,
-		'host' => 'mysql304.db.sakura.ne.jp',
-		'login' => 'iyua',
+		'host' => 'localhost',
+  	    'login' => 'root',
 		'password' => '12p12p12p3',
 		'database' => 'iyua_ver2',
 		'prefix' => '',
-	    'encoding' => 'utf8'	
-	);
-
-	var $test = array(
-		'driver' => 'mysql_log',
-		'persistent' => false,
-		'host' => 'mysql304.db.sakura.ne.jp',
-		'login' => 'iyua',
-		'password' => '12p12p12p3',
-		'database' => 'iyua_ver2',
-		'prefix' => '',
+		'encoding' => 'utf8'
 	);
 }
