@@ -96,192 +96,30 @@ class GoodsService extends AppModel {
     	return $ret;
     }
 
+    /**
+     * 商品EXCELファイルをアップロードしてサーバに仮保存
+     * @param unknown $tempFile
+     * @param unknown $uploadingFileName
+     * @return boolean[]|string[]
+     */
     function uploadFile($tempFile,$uploadingFileName){
 
-    	$targetPath = "uploads".DS."goods".DS;
-    	$tempFileNameWihtoutExtension = pathinfo($uploadingFileName, PATHINFO_FILENAME);
-    	//$targetFile =  mb_convert_encoding($targetPath.$tempFileNameWihtoutExtension.'_'.date('YmdHis').'.xlsx', "SJIS", "AUTO");
-        $targetFile =  $targetPath.date('YmdHis').'.xlsx';
-
-    	//ファイル削除
-    	//unlink($targetFile);
-    	//ファイル保存
-    	chmod($targetPath, 0777);
-    	move_uploaded_file($tempFile,$targetFile);
-    	if($this->data['ImgForm']['ImgFile']['error']!=0){
-    		switch ($this->data['ImgForm']['ImgFile']['error'])
-    		{
-    			case 0:
-    				$msg = "アップロードが完了しました。";
-    				break;
-    			case 1:
-    				$msg = "The file is bigger than this PHP installation allows";
-    				break;
-    			case 2:
-    				$msg = "The file is bigger than this form allows";
-    				break;
-    			case 3:
-    				$msg = "Only part of the file was uploaded";
-    				break;
-    			case 4:
-    				$msg = "No file was uploaded";
-    				break;
-    			case 6:
-    				$msg = "Missing a temporary folder";
-    				break;
-    			case 7:
-    				$msg = "Failed to write file to disk";
-    				break;
-    			case 8:
-    				$msg = "File upload stopped by extension";
-    				break;
-    			default:
-    				$msg = "unknown error ".$this->data['ImgForm']['ImgFile']['error'];
-    				break;
-    		}
-    		return array('result'=>false,'message'=>$msg);
-    	}else{
-    		return array('result'=>true,'filePath'=>$targetFile);
-    	}
+	    App::import("Model", "GoodsUploader");
+	    $uploader = new GoodsUploader();
+      	return $uploader->uploadFile($tempFile, $uploadingFileName);
     }
 
+    /**
+     * 商品EXCELファイルを元に商品マスタを更新
+     * @param unknown $file
+     * @param unknown $username
+     * @return boolean[]|string[]|boolean[]
+     */
     function updateByFile($file,$username){
 
-    	App::import("Model", "GoodsMst");
-    	$goods = new GoodsMst();
-
-    	App::import("Model", "EstimateDtlTrn");
-    	$estimate_dtl = new EstimateDtlTrn();
-    	App::import("Model", "SetGoodsMst");
-    	$set_goods = new SetGoodsMst();
-    	App::import("Model", "LatestGoodsMstView");
-    	$goods_view = new LatestGoodsMstView();
-    	App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . DS . 'PHPExcel' . DS . 'Reader' . DS . 'Excel2007.php') );
-
-    	$reader = new PHPExcel_Reader_Excel2007();
-    	$objPHPExcel = $reader->load($file);
-    	$tmp = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-    			//1:ヘッダ 2～:データ行
-    			//$m = $tmp[2]['B'];
-
- 	//return array('result'=>false,'message'=>$tmp[2]['AF']);   
-
-    	for($i=2;$i <= count($tmp);$i++){
-
-    		$id = $tmp[$i]['A'];
-    		if(!empty($id) && $id !="" && $id != null){
-
-    			$current_data = $goods_view->findById($id);
-    			if($current_data == null){ return  array('result'=>false,'message'=>$i.'行目のID'.$id.'の商品が存在しません。');}
-
-    		    //削除
-    			if($tmp[$i]['AH'] == 1){
-    				/* 全てのリビジョンを物理or論理削除する  */
-    				$target = $goods->find('all',array('fields'=>array('id'),'conditions'=>array('goods_cd'=>$current_data['LatestGoodsMstView']['goods_cd'])));
-
-    				for($j=0;$j < count($target);$j++){
-
-    					$goods_id = $target[$j]['GoodsMst']['id'];
-
-    					/* 見積又はセット商品の商品構成で既に使用されている場合は論理削除 */
-    					if($estimate_dtl->find('count',array('conditions'=>array('goods_id'=>$goods_id))) > 0 ||
-    				       $set_goods->find('count',array('conditions'=>array('goods_id'=>$goods_id))) > 0){
-
-    						$fields = array('del_kbn'=>DELETE,'del_nm'=>"'".$username."'",'del_dt'=>"'".date('Y-m-d H:i:s')."'");
-    						/* 商品マスタ */
-    						if($goodsMst->updateAll($fields,array('id'=>$goods_id))==false){
-    							return array('result'=>false,'message'=>"削除に失敗しました。".$goods->getDbo()->error."[".date('Y-m-d H:i:s')."]");
-    						}
-    						/* 物理削除 */
-    					}else{
-
-    						if($goods->delete($goods_id)==false){
-    							return array('result'=>false,'message'=>"削除に失敗しました。".$goods->getDbo()->error."[".date('Y-m-d H:i:s')."]");
-    						}
-    					}
-    				}
-    			//更新
-    			}else{
-    				$data = array(
-    						"year"=>$current_data['LatestGoodsMstView']['year'],
-    						"revision"=>$current_data['LatestGoodsMstView']['revision'] + 1,
-    						"goods_cd"=>$current_data['LatestGoodsMstView']['goods_cd'],
-    						"goods_kbn_id"=>$tmp[$i]['E'],
-    						"vendor_id"=>$tmp[$i]['G'],
-    						"goods_nm"=>$tmp[$i]['I'],
-    						"price"=>str_replace(',','',$tmp[$i]['Z']),
-    						"cost"=>str_replace(',','',$tmp[$i]['X']),
-    						"cost1"=>str_replace(',','',$tmp[$i]['M']),
-    						"cost2"=>str_replace(',','',$tmp[$i]['N']),
-    						"cost3"=>str_replace(',','',$tmp[$i]['O']),
-    						"cost4"=>str_replace(',','',$tmp[$i]['P']),
-    						"cost5"=>str_replace(',','',$tmp[$i]['Q']),
-    						"cost6"=>str_replace(',','',$tmp[$i]['R']),
-    						"cost7"=>str_replace(',','',$tmp[$i]['S']),
-    						"cost8"=>str_replace(',','',$tmp[$i]['T']),
-    						"cost9"=>str_replace(',','',$tmp[$i]['U']),
-    						"cost10"=>str_replace(',','',$tmp[$i]['V']),
-    						"tax"=>str_replace('%','',$tmp[$i]['J']) / 100,
-    						"service_rate"=>str_replace('%','',$tmp[$i]['K']) / 100,
-    						"profit_rate"=>str_replace('%','',$tmp[$i]['L']) / 100,
-    						"aw_share"=>str_replace('%','',$tmp[$i]['AE']) / 100,
-    						"rw_share"=>str_replace('%','',$tmp[$i]['AF']) / 100,
-    						"currency_kbn"=>$tmp[$i]['AD'],
-    						"internal_pay_flg"=>$tmp[$i]['AB'],
-    						"set_goods_kbn"=>$current_data['LatestGoodsMstView']['set_goods_kbn'],
-    						"start_valid_dt"=>$current_data['LatestGoodsMstView']['start_valid_dt'],
-    						"end_valid_dt"=>$current_data['LatestGoodsMstView']['end_valid_dt'],
-    						"payment_kbn"=>$tmp[$i]['AC'],
-    						"non_display_flg"=>$current_data['LatestGoodsMstView']['non_display_flg'],
-    						"reg_nm"=>$current_data['LatestGoodsMstView']['reg_nm'],
-    						"reg_dt"=>$current_data['LatestGoodsMstView']['reg_dt'],
-    						"upd_nm"=>$username,
-    						"upd_dt"=>date('Y-m-d H:i:s')
-    				);
-    				$goods->create();
-    				if($goods->save($data) == false){ return  array('result'=>false,'message'=>$i.'行目の更新に失敗しました。'); }
-    			}
-    		//新規
-    		}else{
-    			$data = array(
-    						"year"=>GOODS_YEAR,
-    						"revision"=>1,
-    						"goods_cd"=>$goods->getNewGoodsCode($tmp[$i]['C'],GOODS_YEAR),
-    						"goods_kbn_id"=>$tmp[$i]['E'],
-    						"vendor_id"=>$tmp[$i]['G'],
-    						"goods_nm"=>$tmp[$i]['I'],
-    						"price"=>str_replace(',','',$tmp[$i]['Z']),
-    						"cost"=>str_replace(',','',$tmp[$i]['X']),
-    						"cost1"=>str_replace(',','',$tmp[$i]['M']),
-    						"cost2"=>str_replace(',','',$tmp[$i]['N']),
-    						"cost3"=>str_replace(',','',$tmp[$i]['O']),
-    						"cost4"=>str_replace(',','',$tmp[$i]['P']),
-    						"cost5"=>str_replace(',','',$tmp[$i]['Q']),
-    						"cost6"=>str_replace(',','',$tmp[$i]['R']),
-    						"cost7"=>str_replace(',','',$tmp[$i]['S']),
-    						"cost8"=>str_replace(',','',$tmp[$i]['T']),
-    						"cost9"=>str_replace(',','',$tmp[$i]['U']),
-    						"cost10"=>str_replace(',','',$tmp[$i]['V']),
-    						"tax"=>str_replace('%','',$tmp[$i]['J']) / 100,
-    						"service_rate"=>str_replace('%','',$tmp[$i]['K']) / 100,
-    						"profit_rate"=>str_replace('%','',$tmp[$i]['L']) / 100,
-    						"aw_share"=>str_replace('%','',$tmp[$i]['AE']) / 100,
-    						"rw_share"=>str_replace('%','',$tmp[$i]['AF']) / 100,
-    						"currency_kbn"=>$tmp[$i]['AD'],
-    						"internal_pay_flg"=>$tmp[$i]['AB'],
-    						"set_goods_kbn"=>0,
-    						"start_valid_dt"=>"1000-01-01",
-    						"end_valid_dt"=>"9999-12-31",
-    						"payment_kbn"=>$tmp[$i]['AC'],
-    						"non_display_flg"=>0,
-    						"reg_nm"=>$username,
-    						"reg_dt"=>date('Y-m-d H:i:s')
-    				);
-    			$goods->create();
-    			if($goods->save($data) == false){ return  array('result'=>false,'message'=>$i.'行目の更新に失敗しました。'); }
-    		}
-    	}
-    	return array('result'=>true);
+    	App::import("Model", "GoodsUploader");
+    	$uploader = new GoodsUploader();
+    	return $uploader->updateByFile($file, $username);
     }
 }
 ?>

@@ -50,6 +50,7 @@
             autoOpen: false,
             resizable: false,
             zIndex: 5000,
+            width: 380,
             modal: true,
             title: "アップロード結果"
         });
@@ -76,7 +77,14 @@
                         } else {
                           var imgSrc = <?php echo "'".$html->webroot("/images/error_result.png")."'" ?>;
                         }
-                       var tag = "<p id='result_message'><img src='" + imgSrc + "'  />" + result.data.message + "</p>";
+                       var reasons = "";
+                       if(result.data.reasons != null){
+                          for(var i=0; i < result.data.reasons.length;i++){
+                             reasons += "<br><span>" + result.data.reasons[i] + "</span>"
+                          }
+                       }
+
+                       var tag = "<p id='result_message'><img src='" + imgSrc + "'  />" + result.data.message + reasons  + "</p>";
                        $("#upload_result_dialog").append(tag);
                        $("#upload_result_dialog").dialog("open");
                     }catch(ex){

@@ -272,7 +272,7 @@ class GoodsMasterController extends AppController
 
       		/* 見積又はセット商品の商品構成で既に使用されている場合は論理削除 */
       		if($this->EstimateDtlTrn->find('count',array('conditions'=>array('goods_id'=>$goods_id))) > 0 ||
-      		$this->SetGoodsMst->find('count',array('conditions'=>array('goods_id'=>$goods_id))) > 0){
+      		   $this->SetGoodsMst->find('count',array('conditions'=>array('goods_id'=>$goods_id))) > 0){
 
       			$fields = array('del_kbn'=>DELETE,'del_nm'=>"'".$this->Auth->user('username')."'",'del_dt'=>"'".date('Y-m-d H:i:s')."'");
       			/* 商品マスタ */
@@ -719,10 +719,10 @@ class GoodsMasterController extends AppController
  		//ファイルから商品マスタを更新
  		$ret = $this->GoodsService->updateByFile($ret['filePath'],$this->Auth->user('username'));
  		if($ret['result']==true){
- 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"true",'message'=>"ファイル取り込みに成功しました。"))));
+ 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"true",'message'=>"ファイル取り込みに成功しました。  ".$ret["message"]))));
  			$tr->commit();
  		}else{
- 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> $ret["message"]))));
+ 			$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> $ret["message"],"reasons"=>$ret['errors']))));
  		}
  	}else{
  		$this->set("msg",json_encode(array('data'=>array('isSuccess'=>"false", 'message'=> "ファイルの種類が違います。(EXCELファイル) ファイルサイズの上限は128Mです。"))));

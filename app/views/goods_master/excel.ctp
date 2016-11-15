@@ -77,10 +77,9 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
      }
 
       $sheet->setCellValue("Z".$row_cnt, $atr['cost_exchange_rate']);
-      $sheet->setCellValue("AA".$row_cnt, "=ROUNDUP(X".$row_cnt."*Z".$row_cnt.",-1)");
-
       $sheet->setCellValue("AB".$row_cnt, $atr['sales_exchange_rate']);
-      $sheet->setCellValue("AC".$row_cnt, "=ROUNDUP(Y".$row_cnt."*AB".$row_cnt.",-1)");
+      $sheet->setCellValue("AA".$row_cnt, "=IF(AG".$row_cnt." = 0, ROUNDUP(X".$row_cnt."*Z".$row_cnt.",1), ROUNDUP(X".$row_cnt."/Z".$row_cnt.",1))");
+      $sheet->setCellValue("AC".$row_cnt, "=IF(AG".$row_cnt." = 0, ROUNDUP(Y".$row_cnt."*AB".$row_cnt.",1), ROUNDUP(Y".$row_cnt."/AB".$row_cnt.",1))");
       $sheet->setCellValue("AD".$row_cnt, "=IF(AC".$row_cnt." = 0,0,(AC".$row_cnt." - AA".$row_cnt.")/AC".$row_cnt.")");
 
       $sheet->setCellValue("AE".$row_cnt, $atr['internal_pay_flg']);

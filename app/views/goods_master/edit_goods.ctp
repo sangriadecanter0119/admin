@@ -10,6 +10,9 @@ $this->addScript($javascript->codeBlock( <<<JSPROG
 $(function(){
 
     $(".inputdate").mask("9999-99-99");
+    $("#sales_exchange_rate").mask("999.99");
+    $("#cost_exchange_rate").mask("999.99");
+    $(".inputnumeric").css("text-align","right");
 
     $("#internal_pay_flg").change(function() {
           var val = $(this).prop("checked") ? 1:0;
@@ -127,11 +130,11 @@ $(function(){
      });
 	}
 
-	CalculateCost();
+	CaluculateSummary();
     $(".culculate").focusout(function(){ CalculateCost(); });
 
 	function CalculateCost(){
-	  var price       = isFinite($("#goods_price").val())  && $("#goods_price").val()  != ""  ? parseFloat($("#goods_price").val()) : 0;
+
 	  var tax         = isFinite($("#tax").val())          && $("#tax").val()          != ""  ? new BigNumber($("#tax").val()).div(100).toPrecision() : 0;
 	  var serviceRate = isFinite($("#service_rate").val()) && $("#service_rate").val() != ""  ? new BigNumber($("#service_rate").val()).div(100).toPrecision() : 0;
 	  var profitRate  = isFinite($("#profit_rate").val())  && $("#profit_rate").val()  != ""  ? new BigNumber($("#profit_rate").val()).div(100).toPrecision() : 0;
@@ -147,17 +150,81 @@ $(function(){
 	  var cost10 = isFinite($("#cost10").val()) && $("#cost10").val() != "" ? parseFloat($("#cost10").val()) : 0;
 
 	  var costTotal = cost1 + cost2 + cost3 + cost4 + cost5 + cost6 + cost7 + cost8 + cost9 + cost10;
-	  var netTax = new BigNumber(tax).plus(1).times(costTotal).round(2).toPrecision();
-	  var serviceCharge = new BigNumber(serviceRate).plus(1).times(netTax).round(2).toPrecision();
-	  var profitRate_ = new BigNumber(profitRate).plus(1).times(serviceCharge).round(2).toPrecision();
-	  var profit = new BigNumber(price).minus(serviceCharge).round(2).toPrecision();
+	  var netTax = new BigNumber(tax).plus(1).times(costTotal).toPrecision();
 
-	  $("#net_tax").text(netTax);
-	  $("#service_charge").text(serviceCharge);
-	  $("#goods_cost").val(serviceCharge);
-	  $("#profit_rate_").text(profitRate_);
-	  $("#profit").text(profit);
+      var costIncluded = new BigNumber(serviceRate).plus(1).times(netTax).toPrecision();
+	  costIncluded = CustomRound(costIncluded);
+
+	  var price = new BigNumber(profitRate).plus(1).times(costIncluded).toPrecision();
+	  costIncluded = CustomRound(price);
+
+	  $("#goods_cost").val(costIncluded);
+	  $("#goods_price").val(price);
+
+      CaluculateSummary();
 	}
+
+    function CaluculateSummary(){
+
+       var sales_exchange_rate = $("#sales_exchange_rate").val();
+	   var cost_exchange_rate = $("#cost_exchange_rate").val();
+	   var cost = $("#goods_cost").val();
+	   var price = $("#goods_price").val();
+       var cost_with_exchange = 0;
+	   var price_with_exchange = 0;
+       var profit_rate = 0;
+
+	   if($("#internal_pay_flg").prop("checked")){
+
+	     if(cost_exchange_rate != "" && parseInt(cost_exchange_rate) > 0){
+	         cost_with_exchange = new BigNumber(cost).div(cost_exchange_rate).round(2).toPrecision();
+	     }
+	     if(price_exchange_rate != "" && parseInt(price_exchange_rate) > 0){
+	         price_with_exchange = new BigNumber(price).div(sales_exchange_rate).round(2).toPrecision();
+	     }
+
+	   }else{
+	      if(cost_exchange_rate != ""){ cost_with_exchange = new BigNumber(cost).times(cost_exchange_rate).round(2).toPrecision(); }
+	      if(sales_exchange_rate != ""){  price_with_exchange = new BigNumber(price).times(sales_exchange_rate).round(2).toPrecision(); }
+	   }
+
+	   if(isFinite(price) && price != ""){
+	     profit_rate = new BigNumber(price).minus(cost).div(price).shift(2).round(2).toPrecision();
+	   }
+
+       $("#cost_with_exchange").text(cost_with_exchange);
+	   $("#price_with_exchange").text(price_with_exchange);
+	   $("#profit_rate_based_sales").text(profit_rate + " %");
+    }
+
+
+	function CustomRound(original){
+
+       tmp = original.split(".");
+       if(tmp != null && tmp.length > 0){
+
+            if(tmp[0].length > 4){
+
+                tmp = new BigNumber(tmp[0]).shift(-3).round(0,0).shift(3).toPrecision();
+
+            }else if(tmp[0].length == 4){
+
+                tmp = new BigNumber(tmp[0]).shift(-2).round(0,0).shift(2).toPrecision();
+
+            }else if(tmp[0].length == 3){
+
+                tmp = new BigNumber(tmp[0]).shift(-1).round(0,0).shift(1).toPrecision();
+
+            }else{
+                tmp = new BigNumber(original).round(0,0).toPrecision();
+            }
+            return tmp;
+       }else{
+         return original
+       }
+	}
+
+
 });
 JSPROG
 )) ?>
@@ -390,24 +457,32 @@ JSPROG
              <td><input type="text" name="data[GoodsMst][cost10]" id="cost10" class="validate[custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['cost10'] ?>" /></td>
           </tr>
           <tr>
-             <th>Net Tax</th>
-             <td id="net_tax"></td>
+             <th>税サービス込仕入価格</th>
+             <td><input type="text" name="data[GoodsMst][cost]"  id="goods_cost"  class="validate[required,custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['cost'] ?>" /></td>
           </tr>
           <tr>
-             <th>サービスチャージ</th>
-             <td><span id="service_charge"><?php echo $data['LatestGoodsMstView']['cost'] ?></span><input type="hidden" name="data[GoodsMst][cost]" id="goods_cost" value="<?php echo $data['LatestGoodsMstView']['cost'] ?>" /></td>
-          </tr>
-          <tr>
-             <th>利益率</th>
-             <td id="profit_rate_"></td>
-          </tr>
-           <tr>
-             <th>Gross<span class="necessary">(必須)</span></th>
+             <th>販売価格</th>
              <td><input type="text" name="data[GoodsMst][price]" id="goods_price" class="validate[required,custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['price'] ?>" /></td>
           </tr>
           <tr>
-             <th>利益</th>
-             <td id="profit"></td>
+             <th>仕入為替</th>
+             <td><input type="text" name="data[GoodsMst][cost_exchange_rate]"  id="cost_exchange_rate"  class="inputnumeric culculate"  value="<?php echo $data['LatestGoodsMstView']['cost_exchange_rate'] ?>" /></td>
+          </tr>
+          <tr>
+             <th>販売為替</th>
+             <td><input type="text" name="data[GoodsMst][sales_exchange_rate]" id="sales_exchange_rate" class="inputnumeric culculate"  value="<?php echo $data['LatestGoodsMstView']['sales_exchange_rate'] ?>" /></td>
+          </tr>
+          <tr>
+             <th>仕入価格</th>
+             <td id="cost_with_exchange"></td>
+          </tr>
+          <tr>
+             <th>販売価格</th>
+             <td id="price_with_exchange"></td>
+          </tr>
+          <tr>
+             <th>対売価利益率</th>
+             <td id="profit_rate_based_sales"></td>
           </tr>
           </table>
 	    </fieldset>
