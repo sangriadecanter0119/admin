@@ -21,6 +21,8 @@ $(function(){
 		});
 	});
 
+	$("#currency_kbn_list").change(function(){ CaluculateSummary(); });
+
     /* 処理結果用ダイアログ */
     $("#result_dialog").dialog({
              buttons: [{
@@ -130,9 +132,13 @@ $(function(){
      });
 	}
 
-	CaluculateSummary();
-    $(".culculate").focusout(function(){ CalculateCost(); });
+    $(".culculate").change(function(){ CalculateCost(); });
+    $(".culculate_exchange").change(function(){ CaluculateSummary(); });
 
+    CaluculateSummary();
+
+    /* 価格の再計算
+    -----------------------------------------------------------------------*/
 	function CalculateCost(){
 
 	  var tax         = isFinite($("#tax").val())          && $("#tax").val()          != ""  ? new BigNumber($("#tax").val()).div(100).toPrecision() : 0;
@@ -153,10 +159,15 @@ $(function(){
 	  var netTax = new BigNumber(tax).plus(1).times(costTotal).toPrecision();
 
       var costIncluded = new BigNumber(serviceRate).plus(1).times(netTax).toPrecision();
+
+      console.log(costIncluded);
+
 	  costIncluded = CustomRound(costIncluded);
 
+	   console.log(costIncluded);
+
 	  var price = new BigNumber(profitRate).plus(1).times(costIncluded).toPrecision();
-	  costIncluded = CustomRound(price);
+	  price = CustomRound(price);
 
 	  $("#goods_cost").val(costIncluded);
 	  $("#goods_price").val(price);
@@ -164,6 +175,8 @@ $(function(){
       CaluculateSummary();
 	}
 
+    /* 仕入価格、販売価格及び対売価利益率を計算
+    ----------------------------------------------------------------------------*/
     function CaluculateSummary(){
 
        var sales_exchange_rate = $("#sales_exchange_rate").val();
@@ -174,47 +187,67 @@ $(function(){
 	   var price_with_exchange = 0;
        var profit_rate = 0;
 
-	   if($("#internal_pay_flg").prop("checked")){
+       //円貨ベース
+	   if($("#currency_kbn_list").val() == 1){
 
 	     if(cost_exchange_rate != "" && parseInt(cost_exchange_rate) > 0){
 	         cost_with_exchange = new BigNumber(cost).div(cost_exchange_rate).round(2).toPrecision();
 	     }
-	     if(price_exchange_rate != "" && parseInt(price_exchange_rate) > 0){
+	     if(sales_exchange_rate != "" && parseInt(sales_exchange_rate) > 0){
 	         price_with_exchange = new BigNumber(price).div(sales_exchange_rate).round(2).toPrecision();
 	     }
 
+	     $("#title_cost_with_exchange").text("仕入価格(ドル)");
+	     $("#title_price_with_exchange").text("販売価格(ドル)");
+	     $("#title_cost").text("税サービス込仕入価格(円)");
+	     $("#title_price").text("販売価格(円)");
+
+	   //外貨ベース
 	   }else{
-	      if(cost_exchange_rate != ""){ cost_with_exchange = new BigNumber(cost).times(cost_exchange_rate).round(2).toPrecision(); }
-	      if(sales_exchange_rate != ""){  price_with_exchange = new BigNumber(price).times(sales_exchange_rate).round(2).toPrecision(); }
-	   }
+	      if(cost_exchange_rate != ""){  cost_with_exchange = new BigNumber(cost).times(cost_exchange_rate).round(2).toPrecision();}
+	      if(sales_exchange_rate != ""){ price_with_exchange = new BigNumber(price).times(sales_exchange_rate).round(2).toPrecision();}
 
-	   if(isFinite(price) && price != ""){
-	     profit_rate = new BigNumber(price).minus(cost).div(price).shift(2).round(2).toPrecision();
+	     $("#title_cost_with_exchange").text("仕入価格(円)");
+	     $("#title_price_with_exchange").text("販売価格(円)");
+	     $("#title_cost").text("税サービス込仕入価格(ドル)");
+	     $("#title_price").text("販売価格(ドル)");
 	   }
+	   if(isFinite(price) && price != ""){ profit_rate = new BigNumber(price).minus(cost).div(price).shift(2).round(2).toPrecision(); }
 
-       $("#cost_with_exchange").text(cost_with_exchange);
-	   $("#price_with_exchange").text(price_with_exchange);
+       $("#cost_with_exchange").text(AddComma(cost_with_exchange));
+	   $("#price_with_exchange").text(AddComma(price_with_exchange));
 	   $("#profit_rate_based_sales").text(profit_rate + " %");
     }
 
+    /* 数値にカンマを加える
+    ----------------------------------------------------------------------------*/
+    function AddComma(s){
+       return String(s).replace( /(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+    }
 
+    /* 桁数により数値を丸める
+    ----------------------------------------------------------------------------*/
 	function CustomRound(original){
 
        tmp = original.split(".");
        if(tmp != null && tmp.length > 0){
 
+            //万単位以上は百の位で切り上げ
             if(tmp[0].length > 4){
 
                 tmp = new BigNumber(tmp[0]).shift(-3).round(0,0).shift(3).toPrecision();
 
+            //千単位は十の位で切り上げ
             }else if(tmp[0].length == 4){
 
                 tmp = new BigNumber(tmp[0]).shift(-2).round(0,0).shift(2).toPrecision();
 
+            //百単位は一の位で切り上げ
             }else if(tmp[0].length == 3){
 
                 tmp = new BigNumber(tmp[0]).shift(-1).round(0,0).shift(1).toPrecision();
 
+            //十単位以下は小数点第一位で切り上げ
             }else{
                 tmp = new BigNumber(original).round(0,0).toPrecision();
             }
@@ -223,8 +256,6 @@ $(function(){
          return original
        }
 	}
-
-
 });
 JSPROG
 )) ?>
@@ -359,7 +390,7 @@ JSPROG
           <tr>
              <th>通貨区分</th>
              <td>
-               <select name="data[GoodsMst][currency_kbn]">
+               <select id="currency_kbn_list" name="data[GoodsMst][currency_kbn]">
                <?php
                  if($data['LatestGoodsMstView']['currency_kbn'] == 0)
                  {
@@ -391,7 +422,7 @@ JSPROG
 	      <legend>価格明細</legend>
           <table class="cost_form" cellspacing="0">
           <tr>
-             <th>Tax</th>
+             <th>Tax(%)</th>
              <td><input type="text" name="data[GoodsMst][tax]" id="tax" class="validate[custom[number],max[100],maxSize[5]] inputnumeric culculate digit" value="<?php echo $data['LatestGoodsMstView']['tax']*100 ?>" /></td>
              <th>Service Rate(%)</th>
              <td><input type="text" name="data[GoodsMst][service_rate]" id="service_rate" class="validate[custom[number],max[100],maxSize[5]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['service_rate']*100 ?>" /></td>
@@ -457,27 +488,27 @@ JSPROG
              <td><input type="text" name="data[GoodsMst][cost10]" id="cost10" class="validate[custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['cost10'] ?>" /></td>
           </tr>
           <tr>
-             <th>税サービス込仕入価格</th>
-             <td><input type="text" name="data[GoodsMst][cost]"  id="goods_cost"  class="validate[required,custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['cost'] ?>" /></td>
+             <th id="title_cost">税サービス込仕入価格</th>
+             <td><input type="text" name="data[GoodsMst][cost]"  id="goods_cost"  class="validate[required,custom[number],max[10000000]] inputnumeric culculate_exchange number digit" value="<?php echo $data['LatestGoodsMstView']['cost'] ?>" /></td>
           </tr>
           <tr>
-             <th>販売価格</th>
-             <td><input type="text" name="data[GoodsMst][price]" id="goods_price" class="validate[required,custom[number],max[10000000]] inputnumeric culculate number digit" value="<?php echo $data['LatestGoodsMstView']['price'] ?>" /></td>
+             <th id="title_price">販売価格</th>
+             <td><input type="text" name="data[GoodsMst][price]" id="goods_price" class="validate[required,custom[number],max[10000000]] inputnumeric culculate_exchange number digit" value="<?php echo $data['LatestGoodsMstView']['price'] ?>" /></td>
           </tr>
           <tr>
              <th>仕入為替</th>
-             <td><input type="text" name="data[GoodsMst][cost_exchange_rate]"  id="cost_exchange_rate"  class="inputnumeric culculate"  value="<?php echo $data['LatestGoodsMstView']['cost_exchange_rate'] ?>" /></td>
+             <td><input type="text" name="data[GoodsMst][cost_exchange_rate]"  id="cost_exchange_rate"  class="inputnumeric culculate_exchange"  value="<?php echo $data['LatestGoodsMstView']['cost_exchange_rate'] ?>" /></td>
           </tr>
           <tr>
              <th>販売為替</th>
-             <td><input type="text" name="data[GoodsMst][sales_exchange_rate]" id="sales_exchange_rate" class="inputnumeric culculate"  value="<?php echo $data['LatestGoodsMstView']['sales_exchange_rate'] ?>" /></td>
+             <td><input type="text" name="data[GoodsMst][sales_exchange_rate]" id="sales_exchange_rate" class="inputnumeric culculate_exchange"  value="<?php echo $data['LatestGoodsMstView']['sales_exchange_rate'] ?>" /></td>
           </tr>
           <tr>
-             <th>仕入価格</th>
+             <th id="title_cost_with_exchange">仕入価格</th>
              <td id="cost_with_exchange"></td>
           </tr>
           <tr>
-             <th>販売価格</th>
+             <th id="title_price_with_exchange">販売価格</th>
              <td id="price_with_exchange"></td>
           </tr>
           <tr>
