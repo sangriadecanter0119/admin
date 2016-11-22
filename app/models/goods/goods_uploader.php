@@ -3,38 +3,38 @@ class GoodsUploader extends AppModel {
     var $useTable = false;
 
     const COL_TARGET = 'A';
-    const COL_GOODS_ID = 'B';
-    const COL_GOODS_CTG_ID = 'D';
-    const COL_GOODS_KBN_ID = 'F';
-    const COL_VENDOR_ID = 'H';
-    const COL_GOODS_NM = 'J';
-    const COL_TAX = 'K';
-    const COL_SERVICE_RATE = 'L';
-    const COL_PROFIT_RATE = 'M';
-    const COL_COST1 = 'N';
-    const COL_COST2 = 'O';
-    const COL_COST3 = 'P';
-    const COL_COST4 = 'Q';
-    const COL_COST5 = 'R';
-    const COL_COST6 = 'S';
-    const COL_COST7 = 'T';
-    const COL_COST8 = 'U';
-    const COL_COST9 = 'V';
-    const COL_COST10 = 'W';
-    const COL_COST = 'X';
-    const COL_PRICE = 'Y';
-    const COL_COST_EXCHANGE_RATE = 'Z';
-    const COL_PRICE_EXCHANGE_RATE = 'AB';
-    const COL_INTERNAL_PAY_FLG = 'AE';
-    const COL_PAYMENT_KBN_ID = 'AF';
-    const COL_CURRENCY_KBN = 'AG';
-    const COL_HI_SHARE = 'AH';
-    const COL_RW_SHARE = 'AI';
-    const COL_DELETE_KBN = 'AK';
-    const COL_NOTE = 'AL';
+    const COL_GOODS_CD = 'B';
+    const COL_GOODS_CTG_ID = 'C';
+    const COL_GOODS_KBN_ID = 'E';
+    const COL_VENDOR_ID = 'G';
+    const COL_GOODS_NM = 'I';
+    const COL_TAX = 'J';
+    const COL_SERVICE_RATE = 'K';
+    const COL_PROFIT_RATE = 'L';
+    const COL_COST1 = 'M';
+    const COL_COST2 = 'N';
+    const COL_COST3 = 'O';
+    const COL_COST4 = 'P';
+    const COL_COST5 = 'Q';
+    const COL_COST6 = 'R';
+    const COL_COST7 = 'S';
+    const COL_COST8 = 'T';
+    const COL_COST9 = 'U';
+    const COL_COST10 = 'V';
+    const COL_COST = 'W';
+    const COL_PRICE = 'X';
+    const COL_COST_EXCHANGE_RATE = 'Y';
+    const COL_PRICE_EXCHANGE_RATE = 'AA';
+    const COL_INTERNAL_PAY_FLG = 'AD';
+    const COL_PAYMENT_KBN_ID = 'AE';
+    const COL_CURRENCY_KBN = 'AF';
+    const COL_HI_SHARE = 'AG';
+    const COL_RW_SHARE = 'AH';
+    const COL_DELETE_KBN = 'AJ';
+    const COL_NOTE = 'AK';
 
     const DATA_START_ROW = 2;
-    const COL_COUNT = 38;
+    const COL_COUNT = 37;
 
     /**
      * 商品EXCELファイルをアップロードしてサーバに仮保存
@@ -187,7 +187,8 @@ class GoodsUploader extends AppModel {
 
     	for($i=0;$i < count($update_data);$i++){
 
-    		$current_data = $goods->findById($update_data[$i][self::COL_GOODS_ID]);
+    		$goods_id = $this->getLatestGoodsId($update_data[$i][self::COL_GOODS_CD]);
+    		$current_data = $goods->findById($goods_id);
 
     		$data = array(
     				"year"=>$current_data['GoodsMst']['year'],
@@ -246,10 +247,8 @@ class GoodsUploader extends AppModel {
 
     	for($i=0;$i < count($delete_data);$i++){
 
-    		$current_data = $goods_view->findById($delete_data[$i][self::COL_GOODS_ID]);
-
     		/* 全てのリビジョンを物理or論理削除する  */
-    		$target = $goods->find('all',array('fields'=>array('id'),'conditions'=>array('goods_cd'=>$current_data['LatestGoodsMstView']['goods_cd'])));
+    		$target = $goods->find('all',array('fields'=>array('id'),'conditions'=>array('goods_cd'=>$delete_data[$i][self::COL_GOODS_CD])));
 
     		for($j=0;$j < count($target);$j++){
 
@@ -284,7 +283,7 @@ class GoodsUploader extends AppModel {
     			if($data[$i][self::COL_DELETE_KBN] == 1){
     				$ret['delete'][] = $data[$i];
 
-    			}else if(empty($data[$i][self::COL_GOODS_ID])){
+    			}else if(empty($data[$i][self::COL_GOODS_CD])){
     				$ret['new'][] = $data[$i];
     			}else{
     				$ret['update'][] = $data[$i];
@@ -307,17 +306,17 @@ class GoodsUploader extends AppModel {
     			}else{
 
     				//更新又は削除データ
-    				if(!empty($data[$i][self::COL_GOODS_ID])){
+    				if(!empty($data[$i][self::COL_GOODS_CD])){
 
-    					if(empty($data[$i][self::COL_GOODS_ID])){
-    						$ret['errors'][] = 'IDが設定されていません。('.$i.'行目)';
-    					}elseif(!$this->goodsExists($data[$i][self::COL_GOODS_ID])){
-    						$ret['errors'][] = '商品IDは存在しません。('.$i.'行目)';
-    					}elseif(!$this->isLatestGoods($data[$i][self::COL_GOODS_ID])){
+    					$id = $this->getLatestGoodsId($data[$i][self::COL_GOODS_CD]);
+    					if(empty($id)){
+    						$ret['errors'][] = '商品コードは存在しません('.$i.'行目)';
+    					}elseif(!$this->isLatestGoods($id)){
     						$ret['errors'][] = '最新リビジョンの商品ではありません。('.$i.'行目)';
     					}else{
-    						if($this->isSetGoods($data[$i][self::COL_GOODS_ID])){ $ret['errors'][] = 'セット商品は更新・削除できません。('.$i.'行目)';}
+    						if($this->isSetGoods($id)){ $ret['errors'][] = 'セット商品は更新・削除できません。('.$i.'行目)';}
     					}
+
     				}
 
     				//新規又は更新データ
@@ -379,6 +378,14 @@ class GoodsUploader extends AppModel {
     	App::import("Model", "LatestGoodsMstView");
     	$goods_view = new LatestGoodsMstView();
     	return  $goods_view->find('count',array('conditions'=>array('id'=>$goods_id))) ==  1;
+    }
+
+    private function getLatestGoodsId($goods_cd)
+    {
+    	App::import("Model", "GoodsMst");
+    	$goods = new GoodsMst();
+    	$data = $goods->find('all',array('fields'=>array('id','revision','goods_cd','del_kbn'),'conditions'=>array('goods_cd'=>$goods_cd),'order'=>array('revision desc')));
+     	return count($data) > 0 && $data[0]['GoodsMst']['del_kbn'] == EXISTS ? $data[0]['GoodsMst']['id'] : null;
     }
 
 
