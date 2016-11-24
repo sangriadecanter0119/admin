@@ -57,12 +57,15 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
       $sheet->setCellValue("V".$row_cnt, $atr['cost10']);
 
       $cost_cols = "M".$row_cnt."+N".$row_cnt."+O".$row_cnt."+P".$row_cnt."+Q".$row_cnt."+R".$row_cnt."+S".$row_cnt."+T".$row_cnt."+U".$row_cnt."+V".$row_cnt;
+      /*
       $sheet->setCellValue("W".$row_cnt, "=IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1)) >= 6,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),-3),".
                                           "IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1))  = 5,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),-3),".
                                           "IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1))  = 4,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),-2),".
                                           "IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1))  = 3,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),-1),".
                                           "IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1))  = 2,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),0),".
                                           "IF(LEN(FLOOR(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),1))  = 1,ROUNDUP(((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt."),0),0))))))");
+      */
+      $sheet->setCellValue("W".$row_cnt, "=((1+J".$row_cnt.") * (".$cost_cols."))*(1+K".$row_cnt.")");
 
      if(empty($atr['profit_rate']) || $atr['profit_rate']==0 || $atr['profit_rate']==null ){
        $sheet->setCellValue("X".$row_cnt, $atr['price']);
