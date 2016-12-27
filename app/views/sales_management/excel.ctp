@@ -48,6 +48,8 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
     	$sheet->setCellValue("O".$row_cnt, $data[$i]['foreign_rw_total_rate']/100);
     	$sheet->setCellValue("P".$row_cnt, $data[$i]['foreign_gross_total']);
     	$sheet->setCellValue("Q".$row_cnt, $data[$i]['foreign_gross_total_rate']/100);
+    	$sheet->setCellValue("R".$row_cnt, $data[$i]['sales_rate']);
+    	$sheet->setCellValue("S".$row_cnt, $data[$i]['cost_rate']);
 
 
     	$sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_CURRENCY_USD_SIMPLE);
@@ -140,7 +142,7 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
       */
     // PHPの日時出力
     $time = time();                 // 現在日時(Unix Timestamp)
-    $sheet->setCellValue("Q2", '出力日：'.date('Y/m/d'));
+    $sheet->setCellValue("S2", '出力日：'.date('Y/m/d'));
     $sheet->setCellValue("C2", $sheet_name."分売上一覧");
 
     /* 円表記
@@ -176,6 +178,8 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
     	$sheet->setCellValue("O".$row_cnt, $data[$i]['rw_total_rate']/100);
     	$sheet->setCellValue("P".$row_cnt, $data[$i]['gross_total']);
     	$sheet->setCellValue("Q".$row_cnt, $data[$i]['gross_total_rate']/100);
+    	$sheet->setCellValue("R".$row_cnt, $data[$i]['sales_rate']);
+    	$sheet->setCellValue("S".$row_cnt, $data[$i]['cost_rate']);
 
     	$sheet->getStyle("E".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
     	$sheet->getStyle("F".$row_cnt)->getNumberFormat()->setFormatCode('"\"#,##0');
@@ -255,7 +259,7 @@ $cols = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q
 
     // PHPの日時出力
     $time = time();                 // 現在日時(Unix Timestamp)
-    $sheet->setCellValue("Q2", '出力日：'.date('Y/m/d'));
+    $sheet->setCellValue("S2", '出力日：'.date('Y/m/d'));
     $sheet->setCellValue("C2", $sheet_name."分売上一覧");
 
 // Excelファイルの保存

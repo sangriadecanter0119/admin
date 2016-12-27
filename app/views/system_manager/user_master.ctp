@@ -4,6 +4,7 @@
         /* ユーザー追加は管理者のみ */
         if(UC_ADMIN == $user['User']['user_kbn_id']){
           echo "<li><a href='{$html->url('/users/addUser')}'>追加</a></li>";
+          echo "<li><a href='{$html->url('/users/history')}'>ログイン履歴</a></li>";
         }
      ?>
     </ul>

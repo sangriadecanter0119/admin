@@ -144,7 +144,9 @@ class RemittanceTrn extends AppModel {
                     "foreign_aw_share"    => $foreign_aw_share,
                     "foreign_rw_share"    => $foreign_rw_share,
                     "foreign_domestic_pay" => $foreign_domestic_pay,
-                    "foreign_domestic_pay_cost" => $foreign_domestic_pay_cost
+                    "foreign_domestic_pay_cost" => $foreign_domestic_pay_cost,
+       		        "sales_rate"=>$sales_rate,
+       		        "cost_rate"=>$cost_rate
        );
   }
 
@@ -173,6 +175,8 @@ class RemittanceTrn extends AppModel {
      $credit_aboard_pay_amount = 0;
      $foreign_credit_domestic_pay_amount = 0;
      $foreign_credit_aboard_pay_amount = 0;
+     $sales_rate = 0;
+     $cost_rate = 0;
 
  	 for($i=0;$i < count($data);$i++)
      {
@@ -238,6 +242,9 @@ class RemittanceTrn extends AppModel {
  	    //国内払いの金額合計(外貨)
  	    $foreign_domestic_pay_amount += $ret["foreign_domestic_pay"];
  	    $foreign_domestic_pay_cost_amount += $ret["foreign_domestic_pay_cost"];
+
+ 	    $sales_rate = $ret["sales_rate"];
+ 	    $cost_rate = $ret["cost_rate"];
      }
 
  	 return array("amount_price"         => $amount_price,
@@ -257,7 +264,9 @@ class RemittanceTrn extends AppModel {
  	 		      "credit_domestic_pay_amount" => $credit_domestic_pay_amount,
  	 		      "credit_aboard_pay_amount" => $credit_aboard_pay_amount,
  	 		      "foreign_credit_domestic_pay_amount" => $foreign_credit_domestic_pay_amount,
- 	 		      "foreign_credit_aboard_pay_amount" => $foreign_credit_aboard_pay_amount
+ 	 		      "foreign_credit_aboard_pay_amount" => $foreign_credit_aboard_pay_amount,
+ 	 		      "sales_rate"=>$sales_rate,
+ 	 		      "cost_rate"=>$cost_rate
  	 );
   }
 
@@ -610,7 +619,9 @@ class RemittanceTrn extends AppModel {
    			     "credit_domestic_pay_amount" => $ret['credit_domestic_pay_amount'],
    			     "credit_aboard_pay_amount" => $ret['credit_aboard_pay_amount'],
    			     "foreign_credit_domestic_pay_amount" => $ret['foreign_credit_domestic_pay_amount'],
-   			     "foreign_credit_aboard_pay_amount" => $ret['foreign_credit_aboard_pay_amount']
+   			     "foreign_credit_aboard_pay_amount" => $ret['foreign_credit_aboard_pay_amount'],
+   			     "sales_rate"=>$ret['sales_rate'],
+   			     "cost_rate"=>$ret['cost_rate']
    	    );
    }
 }

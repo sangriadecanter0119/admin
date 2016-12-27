@@ -3,9 +3,10 @@ class UsersController extends AppController
 {
 
  public $name = 'Users';
- public $uses = array('User','UserKbnMst','UserView');
+ public $uses = array('User','UserKbnMst','UserView','LoginHistoryTrn');
  public $components = array('Auth');
  public $layout = 'edit_mode';
+ public $helpers = array('Html','common','javascript');
 
  function index()
  {
@@ -45,36 +46,58 @@ class UsersController extends AppController
  {
  	if(!empty($this->data))
  	{
- 	   $tr = ClassRegistry::init('TransactionManager');
-	   $tr->begin();
+ 		$tr = ClassRegistry::init('TransactionManager');
+ 		$tr->begin();
 
-	   $this->layout = '';
- 	   $this->autoRender =false;
- 	   configure::write('debug', 0);
+ 		$this->layout = '';
+ 		$this->autoRender =false;
+ 		configure::write('debug', 0);
 
- 	   $this->data['User']['id'] = null;
-  	   $this->data['User']['reg_nm'] = $this->Auth->user('username');
-       $this->data['User']['reg_dt'] = date('Y-m-d H:i:s');
- 	   $this->User->create();
+ 		$this->data['User']['id'] = null;
+ 		$this->data['User']['reg_nm'] = $this->Auth->user('username');
+ 		$this->data['User']['reg_dt'] = date('Y-m-d H:i:s');
+ 		$this->User->create();
 
- 	   if($this->User->save($this->data)){
- 	   	 $tr->commit();
-  	     return json_encode(array('result'=>true,'message'=>'登録完了しました。'));
- 	  }else{
- 	   	 return json_encode(array('result'=>false,'message'=>"登録に失敗しました。",'reason'=>$this->User->getDbo()->error."[".date('Y-m-d H:i:s')."]"));
- 	  }
- 	   	//初回ログイン用
- 	    // $this->redirect(array('action'=>'login'));
+ 		if($this->User->save($this->data)){
+ 			$tr->commit();
+ 			return json_encode(array('result'=>true,'message'=>'登録完了しました。'));
+ 		}else{
+ 			return json_encode(array('result'=>false,'message'=>"登録に失敗しました。",'reason'=>$this->User->getDbo()->error."[".date('Y-m-d H:i:s')."]"));
+ 		}
+ 		//初回ログイン用
+ 		// $this->redirect(array('action'=>'login'));
  	}else{
 
- 	  //メニューとサブメニューのアクティブ化
-      $this->set("menu_customers","");
- 	  $this->set("menu_customer","");
- 	  $this->set("menu_fund","");
-  	  $this->set("sub_title","ユーザー追加");
-  	  $this->set("user",$this->Auth->user());
-  	  $this->set("user_kbn_list",$this->UserKbnMst->find('all'));
+ 		//メニューとサブメニューのアクティブ化
+ 		$this->set("menu_customers","");
+ 		$this->set("menu_customer","");
+ 		$this->set("menu_fund","");
+ 		$this->set("sub_title","ユーザー追加");
+ 		$this->set("user",$this->Auth->user());
+ 		$this->set("user_kbn_list",$this->UserKbnMst->find('all'));
  	}
+ }
+
+ /**
+  *
+  * ログイン履歴表示
+  */
+ function history()
+ {
+ 	$this->paginate = array (
+ 			'LoginHistoryTrn' => array(
+ 					'limit' => 50,
+ 				    'order'=>array('id'=>'desc')
+ 			)
+ 	);
+ 	$this->set("data",$this->paginate('LoginHistoryTrn'));
+
+ 	//メニューとサブメニューのアクティブ化
+    $this->set("menu_customers","");
+ 	$this->set("menu_customer","");
+ 	$this->set("menu_fund","");
+  	$this->set("sub_title","ログイン履歴");
+  	$this->set("user",$this->Auth->user());
  }
 
  /**
@@ -163,6 +186,8 @@ class UsersController extends AppController
  	$this->User->create();
  	$this->User->id = $this->Auth->user('id');
  	$this->User->saveField('last_login_dt',date('Y/m/d H:i:s'));
+
+ 	$this->LoginHistoryTrn->Add($this->Auth->user('id'));
 
  	//初期画面へ移動
  	$this->redirect(array('controller' => 'customersList',  'action' => 'index'));

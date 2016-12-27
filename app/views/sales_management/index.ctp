@@ -181,6 +181,10 @@ JSPROG
         <th style="text-align:right">RW Total / 売上<?php echo $html->image('dollar.png')?></th>
         <th style="text-align:right">粗利 Total<?php echo $html->image('dollar.png')?></th>
         <th style="text-align:right">粗利 Total / 売上<?php echo $html->image('dollar.png')?></th>
+        <th></th>
+        <th></th>
+        <th style="text-align:right">販売為替</th>
+        <th style="text-align:right">原価為替</th>
 	</tr>
 <?php
 
@@ -215,6 +219,10 @@ JSPROG
 	           "<td class='dollar'>".number_format($data[$i]['foreign_rw_total_rate'],2)."%</td>".
 	           "<td class='dollar'>".number_format($data[$i]['foreign_gross_total'],2)."</td>".
 	           "<td class='dollar'>".number_format($data[$i]['foreign_gross_total_rate'],2)."%</td>".
+	           "<td>&nbsp;</td>".
+	           "<td>&nbsp;</td>".
+	           "<td class='dollar'>".number_format($data[$i]['sales_rate'],2)."</td>".
+	           "<td class='dollar'>".number_format($data[$i]['cost_rate'],2)."</td>".
             "</tr>";
 
     $sum_foreign_total += $data[$i]['foreign_total'];
@@ -243,6 +251,10 @@ JSPROG
           "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_rw/$sum_foreign_total)*100,2))."%</td>".
           "<td class='dollar'>".number_format($sum_foreign_gross_total,2)."</td>".
           "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_gross_total/$sum_foreign_total)*100,2))."%</td>".
+          "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
           "</tr>";
 
      $c = count($data);
@@ -260,6 +272,10 @@ JSPROG
           "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_rw/$sum_foreign_total)*100,2))."%</td>".
           "<td class='dollar'>".($c==0 ? 0 : number_format($sum_foreign_gross_total/$c,2))."</td>".
           "<td class='dollar'>".($sum_foreign_total==0 ? 0 : number_format(($sum_foreign_gross_total/$sum_foreign_total)*100,2))."%</td>".
+          "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
           "</tr>";
 ?>
     </table>
@@ -283,6 +299,10 @@ JSPROG
         <th style="text-align:right">RW Total / 売上<?php echo $html->image('yen.png')?></th>
         <th style="text-align:right">粗利 Total<?php echo $html->image('yen.png')?></th>
         <th style="text-align:right">粗利 Total / 売上<?php echo $html->image('yen.png')?></th>
+        <th></th>
+        <th></th>
+        <th style="text-align:right">販売為替</th>
+        <th style="text-align:right">原価為替</th>
 	</tr>
 <?php
 	$sum_total = 0;
@@ -316,6 +336,10 @@ JSPROG
 	           "<td class='yen'>".number_format($data[$i]['rw_total_rate'],2)."%</td>".
 	           "<td class='yen'>".number_format($data[$i]['gross_total'])."</td>".
 	           "<td class='yen'>".number_format($data[$i]['gross_total_rate'],2)."%</td>".
+	           "<td></td>".
+	           "<td></td>".
+	           "<td class='yen'>".number_format($data[$i]['sales_rate'],2)."</td>".
+	           "<td class='yen'>".number_format($data[$i]['cost_rate'],2)."</td>".
             "</tr>";
     $sum_total += $data[$i]['total'];
     $sum_credit_pay += $data[$i]['credit_domestic_pay_amount']+$data[$i]['credit_aboard_pay_amount'];
@@ -343,6 +367,10 @@ JSPROG
           "<td class='yen'>".($sum_total== 0 ? 0 : number_format(($sum_rw/$sum_total)*100,2))."%</td>".
           "<td class='yen'>".number_format($sum_gross_total)."</td>".
           "<td class='yen'>".($sum_total== 0 ? 0 :number_format(($sum_gross_total/$sum_total)*100,2)) ."%</td>".
+          "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
           "</tr>";
 
      $c = count($data);
@@ -360,6 +388,10 @@ JSPROG
           "<td class='yen'>".($sum_total== 0 ? 0 : number_format(($sum_rw/$sum_total)*100,2))."%</td>".
           "<td class='yen'>".($c==0 ? 0 : number_format($sum_gross_total/$c))."</td>".
           "<td class='yen'>".($sum_total== 0 ? 0 :number_format(($sum_gross_total/$sum_total)*100,2)) ."%</td>".
+          "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
+	      "<td>&nbsp;</td>".
           "</tr>";
 ?>
     </table>
