@@ -327,6 +327,7 @@ JSPROG
         	                   "<input type='hidden'                                                                                               value='".$original_sales_cost."' />".
         	                   "<input type='hidden'   name='data[EstimateDtlTrn][".($counter)."][estimate_dtl_id]'                                value='".$estimate_dtl_id."' />".
         	                   "<input type='hidden'   name='data[EstimateDtlTrn][".($counter)."][set_estimate_dtl_id]'                            value='".$set_estimate_dtl_id."' />".
+        	                   "<input type='hidden'   name='data[EstimateDtlTrn][".($counter)."][num]'                                            value='".$data_by_category[$sub_index]["EstimateDtlTrnView"]['num']."' />".
         	               "</td>";
         	          //顧客別の合計値を抽出するために金額を加算する
         	          //$customer_sales[$customer_pos[$j]] += $data_by_category[$sub_index]["EstimateDtlTrnView"]['sales_cost']*$data_by_category[$sub_index]["EstimateDtlTrnView"]['num'];

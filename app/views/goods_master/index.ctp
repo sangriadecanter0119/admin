@@ -106,8 +106,15 @@ JSPROG
      <li><a href="<?php echo $html->url('/systemManager') ?>">戻る</a></li>
      <li><a href="<?php echo $html->url('addGoods') ?>">商品追加</a></li>
      <li><a href="<?php echo $html->url('addSetGoods') ?>">セット商品追加</a></li>
-     <li><a href="<?php echo $html->url('export') ?>">EXCEL出力</a></li>
-     <li><a href="#" id='file_upload_link'>EXCEL取り込み</a></li>
+
+     <?php
+        /* 管理者のみ */
+       if(UC_ADMIN == $user['User']['user_kbn_id']){
+         echo "<li><a href='{$html->url('export')}'>EXCEL出力</a></li>";
+         echo "<li><a href='#' id='file_upload_link'>EXCEL取り込み</a></li>";
+       }
+     ?>
+
     <!-- <li><a href="<?php echo $html->url('duplicateGoods') ?>">商品マスタ複製</a></li> -->
     <!-- <li><a href="#" id="delete_unused_goods_link">使用頻度の少ない商品削除</a></li> -->
     </ul>

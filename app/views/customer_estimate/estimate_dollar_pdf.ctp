@@ -211,7 +211,10 @@ $html .= '<tr><td colspan="4" align="right">小計</td><td align="right">＄' . 
           		$html .= '<tr><td colspan="4" align="right">お見積金額合計('.str_replace('-', '/',$estimate_dtl[0]['EstimateDtlTrnView']['tts_rate_dt']).'&nbsp;&nbsp;TTSレート&nbsp;'.$estimate_dtl[0]['EstimateDtlTrnView']['tts_rate'].')</td><td align="right">￥' . number_format(($subtotal + $tax +$service) * $estimate_dtl[0]['EstimateDtlTrnView']['tts_rate']).'</td></tr>';
           	}
         }
-$html .= '</table></div>';
+$html .=  '</table>';
+
+/* 注意事項 */
+$html .=  '<table border="0" cellspacing="0" cellpadding="2"><tr><td>'.nl2br($estimate_dtl[0]['EstimateDtlTrnView']['pdf_note']).'</td></tr></table></div>';
 
 /* 補足説明 */
 $html .= '<div>';

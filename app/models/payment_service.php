@@ -181,7 +181,7 @@ class PaymentService extends AppModel {
     for($i=0;$i < count($data);$i++){
 
        //3桁区切りのカンマを除去
-       $data[$i]['sales_cost']  = str_replace(",","",$data[$i]['sales_cost']);
+       $data[$i]['sales_cost']  = str_replace(",","",$data[$i]['sales_cost']) / $data[$i]['num'];
 
        //セット商品見積IDがセットされていない場合は単品商品
        if(empty($data[$i]['set_estimate_dtl_id'])){

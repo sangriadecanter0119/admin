@@ -202,7 +202,10 @@ $html .= '<tr><td colspan="4" align="right">小計</td><td align="right">￥' . 
           	}
          }
 
-$html .=  '</table></div>';
+$html .=  '</table>';
+
+/* 注意事項 */
+$html .=  '<table border="0" cellspacing="0" cellpadding="2"><tr><td>'.nl2br($estimate_dtl[0]['EstimateDtlTrnView']['pdf_note']).'</td></tr></table></div>';
 
 /* 補足説明 */
 $html .= '<div>';

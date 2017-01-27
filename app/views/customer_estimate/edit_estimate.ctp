@@ -1266,7 +1266,7 @@ $(function(){
 
     /* 見積書発行の事前チェック処理 */
     $(".export_estimate").click(function(){
-       var url = $(this).attr("href") + "/" + $("#credit_amount").text().split(",").join("");
+       var url = $(this).attr("href") + "/" + $("#credit_amount").text().split(",").join("") + "/dummy/" + $("#pdf_note").val();
        $(this).attr("href",url);
     });
 
@@ -2238,7 +2238,7 @@ JSPROG
     </td>
 
     <td style="padding-left:30px">特記事項:</td>
-    <td rowspan="2"><textarea id="special_note" class="small-inputcomment " name="data[EstimateTrn][note]" style="height:40px;" ><?php echo $data[0]["EstimateDtlTrnView"]["header_note"] ?></textarea></td>
+    <td><textarea id="special_note" class="small-inputcomment " name="data[EstimateTrn][note]" style="height:20px;" ><?php echo $data[0]["EstimateDtlTrnView"]["header_note"] ?></textarea></td>
      <td style="padding-left:20px"><label for="yen"> 【邦貨</label><input type="radio"     name="view" value="yen" />
         <label for="dollar"> 外貨</label><input type="radio"  name="view" value="dollar" />
         <label for="dollar"> 概略</label><input type="radio"  name="view" value="short" checked />
@@ -2248,7 +2248,8 @@ JSPROG
     <td><label for="data[EstimateTrn][cost_exchange_rate]"> 原価為替レート: </label></td>
     <!-- <td><label id="costExchangeRate"> <?php echo $env_data['EnvMst']['cost_exchange_rate'] ?> </label></td> -->
     <td><input id="cost_exchange_update_rate" type="text" style="width:80px;margin-right:10px;" /><input id="cost_exchange_rate_update_button" type="button"  value="変換" /></td>
-    <td></td>
+    <td style="padding-left:30px">注意事項:</td>
+    <td><textarea id="pdf_note" class="small-inputcomment " name="data[EstimateTrn][pdf_note]" style="height:20px;" ><?php echo $data[0]["EstimateDtlTrnView"]["pdf_note"] ?></textarea></td>
     <td></td>
 </tr>
 </table>

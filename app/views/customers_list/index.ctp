@@ -169,9 +169,15 @@ $(function(){
 
 <ul class="operate">
     <li><a href="<?php echo $html->url('addCustomer') ?>">顧客追加</a></li>
-    <li><a href="<?php echo $html->url('export/excel_customer_list') ?>" id="">EXCEL出力</a></li>
-    <li><a href="<?php echo $html->url('export/excel_new_years_card') ?>" id="">EXCEL出力【年賀状用】</a></li>
-    <li><a href="<?php echo $html->url('export/excel_customer_mail') ?>" id="">EXCEL出力【メール用】</a></li>
+
+    <?php
+        /* 管理者のみ */
+       if(UC_ADMIN == $user['User']['user_kbn_id']){
+         echo "<li><a href='{$html->url('export/excel_customer_list')}'  >EXCEL出力</a></li>";
+         echo "<li><a href='{$html->url('export/excel_new_years_card')}' >EXCEL出力【年賀状用】</a></li>";
+         echo "<li><a href='{$html->url('export/excel_customer_mail')}'  >EXCEL出力【メール用】</a></li>";
+       }
+    ?>
     <!-- <li><a href="#" id="update_customer_code_link">顧客コード更新</a></li> -->
     <li><a href="#" id="update_customer_status_link">顧客ステータス更新</a></li>
 </ul>

@@ -172,5 +172,24 @@ class EstimateTrn extends AppModel {
 
   	return $data[0]['EstimateTrn']['invoice_issued_dt'];
   }
+
+  /**
+   *
+   * 見積ヘッダの送金為替レートを更新する
+   * @param $estimate_data
+   * @param $estimate_id
+   * @param $user_name
+   * @return 正常：　 True　
+   *         異常:
+   */
+  function updatePdfNote($estimate_id,$pdf_note)
+  {
+  	$est_fields = array('pdf_note');
+  	$this->id = $estimate_id;
+  	if($this->save(array('pdf_note'=>$pdf_note),false,$est_fields)==false){
+  		return array('result'=>false,'message'=>"見積ヘッダの送金為替レート更新に失敗しました。",'reason'=>$this->getDbo()->error."[".date('Y-m-d H:i:s')."]");
+  	}
+  	return array('result'=>true);
+  }
  }
 ?>

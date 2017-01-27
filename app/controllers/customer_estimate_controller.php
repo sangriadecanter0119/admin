@@ -6,7 +6,7 @@ class CustomerEstimateController extends AppController
 
  public $name = 'CustomerEstimate';
  public $uses = array('EstimateService','EstimateTrnView'   ,'GoodsMst','GoodsMstView','LatestGoodsMstView' ,'GoodsCtgMst','GoodsKbnMst','VendorMst','User',
-                      'EstimateDtlTrn' ,'EstimateDtlTrnView','TemplateEstimateTrn'      ,'TemplateEstimateDtlTrnView','EnvMst','CreditService','ContractTrn',
+                      'EstimateTrn','EstimateDtlTrn' ,'EstimateDtlTrnView','TemplateEstimateTrn'      ,'TemplateEstimateDtlTrnView','EnvMst','CreditService','ContractTrn',
                       'CustomerMst'    ,'CustomerMstView'   ,'CustomerStatusMst','ReportMst','PaymentKbnMst','Mail'   ,'ContactAddressTrnView','ContractTrnView');
  public $layout = 'cust_indivisual_info_main_tab';
  public $components = array('Auth','RequestHandler');
@@ -735,7 +735,11 @@ class CustomerEstimateController extends AppController
   * @param $file_type    EXCEL or PDF
   * @param $estimate_id
   */
- function export($file_type,$estimate_id,$credit_amount = 0,$invoice_deadline=null){
+ function export($file_type,$estimate_id,$credit_amount = 0,$invoice_deadline=null,$pdf_note=null){
+
+  if(strtoupper($file_type) == "ESTIMATE_YEN" || strtoupper($file_type) == "ESTIMATE_DOLLAR"){
+  	 $this->EstimateTrn->updatePdfNote($estimate_id,empty($pdf_note) ? "" : $pdf_note);
+  }
 
    $customer_id = $this->Session->read('customer_id');
    $estimate_dtl = $this->EstimateDtlTrnView->find('all',array('conditions'=>array('estimate_id'=>$estimate_id),'order'=>array('no'=>'asc')));
