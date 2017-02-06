@@ -84,13 +84,37 @@ class UsersController extends AppController
   */
  function history()
  {
- 	$this->paginate = array (
- 			'LoginHistoryTrn' => array(
- 					'limit' => 50,
- 				    'order'=>array('id'=>'desc')
- 			)
- 	);
- 	$this->set("data",$this->paginate('LoginHistoryTrn'));
+ 	$search = array();
+
+ 	if (!empty($this->data)) {
+ 		$this->Session->write('filter_username',$this->data['UserHistoryTrn']['user_name']);
+ 	}
+ 	/* ソートリンクからフィルタ条件を引き継ぐ場合(GET) */
+ 	else if(isset($this->params['named']['user_name'])) {
+
+ 		$this->Session->write('filter_username',$this->params['named']['user_name']);
+ 	}
+
+	if($this->Session->read('filter_username') != -1){
+ 				$search += array("user_id"=>$this->Session->read('filter_username'));
+	}
+
+	$this->paginate = array (
+			'LoginHistoryTrn' => array(
+					'limit' => 50,
+					'order'=>array('id'=>'desc')
+			)
+	);
+
+	$this->set("user_id" ,!isset($search["user_id"]) ? "-1" : $search["user_id"]);
+
+	if(empty($search["user_id"])){
+		$this->set("data",$this->paginate('LoginHistoryTrn'));
+	}else{
+		$this->set("data",$this->paginate('LoginHistoryTrn',$search));
+	}
+
+    $this->set("user_names",$this->LoginHistoryTrn->getUserList());
 
  	//メニューとサブメニューのアクティブ化
     $this->set("menu_customers","");

@@ -19,5 +19,11 @@ class LoginHistoryTrn extends AppModel {
     				     'login_dt'=>date('Y/m/d H:i:s')]);
     	}
     }
+
+    function getUserList(){
+
+    	$sql = "SELECT id,username FROM users WHERE id IN (SELECT distinct user_id FROM login_history_trns) ORDER BY username";
+    	return  $this->query($sql);
+    }
 }
 ?>

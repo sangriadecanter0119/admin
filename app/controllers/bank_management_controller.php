@@ -36,6 +36,10 @@ class BankManagementController extends AppController
  	$data = $this->CreditService->GetCreditInfoByCreditMonth($credit_dt);
  	$this->set('data',$data);
 
+ 	/* 基準日より先の内金合計金額を取得 */
+ 	$this->set("total_prepaid_amount",$this->CreditService->getTotalPrepaidAmountAtfer(date("Y-m-d")));
+ 	/* 基準月の内金合計金額を取得 */
+ 	$this->set("prepaid_amount_of_this_month",$this->CreditService->getTotalPrepaidAmountOfThisMonth($credit_dt));
  	/* 入金年月一覧を取得 */
  	$this->set("credit_dt_list",$this->CreditService->getGroupOfCreditMonth());
  	/* フィルタ条件をVIEWで保持する */

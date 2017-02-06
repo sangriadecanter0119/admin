@@ -61,6 +61,36 @@ class CreditService extends AppModel {
 	}
 
 	/**
+	 *  挙式日が基準日より先の内金合計金額を取得
+     *
+	 */
+	function getTotalPrepaidAmountAtfer($base_date){
+
+		App::import("Model", "CreditTrnView");
+		$credit = new CreditTrnView();
+
+		$sql = "SELECT sum(amount) amount FROM credit_trn_views where SUBSTR(wedding_dt,1,10) > '".$base_date."' AND credit_type_id = ".NC_UCHIKIN;
+		$data = $this->query($sql);
+
+		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
+	}
+
+	/**
+	 *  入金日が基準月の内金合計金額を取得
+	 *
+	 */
+	function getTotalPrepaidAmountOfThisMonth($base_month){
+
+		App::import("Model", "CreditTrn");
+		$credit = new CreditTrn();
+
+		$sql = "SELECT sum(amount) amount FROM credit_trns where SUBSTR(credit_dt,1,7) = '".$base_month."' AND credit_type_id = ".NC_UCHIKIN;
+		$data = $this->query($sql);
+
+		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
+	}
+
+	/**
 	 * 顧客名を全角かなで検索して、顧客コードを取得する
 	 * @param unknown $full_nm
 	 * @return multitype:multitype:NULL

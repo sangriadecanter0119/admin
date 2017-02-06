@@ -6,6 +6,7 @@ $this->addScript($javascript->codeBlock( <<<JSPROG
 $(function(){
 
    $("input:submit").button();
+   $("#credit_dt").mask("9999-99");
 
    $("#credit_dt").change(function(){
       $("#CreditTrnCreditDt").val($(this).val());
@@ -42,8 +43,11 @@ JSPROG
 
  <div class='notation'>
    <label>表示年月：</label>
+
+   <!--
    <select id='credit_dt'>
 		<?php
+		/*
 		  $found = false;
 		  for($i=0;$i < count($credit_dt_list);$i++)
           {
@@ -54,12 +58,18 @@ JSPROG
 		         	 echo "<option value='".$credit_dt_list[$i]."'>{$credit_dt_list[$i]}</option>";
 		           }
 		   }
+		*/
 		   /* 初期表示はログイン年月を基にするがログイン年月に挙式がない場合はもあるので、その場合は項目のみ作成しておく  */
-		   if($found==false){
+		/* if($found==false){
 		     	 echo "<option value='".$credit_dt."' selected>{$credit_dt}</option>";
 		   }
+		 */
 	    ?>
    </select>
+   -->
+
+   <input type="text" id="credit_dt" name="start_date" class="inputdate" value="<?php echo $credit_dt ?>" />
+   <input id="search_button" type="image"  src="<?php echo $html->webroot("/images/search.png"); ?>"  style="margin-left:3px;" />
  </div>
 
    <?php
@@ -67,8 +77,13 @@ JSPROG
         for($i=0;$i < count($data);$i++){
 	      $total += $data[$i]['CreditTrnView']['amount'];
         }
-        echo "<h3>入金額総合計：".number_format($total)."</h3>";
+        echo "<div style='margin-top:10px;margin-bottom:10px;'>".
+             "<h3 style='display:inline;padding-right:40px;'>入金額総合計：".number_format($total)."</h3>".
+             "<h3 style='display:inline;padding-right:40px;'>前受金総合計：".number_format($total_prepaid_amount)."</h3>".
+             "<h3 style='display:inline;'>当月前受金合計：".number_format($prepaid_amount_of_this_month)."</h3>".
+             "</div>";
   ?>
+
 
 	<table class="list" cellspacing="0">
 	<tr>

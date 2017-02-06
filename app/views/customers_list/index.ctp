@@ -357,6 +357,9 @@ $(function(){
 		       ?>
 		    </select>
 		   </td>
+		   <td>&nbsp;</td>
+		   <td>&nbsp;</td>
+		   <td>&nbsp;</td>
 		</tr>
 		<tr>
 		   <th>No</th>
@@ -374,6 +377,9 @@ $(function(){
            <th class='action'>最新アクション</th>
            <th>初回見積提出日</th>
 		   <th>問い合わせ日</th>
+		   <th>導線1</th>
+		   <th>導線2</th>
+		   <th>紹介者</th>
 		</tr>
 
 		<?php
@@ -444,7 +450,25 @@ $(function(){
 
 		  	   echo  "<td class='action'>".$common->evalNbspForShortDate($atr['action_dt1'])." ".$common->evalNbsp($atr['action_nm1'])."</td>".
 		  	         "<td>".$common->evalNbspForShortDate($atr['estimate_issued_dt'])."</td>".
-                     "<td>".$common->evalNbspForShortDate($atr['first_contact_dt'])."</td>".
+                     "<td>".$common->evalNbspForShortDate($atr['first_contact_dt'])."</td>";
+
+                     if($atr['leading1'] == LD1_MAIL){
+                        echo "<td>メール</td>";
+                     }else if($atr['leading1'] == LD1_PHONE){
+                        echo "<td>電話</td>";
+                     }else{
+                        echo "<td>&nbsp;</td>";
+                     }
+
+                     if($atr['leading2'] == LD2_GENERAL){
+                        echo "<td>一般</td>";
+                     }else if($atr['leading2'] == LD2_INTRODUCING){
+                        echo "<td>紹介</td>";
+                     }else{
+                        echo "<td>&nbsp;</td>";
+                     }
+
+                echo  "<td>".$atr['introducer']."</td>".
 		  	        "</tr>";
 		  }
 		?>
