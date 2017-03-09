@@ -128,6 +128,11 @@ function StartSubmit(type){
 	    <li><a href="<?php echo $html->url('/creditExceptionMaster')    ?>"><?php echo $html->image('arrownext.gif') ?>入金例外管理</a></li>
 	    <li><a href="<?php echo $html->url('/ReportMaster')  ?>"><?php echo $html->image('arrownext.gif') ?>帳票管理</a></li>
 	    <li><a href="<?php echo $html->url('/envMaster')    ?>"><?php echo $html->image('arrownext.gif') ?>環境設定管理</a></li>
+	    <?php
+        if(strtoupper($user['User']['username']) == "ADMIN"){
+          echo "<li><a href='{$html->url('/systemMaster')}'>{$html->image('arrownext.gif')}システム管理</a></li>";
+        }
+        ?>
 </ul>
 
 <div id="critical_error"></div>

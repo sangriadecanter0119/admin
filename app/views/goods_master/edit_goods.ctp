@@ -229,7 +229,7 @@ $(function(){
     ----------------------------------------------------------------------------*/
 	function CustomRound(original){
 
-       tmp = original.split(".");
+       var tmp = original.split(".");
        if(tmp != null && tmp.length > 0){
 
             //万単位以上は百の位で切り上げ
@@ -242,14 +242,16 @@ $(function(){
 
                 tmp = new BigNumber(tmp[0]).shift(-2).round(0,0).shift(2).toPrecision();
 
-            //百単位は一の位で切り上げ
-            }else if(tmp[0].length == 3){
-
-                tmp = new BigNumber(tmp[0]).shift(-1).round(0,0).shift(1).toPrecision();
-
-            //十単位以下は小数点第一位で切り上げ
+            //百単位以下
             }else{
-                tmp = new BigNumber(original).round(0,0).toPrecision();
+                //$300以上は一の位で切り上げ
+                if(parseInt(tmp[0]) > 300){
+                  tmp = new BigNumber(tmp[0]).shift(-1).round(0,0).shift(1).toPrecision();
+
+                //$300以下は小数点第一位で切り上げ
+                }else{
+                  tmp = new BigNumber(original).round(0,0).toPrecision();
+                }
             }
             return tmp;
        }else{

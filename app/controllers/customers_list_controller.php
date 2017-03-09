@@ -52,7 +52,9 @@ class CustomersListController extends AppController
 
 	/* フィルター条件がALL(-1)でない場合のみ設定 */
 	if($this->Session->read('filter_status_id') != -1){
-   	   $search += array("status_id"=>$this->Session->read('filter_status_id'));
+   	   //$search += array("status_id"=>$this->Session->read('filter_status_id'));
+
+   	   $search += array("status_id" =>explode("_",$this->Session->read('filter_status_id')));
 	}
 
 	if($this->Session->read('filter_first_contact_person_name') != ""){
@@ -205,6 +207,7 @@ class CustomersListController extends AppController
  	$this->set("first_contact_person_name" ,$this->Session->read('filter_first_contact_person_name'));
  	$this->set("process_person_name" ,$this->Session->read('filter_process_person_name'));
  	$this->set("phone_no" ,$this->Session->read('filter_phone_no'));
+
 
  	$this->set("page_limit",$this->Session->read('cust_list_page_limit'));
  	$this->set("customer_status",$this->CustomerStatusMst->find('all'));

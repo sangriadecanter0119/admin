@@ -282,6 +282,21 @@ $(function(){
 		  	       }else{
 		  	       	  echo "<option value='".$atr['id']."'>{$atr['status_nm']}</option>";
 		  	       }
+
+		  	       if($atr['id'] == 3){
+		  	          if($status_id == "3_4_5_6_7_8"){
+		  	             echo "<option value='3_4_5_6_7_8' selected>見積提示済み以降</option>";
+		  	          }else{
+		  	             echo "<option value='3_4_5_6_7_8' >見積提示済み以降</option>";
+		  	          }
+		  	       }
+		  	       if($atr['id'] == 5){
+		  	          if($status_id == "5_6_7_8"){
+		  	             echo "<option value='5_6_7_8' selected>成約以降</option>";
+		  	          }else{
+		  	             echo "<option value='5_6_7_8' >成約以降</option>";
+		  	          }
+		  	       }
 		         }
 		       ?>
 		    </select>

@@ -73,9 +73,8 @@ App::import( 'Vendor', 'PHPExcel_Reader_Excel2007', array('file'=>'phpexcel' . D
        $sheet->setCellValue("X".$row_cnt, "=IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1)) >= 6,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",-3),".
                                            "IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1))  = 5,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",-3),".
                                            "IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1))  = 4,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",-2),".
-                                           "IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1))  = 3,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",-1),".
-                                           "IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1))  = 2,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",0),".
-                                           "IF(LEN(FLOOR((1+L".$row_cnt.") * W".$row_cnt.",1))  = 1,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",0),0))))))");
+                                           "IF((1+L".$row_cnt.") * W".$row_cnt."  > 300 ,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",-1),".
+                                           "IF((1+L".$row_cnt.") * W".$row_cnt." <= 300 ,ROUNDUP((1+L".$row_cnt.") * W".$row_cnt.",0),0)))))");
      }
 
       $sheet->setCellValue("Y".$row_cnt, $atr['cost_exchange_rate']);
