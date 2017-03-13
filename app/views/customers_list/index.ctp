@@ -13,21 +13,7 @@ $(function(){
      }
    });
 
-   /* ステータスが問い合わせ又は見積提示済みの時のみアクション項目を表示する */
-   if($("#customer_status").val() != <?php echo CS_CONTACT ?> && $("#customer_status").val() != <?php echo CS_ESTIMATED ?>){
-      $(".action").css("display","none");
-   }
-
-   /* ステータスが見積提示済み又は仮約定の時のみ新規担当者項目を表示する */
-   if($("#customer_status").val() != <?php echo CS_ESTIMATED ?> && $("#customer_status").val() != <?php echo CS_CONTRACTING ?>){
-      $(".first_attendant").css("display","none");
-   }
-
-   /* ステータスが成約以降の時のみプラン担当者項目を表示する */
-   if($("#customer_status").val() != <?php echo CS_CONTRACTED ?> && $("#customer_status").val() != <?php echo CS_INVOICED ?> &&
-      $("#customer_status").val() != <?php echo CS_UNPAIED ?>    && $("#customer_status").val() != <?php echo CS_PAIED ?>){
-      $(".process_attendant").css("display","none");
-   }
+   ShowHeaderIfNeeded();
 
    //選択カテゴリが変わったら検索して再表示
    $("#customer_status").change(function(){
@@ -165,6 +151,26 @@ $(function(){
 	   });
    });
 });
+
+function ShowHeaderIfNeeded(){
+    /* ステータスが問い合わせ又は見積提示済みの時のみアクション項目を表示する */
+   if($("#customer_status").val() != <?php echo CS_CONTACT ?> && $("#customer_status").val() != <?php echo CS_ESTIMATED ?>){
+      $(".action").css("display","none");
+   }
+
+   /* ステータスが見積提示済み、仮約定又は見積提示済以降の時のみ新規担当者項目を表示する
+   if($("#customer_status").val() != <?php echo CS_ESTIMATED ?> && $("#customer_status").val() != <?php echo CS_CONTRACTING ?> &&
+      $("#customer_status").val() != <?php echo "'".CS_AFTER_ESTIMATED."'" ?>){
+      $(".first_attendant").css("display","none");
+   } */
+
+   /* ステータスが成約以降の時のみプラン担当者項目を表示する
+   if($("#customer_status").val() != <?php echo CS_CONTRACTED ?> && $("#customer_status").val() != <?php echo CS_INVOICED ?> &&
+      $("#customer_status").val() != <?php echo CS_UNPAIED ?>    && $("#customer_status").val() != <?php echo CS_PAIED ?> &&
+      $("#customer_status").val() != <?php echo "'".CS_AFTER_CONTRACTED."'" ?>){
+      $(".process_attendant").css("display","none");
+   } */
+}
 </script>
 
 <ul class="operate">
@@ -302,40 +308,45 @@ $(function(){
 		    </select>
            </td>
            <td class="first_attendant">
-		      <!--
 		      <select id='first_contact_person_list'>
-		        <option value='' selected>ALL</option>
+		        <option value='-1' selected>ALL</option>
 		        <?php
 		  	     for($i=0;$i < count($first_contact_person_list);$i++)
 		         {
 		  	       $atr = $first_contact_person_list[$i];
-		  	       if($first_contact_person_name == $atr['first_contact_person_nm']){
-		  	       	   echo "<option value='".$atr['first_contact_person_nm']."' selected>{$atr['first_contact_person_nm']}</option>";
+		  	       if($first_contact_person_name == $atr){
+		  	     	  echo "<option value='".$atr."' selected>{$atr}</option>";
 		  	       }else{
-		  	       	  echo "<option value='".$atr['first_contact_person_nm']."'>{$atr['first_contact_person_nm']}</option>";
+		  	       	  echo "<option value='".$atr."'>{$atr}</option>";
 		  	       }
+		         }
+		         if($first_contact_person_name == ""){
+		              echo "<option value='' selected>EMPTY</option>";
+		         }else{
+		              echo "<option value=''>EMPTY</option>";
 		         }
 		       ?>
 		    </select>
-		    -->
 		    <td class="process_attendant">
-		     <!--
 		      <select id='process_person_list'>
-		        <option value='' selected>ALL</option>
+		        <option value='-1' selected>ALL</option>
 		         <?php
-
 		  	     for($i=0;$i < count($process_person_list);$i++)
 		         {
 		  	       $atr = $process_person_list[$i];
-		  	       if($process_person_nm == $atr['process_person_nm']){
-		  	       	   echo "<option value='".$atr['process_person_nm']."' selected>{$atr['process_person_nm']}</option>";
+		  	       if($process_person_name == $atr){
+		  	       	   echo "<option value='".$atr."' selected>{$atr}</option>";
 		  	       }else{
-		  	       	  echo "<option value='".$atr['process_person_nm']."'>{$atr['process_person_nm']}</option>";
+		  	       	  echo "<option value='".$atr."'>{$atr}</option>";
 		  	       }
+		         }
+		         if($process_person_name == ""){
+		            echo "<option value='' selected>EMPTY</option>";
+		         }else{
+		            echo "<option value=''>EMPTY</option>";
 		         }
 		       ?>
 		    </select>
-		    -->
            </td>
            <td class='action'>&nbsp;</td>
            <td>

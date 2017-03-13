@@ -13,6 +13,7 @@ class CustomersListController extends AppController
  {
  	 $search = array();
      $order = "first_contact_dt desc";
+     $delimiter = "_";
 
      //1日に1回挙式日の過ぎた顧客のステータスを更新する
      //$ret =$this->CustomerMst->autoUpdateCustomerStatusIfWeddingFinished($this->Auth->user('username'));
@@ -44,8 +45,8 @@ class CustomersListController extends AppController
 		$this->Session->write('filter_estimate_issued_dt',-1);
 		$this->Session->write('filter_customer_name',"");
 		$this->Session->write('filter_pref',-1);
-		$this->Session->write('filter_first_contact_person_name',"");
-		$this->Session->write('filter_process_person_name',"");
+		$this->Session->write('filter_first_contact_person_name',-1);
+		$this->Session->write('filter_process_person_name',-1);
 		$this->Session->write('filter_non_display_flg',0);
 		$this->Session->write('filter_phone_no',"");
 	}
@@ -57,11 +58,11 @@ class CustomersListController extends AppController
    	   $search += array("status_id" =>explode("_",$this->Session->read('filter_status_id')));
 	}
 
-	if($this->Session->read('filter_first_contact_person_name') != ""){
+	if($this->Session->read('filter_first_contact_person_name') != -1){
 		$search += array("first_contact_person_nm"=>$this->Session->read('filter_first_contact_person_name'));
 	}
 
-	if($this->Session->read('filter_process_person_name') != ""){
+	if($this->Session->read('filter_process_person_name') != -1){
 		$search += array("process_person_nm"=>$this->Session->read('filter_process_person_name'));
 	}
 
@@ -208,15 +209,14 @@ class CustomersListController extends AppController
  	$this->set("process_person_name" ,$this->Session->read('filter_process_person_name'));
  	$this->set("phone_no" ,$this->Session->read('filter_phone_no'));
 
-
  	$this->set("page_limit",$this->Session->read('cust_list_page_limit'));
  	$this->set("customer_status",$this->CustomerStatusMst->find('all'));
   	$this->set("wedding_dt_list",$this->CustomerMst->getGroupOfWeddingMonth());
   	$this->set("estimate_issued_dt_list",$this->CustomerMst->getGroupOfEestimateIssuedMonth());
   	$this->set("first_contact_dt_list",$this->CustomerMst->getGroupOfFirstContactedMonth());
   	$this->set("division_list",$divisions);
-  	$this->set("first_contact_person_list",$this->CustomerMst->getGroupOfFirstContactPersonInStatusId($this->Session->read('filter_status_id')));
-  	$this->set("process_person_list",$this->CustomerMst->getGroupOfProcessPersonInStatusId($this->Session->read('filter_status_id')));
+  	$this->set("first_contact_person_list",$this->CustomerMst->getGroupOfFirstContactPersonInStatusId($this->Session->read('filter_status_id'),$delimiter));
+  	$this->set("process_person_list",$this->CustomerMst->getGroupOfProcessPersonInStatusId($this->Session->read('filter_status_id'),$delimiter));
 
  	//メニューとサブメニューのアクティブ化
  	$this->set("menu_customers","current");

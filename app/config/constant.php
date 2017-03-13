@@ -104,8 +104,10 @@ define('NC_EXTRA','10');   //その他
 define('CS_CONTACT','1');  //問い合わせ
 /* define('CS_VISIT','2');    //新規接客 */
 define('CS_ESTIMATED','3'); //見積提示済み
+define('CS_AFTER_ESTIMATED','3_4_5_6_7_8'); //見積提示済以降
 define('CS_CONTRACTING','4'); //仮約定
 define('CS_CONTRACTED','5'); //成約
+define('CS_AFTER_CONTRACTED','5_6_7_8'); //成約以降
 define('CS_INVOICED','6');    //請求書発行済み
 define('CS_UNPAIED','7');  //挙式完了・未入金
 define('CS_PAIED','8');    //挙式完了・入金済み

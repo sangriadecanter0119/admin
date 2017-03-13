@@ -490,19 +490,23 @@ class CustomerMst extends AppModel {
      *
      * ユニークな新規担当者を取得する
      */
-    function getGroupOfFirstContactPersonInStatusId($status_id){
+    function getGroupOfFirstContactPersonInStatusId($status_id,$delimiter=null){
 
-      if($status_id = -1){
-      	$sql = "SELECT first_contact_person_nm FROM customer_msts GROUP BY first_contact_person_nm";
+      if($status_id == -1){
+      	$sql = "SELECT distinct first_contact_person_nm FROM customer_msts ";
+      }else if($delimiter == null){
+      	$sql = "SELECT distinct first_contact_person_nm FROM customer_msts WHERE status_id = ".$status_id;
       }else{
-      	$sql = "SELECT first_contact_person_nm FROM customer_msts WHERE status_id = ".$status_id." GROUP BY first_contact_person_nm";
+      	$sql = "SELECT distinct first_contact_person_nm FROM customer_msts WHERE status_id IN (".implode(",",explode($delimiter, $status_id)) .")";
       }
 
       $data = $this->query($sql);
 
       $list = array();
       for($i=0;$i < count($data);$i++){
-      	array_push($list, mb_convert_encoding($data[$i]['customer_msts']['first_contact_person_nm'],'SJIS','AUTO'));
+      	if($data[$i]['customer_msts']['first_contact_person_nm'] != ""){
+      		$list[] = $data[$i]['customer_msts']['first_contact_person_nm'];
+      	}
       }
  	  return $list;
     }
@@ -511,18 +515,22 @@ class CustomerMst extends AppModel {
      *
      * ユニークなプラン担当者を取得する
      */
-    function getGroupOfProcessPersonInStatusId($status_id){
+    function getGroupOfProcessPersonInStatusId($status_id,$delimiter=null){
 
-      if($status_id = -1){
-      	$sql = "SELECT process_person_nm FROM customer_msts GROUP BY process_person_nm";
+      if($status_id == -1){
+      	$sql = "SELECT distinct process_person_nm FROM customer_msts";
+      }else if($delimiter == null){
+      	$sql = "SELECT distinct process_person_nm FROM customer_msts WHERE status_id = ".$status_id;
       }else{
-      	$sql = "SELECT process_person_nm FROM customer_msts WHERE status_id = ".$status_id." GROUP BY process_person_nm";
+      	$sql = "SELECT distinct process_person_nm FROM customer_msts WHERE status_id IN (".implode(",",explode($delimiter, $status_id)) .")";
       }
     	$data = $this->query($sql);
 
     	$list = array();
     	for($i=0;$i < count($data);$i++){
-    		array_push($list, mb_convert_encoding($data[$i]['customer_msts']['process_person_nm'],'SJIS','AUTO'));
+    		if($data[$i]['customer_msts']['process_person_nm'] != ""){
+    			$list[] = $data[$i]['customer_msts']['process_person_nm'];
+    		}
     	}
     	return $list;
     }
@@ -869,7 +877,7 @@ class CustomerMst extends AppModel {
     		array_push($months, $data[$i][0]['estimate_issued_dt']);
     	}
     	return $months;
-    }  
+    }
 
     /**
      * 初回見積日ベースの顧客情報を月数分取得
@@ -907,7 +915,7 @@ class CustomerMst extends AppModel {
     				                           'order'=>array("estimate_issued_dt")));
     	}
     }
-    
+
     /**
      * 契約日ベースの顧客リストを取得する
      * @param unknown $contract_dt
