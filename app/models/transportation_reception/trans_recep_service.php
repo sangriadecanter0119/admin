@@ -204,7 +204,7 @@ class TransRecepService extends AppModel {
     	$trans_sub = new TransRecepSubTrn();
 
         $trans_sub_data = array(
-                                     "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                                     "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                                 "reg_nm"=>"'".$array_params['username']."'",
  	                                 "reg_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                                 );

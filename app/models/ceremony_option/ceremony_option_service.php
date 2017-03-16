@@ -154,7 +154,7 @@ class CeremonyOptionService extends AppModel {
 
       //セレモニーオプションメニュー更新
       $ceremony_option_dtl_data = array(
-                                     "option_nm"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                                     "option_nm"=>"'".mysql_real_escape_string($array_params['menu'])."'",
                                      "option_count"=>$array_params['num'],
  	                                 "upd_nm"=>"'".$array_params['username']."'",
  	                                 "upd_dt"=>"'".date('Y-m-d H:i:s')."'"

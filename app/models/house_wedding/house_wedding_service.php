@@ -114,7 +114,7 @@ class HouseWeddingService extends AppModel {
     	 $house = new HouseWeddingTrn();
 
      	 $house_data = array(
-     	                     "site"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+     	                     "site"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                         "upd_nm"=>"'".$array_params['username']."'",
  	                         "upd_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                         );

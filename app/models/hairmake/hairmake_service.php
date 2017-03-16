@@ -309,7 +309,7 @@ class HairmakeService extends AppModel {
 
        //ヘアメイクCPL明細メニュー更新
        $hairmake_cpl_menu_data = array(
-                                      "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                                      "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                                  "reg_nm"=>"'".$array_params['username']."'",
  	                                  "reg_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                                  );
@@ -445,7 +445,7 @@ class HairmakeService extends AppModel {
 
 	  //ヘアメイクゲストサブメニュー更新
       $hairmake_gst_sub_data = array(
-     	                              "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+     	                              "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                                  "reg_nm"=>"'".$array_params['username']."'",
  	                                  "reg_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                                  );

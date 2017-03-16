@@ -67,7 +67,7 @@ class AlbumService extends AppModel {
   	 $album_dtl = new AlbumDtlTrn();
 
      $album_dtl_data = array(
-                           "type"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                           "type"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                       "upd_nm"=>"'".$array_params['username']."'",
  	                       "upd_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                       );

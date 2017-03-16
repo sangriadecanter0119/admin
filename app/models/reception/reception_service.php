@@ -171,7 +171,7 @@ class ReceptionService extends AppModel {
       $recep_menu = new ReceptionMenuTrn();
 
       $recep_menu_data = array(
-                               "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                               "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
                                "num"=>$array_params['num'],
  	                           "upd_nm"=>"'".$array_params['username']."'",
  	                           "upd_dt"=>"'".date('Y-m-d H:i:s')."'"

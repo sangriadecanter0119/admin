@@ -272,7 +272,7 @@ class CeremonyService extends AppModel {
 
       //セレモニーヘッダ更新
       $ceremony_data = array(
-     	                     "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+     	                     "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                         "upd_nm"=>"'".$array_params['username']."'",
  	                         "upd_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                         );

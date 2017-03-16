@@ -197,7 +197,7 @@ class VideographerService extends AppModel {
        $video_menu = new VideographerMenuTrn();
 
        $video_menu_data = array(
-                               "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                               "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                           "reg_nm"=>"'".$array_params['username']."'",
  	                           "reg_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                           );

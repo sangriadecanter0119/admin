@@ -152,7 +152,7 @@ class AvService extends AppModel {
 
      //AVメニュー更新
      $av_menu_data = array(
-                           "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                           "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
                            "av_count"=>$array_params['num'],
  	                       "upd_nm"=>"'".$array_params['username']."'",
  	                       "upd_dt"=>"'".date('Y-m-d H:i:s')."'"

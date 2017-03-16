@@ -156,7 +156,7 @@ class CakeService extends AppModel {
       $cake_menu = new CakeMenuTrn();
 
       $cake_menu_data = array(
-                              "menu"=>"'".mysql_real_escape_stringl($array_params['menu'])."'",
+                              "menu"=>"'".mysql_real_escape_string($array_params['menu'])."'",
  	                          "upd_nm"=>"'".$array_params['username']."'",
  	                          "upd_dt"=>"'".date('Y-m-d H:i:s')."'"
  	                         );
