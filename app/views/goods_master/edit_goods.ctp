@@ -158,14 +158,7 @@ $(function(){
 	  var costTotal = cost1 + cost2 + cost3 + cost4 + cost5 + cost6 + cost7 + cost8 + cost9 + cost10;
 	  var netTax = new BigNumber(tax).plus(1).times(costTotal).toPrecision();
 
-      var costIncluded = new BigNumber(serviceRate).plus(1).times(netTax).toPrecision();
-
-      console.log(costIncluded);
-
-	  costIncluded = CustomRound(costIncluded);
-
-	   console.log(costIncluded);
-
+      var costIncluded = new BigNumber(serviceRate).plus(1).times(netTax).round(2).toPrecision();
 	  var price = new BigNumber(profitRate).plus(1).times(costIncluded).toPrecision();
 	  price = CustomRound(price);
 
