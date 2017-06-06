@@ -54,7 +54,6 @@ class CustomersListController extends AppController
 	/* フィルター条件がALL(-1)でない場合のみ設定 */
 	if($this->Session->read('filter_status_id') != -1){
    	   //$search += array("status_id"=>$this->Session->read('filter_status_id'));
-
    	   $search += array("status_id" =>explode("_",$this->Session->read('filter_status_id')));
 	}
 
@@ -350,14 +349,21 @@ class CustomersListController extends AppController
 
 	/* フィルター条件がALL(-1)でない場合のみ設定 */
 	if($this->Session->read('filter_status_id') != -1){
-   	   $search += array("status_id"=>$this->Session->read('filter_status_id'));
+   	   //$search += array("status_id"=>$this->Session->read('filter_status_id'));
+	   //$search += array("status_id" =>explode("_",$this->Session->read('filter_status_id')))
+		$status_ = explode("_",$this->Session->read('filter_status_id'));
+		if(count($status_) == 1){
+			$search += array("status_id" =>$status_[0]);
+		}else{
+			$search += array("status_id" =>$status_);
+		}
 	}
 
-	if($this->Session->read('filter_first_contact_person_name') != ""){
+	if($this->Session->read('filter_first_contact_person_name') != -1){
 		$search += array("first_contact_person_nm"=>$this->Session->read('filter_first_contact_person_name'));
 	}
 
-	if($this->Session->read('filter_process_person_name') != ""){
+	if($this->Session->read('filter_process_person_name') != -1){
 		$search += array("process_person_nm"=>$this->Session->read('filter_process_person_name'));
 	}
 
@@ -464,12 +470,12 @@ class CustomersListController extends AppController
             }
 	}
  	//ページネーション設定
- 	$this->paginate = array(
+ 	/*$this->paginate = array(
  			                'limit'=>null,
  	                        'order' =>$order
                             );
-  // $this->set("tmp",$search);
-   //$this->set("customers",$this->paginate('CustomerMstView',$search));
+    $this->set("tmp",$search);
+    $this->set("customers",$this->paginate('CustomerMstView',$search));*/
  	$this->set("customers",$this->CustomerMstView->find('all',array('conditions'=>$search,'order'=>$order)));
 
    $this->layout = false;

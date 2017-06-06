@@ -1,5 +1,5 @@
 /*
- * •¶šƒR[ƒhUTF-8
+ * ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hUTF-8
  */
 
 body {
@@ -7,14 +7,14 @@ body {
 	padding: 0px;
 	line-height: 135%;
 	font-size: 14px;
-	font-family: "‚l‚r ‚oƒSƒVƒbƒN", Osaka, sans-serif;
+	font-family: "ï¿½lï¿½r ï¿½oï¿½Sï¿½Vï¿½bï¿½N", Osaka, sans-serif;
 	min-width: 600px;
 	max-width: auto;
 }
 
 input, textarea, select {
 	font-size: 11px;
-	font-family: "‚l‚r ‚oƒSƒVƒbƒN", Osaka, sans-serif;
+	font-family: "ï¿½lï¿½r ï¿½oï¿½Sï¿½Vï¿½bï¿½N", Osaka, sans-serif;
 }
 
 select{
@@ -336,7 +336,7 @@ td.empty{
    border-style:solid;
 }
 
-/*** ŒÚ‹q‚ÌŠî–{î•ñƒwƒbƒ_—p  *****/
+/*** ï¿½Ú‹qï¿½ÌŠï¿½{ï¿½ï¿½ï¿½wï¿½bï¿½_ï¿½p  *****/
 .viewheader {
 	width: 100%;
 	clear: both;
@@ -431,7 +431,7 @@ table.header td {
 	padding: 6px 0px 6px 0px;
 }
 
-/* ƒ†[ƒU[“o˜^‰æ–Ê—p */
+/* ï¿½ï¿½ï¿½[ï¿½Uï¿½[ï¿½oï¿½^ï¿½ï¿½Ê—p */
 table#userform th{
     width:190px;
 }
@@ -470,7 +470,7 @@ table#userform th{
 .nobordertextarea{
  border: none;
  background-color:transparent;
- /* ƒXƒNƒ[ƒ‹”ñ•\¦ */
+ /* ï¿½Xï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ */
  overflow:hidden;
 }
 
@@ -646,6 +646,27 @@ a:link.sort {
    border:1px solid #f7c455;
    color:#222;
 }
+
+/*å¹ãå‡ºã—
+--------------------------------------------*/
+.balloon div{
+	background: #F03E51;
+	color: #fff;
+	text-align: center;
+	min-width: 200px;
+	padding: 8px;
+	border-radius: 5px;
+	position: relative;
+}
+.balloon div:before{
+	content: "";
+	position: absolute;
+	bottom: -23px;
+	right: 75%;
+	border: 12px solid transparent;
+	border-top: 12px solid #F03E51;
+}
+
 /* MISC
 -------------------------------------------*/
 .digit{

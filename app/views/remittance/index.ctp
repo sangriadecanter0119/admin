@@ -11,6 +11,10 @@ $(function(){
    $(".rate").mask("999.99");
    $(".customer_cd").mask("999999-999999");
 
+   $(".balloon").hide();
+   $("#hi_header").hover(function(){ $("#hi_header_balloon").fadeIn();},
+                         function(){ $("#hi_header_balloon").fadeOut();});
+
    $("#wedding_dt").change(function(){
       $("#GoodsMstViewWeddingPlannedDt").val($(this).val());
       $("#EstimateDtlTrnViewIndexForm").submit();
@@ -202,6 +206,8 @@ JSPROG
 </table>
 -->
 
+<div style='position:relative;'>
+ <div id='hi_header_balloon' class='balloon' style='position:absolute;top:-40px;left:550px;'><div>HI負担分の割引料を加味した金額</div></div>
  <form id="customer_cd_update_form" method="post" action="">
 	<table class="list" cellspacing="0">
 
@@ -211,7 +217,7 @@ JSPROG
 	    <th>顧客名</th>
 	    <th>顧客番号</th>
 	    <th>現地払い料</th>
-	    <th>HI手配料</th>
+	    <th id='hi_header'>HI手配料</th>
         <th>州税</th>
   	    <th>振込み額合計</th>
 	</tr>
@@ -249,7 +255,7 @@ JSPROG
 ?>
     </table>
  </form>
-
+</div>
 <div id="result_dialog" style="display:none"><p id="result_message"><img src="#" alt="" /><span></span></p><p id="error_reason"></p></div>
 <div id="critical_error"></div>
 

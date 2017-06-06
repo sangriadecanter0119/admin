@@ -7,6 +7,12 @@ $(function(){
    $("#start_date").mask("9999-99");
    $("#end_date").mask("9999-99");
 
+   $(".balloon").hide();
+   $("#hi_header_jp").hover(function(){ $("#hi_header_balloon_jp").fadeIn();},
+                            function(){ $("#hi_header_balloon_jp").fadeOut();});
+   $("#hi_header_en").hover(function(){ $("#hi_header_balloon_en").fadeIn();},
+                            function(){ $("#hi_header_balloon_en").fadeOut();});
+
    $("#wedding_dt").change(function(){
 
       $("#GoodsMstViewWeddingPlannedDt").val($(this).val());
@@ -162,8 +168,9 @@ JSPROG
 </tr>
 </table>
 -->
+ <div style='position:relative;'>
+    <div id='hi_header_balloon_en' class='balloon' style='position:absolute;top:-40px;left:550px;'><div>HI負担分の割引料を加味しない金額</div></div>
 	<table id="country_us" class="list" cellspacing="0">
-
 	<tr>
 	    <th>No</th>
 	    <th>挙式日</th>
@@ -171,7 +178,7 @@ JSPROG
 	    <th style="text-align:right">全体額<?php echo $html->image('dollar.png')?></th>
 	    <th style="text-align:right">クレジット払い額<?php echo $html->image('dollar.png')?></th>
 	    <th style="text-align:right">アレンジメントフィー<?php echo $html->image('dollar.png')?></th>
-	    <th style="text-align:right">HI取り分<?php echo $html->image('dollar.png')?></th>
+	    <th id="hi_header_en" style="text-align:right">HI取り分<?php echo $html->image('dollar.png')?></th>
   	    <th style="text-align:right">RW取り分<?php echo $html->image('dollar.png')?></th>
 	    <th style="text-align:right">税金<?php echo $html->image('dollar.png')?></th>
 	    <th style="text-align:right">送金税金<?php echo $html->image('dollar.png')?></th>
@@ -279,9 +286,11 @@ JSPROG
           "</tr>";
 ?>
     </table>
+ </div>
 
+ <div style='position:relative;'>
+    <div id='hi_header_balloon_jp' class='balloon' style='position:absolute;top:-40px;left:550px;'><div>HI負担分の割引料を加味しない金額</div></div>
     <table id="country_japan" class="list" cellspacing="0">
-
 	<tr>
 	    <th>No</th>
 	    <th>挙式日</th>
@@ -289,7 +298,7 @@ JSPROG
 	    <th style="text-align:right">全体額<?php echo $html->image('yen.png')?></th>
 	    <th style="text-align:right">クレジット払い額<?php echo $html->image('yen.png')?></th>
 	    <th style="text-align:right">アレンジメントフィー<?php echo $html->image('yen.png')?></th>
-	    <th style="text-align:right">HI取り分<?php echo $html->image('yen.png')?></th>
+	    <th id='hi_header_jp' style="text-align:right">HI取り分<?php echo $html->image('yen.png')?></th>
   	    <th style="text-align:right">RW取り分<?php echo $html->image('yen.png')?></th>
 	    <th style="text-align:right">税金<?php echo $html->image('yen.png')?></th>
 	    <th style="text-align:right">送金税金<?php echo $html->image('yen.png')?></th>
@@ -395,6 +404,6 @@ JSPROG
           "</tr>";
 ?>
     </table>
-
+ </div>
 
 

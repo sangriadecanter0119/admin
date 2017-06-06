@@ -7,6 +7,16 @@ $(function(){
 
    $("input:submit").button();
    $("#credit_dt").mask("9999-99");
+   $(".balloon").hide();
+
+   $("#total_credit_amount").hover(function(){ $("#total_credit_amount_balloon").fadeIn();},
+                                   function(){ $("#total_credit_amount_balloon").fadeOut();});
+
+   $("#after_credit_amount").hover(function(){ $("#after_credit_amount_balloon").fadeIn();},
+                                   function(){ $("#after_credit_amount_balloon").fadeOut();});
+
+   $("#this_month_credit_amount").hover(function(){ $("#this_month_credit_amount_balloon").fadeIn();},
+                                        function(){ $("#this_month_credit_amount_balloon").fadeOut();});
 
    $("#credit_dt").change(function(){
       $("#CreditTrnCreditDt").val($(this).val());
@@ -77,10 +87,13 @@ JSPROG
         for($i=0;$i < count($data);$i++){
 	      $total += $data[$i]['CreditTrnView']['amount'];
         }
-        echo "<div style='margin-top:10px;margin-bottom:10px;'>".
-             "<h3 style='display:inline;padding-right:40px;'>入金額総合計：".number_format($total)."</h3>".
-             "<h3 style='display:inline;padding-right:40px;'>前受金総合計：".number_format($total_prepaid_amount)."</h3>".
-             "<h3 style='display:inline;'>当月前受金合計：".number_format($prepaid_amount_of_this_month)."</h3>".
+        echo "<div style='margin-top:10px;margin-bottom:10px;position:relative;'>".
+             "<div id='total_credit_amount_balloon' class='balloon' style='position:absolute;top:-43px;left:0px;'><div>入金日が検索月内のすべての入金合計額を表示</div></div>".
+             "<h3  id='total_credit_amount' style='display:inline;padding-right:40px;'>入金額総合計：".number_format($total)."</h3>".
+             "<div id='after_credit_amount_balloon' class='balloon' style='position:absolute;top:-43px;left:200px;'><div>挙式日がシステム日以降の内金合計金額を取得</div></div>".
+             "<h3  id='after_credit_amount' style='display:inline;padding-right:40px;'>前受金総合計：".number_format($total_prepaid_amount)."</h3>".
+             "<div id='this_month_credit_amount_balloon' class='balloon' style='position:absolute;top:-43px;left:470px;'><div>入金日が検索月内の内金合計金額を取得</div></div>".
+             "<h3  id='this_month_credit_amount' style='display:inline;'>当月前受金合計：".number_format($prepaid_amount_of_this_month)."</h3>".
              "</div>";
   ?>
 
