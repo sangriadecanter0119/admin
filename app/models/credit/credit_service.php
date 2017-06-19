@@ -70,6 +70,7 @@ class CreditService extends AppModel {
 		$credit = new CreditTrnView();
 
 		$sql = "SELECT sum(amount) amount FROM credit_trn_views where SUBSTR(wedding_dt,1,10) > '".$base_date."' AND credit_type_id = ".NC_UCHIKIN;
+		//$sql = "SELECT sum(amount) amount FROM credit_trn_views where SUBSTR(wedding_dt,1,10) > '".$base_date."' AND credit_type_id IN (".NC_UCHIKIN.",".NC_ZANKIN.")";
 		$data = $this->query($sql);
 
 		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
@@ -89,6 +90,35 @@ class CreditService extends AppModel {
 
 		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
 	}
+
+	/**
+	 * 未挙式の請求書発行済み合計入金金額
+	 *
+	 */
+	function getTotalInvoicedCreditAmountBeforeWedding(){
+
+		App::import("Model", "CreditTrnView");
+		$credit = new CreditTrnView();
+		$sql = "SELECT sum(amount) amount FROM credit_trn_views where SUBSTR(wedding_dt,1,10) > '".date("Y-m-d")."' AND status_id = ".CS_INVOICED." AND credit_type_id IN  (".NC_UCHIKIN.",".NC_ZANKIN.")";
+		$data = $this->query($sql);
+
+		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
+	}
+
+	/**
+	 * 未挙式の請求書発行前合計入金金額
+	 *
+	 */
+	function getTotalUninvoicedCreditAmountBeforeWedding(){
+
+		App::import("Model", "CreditTrnView");
+		$credit = new CreditTrnView();
+		$sql = "SELECT sum(amount) amount FROM credit_trn_views where status_id IN (".CS_ESTIMATED.",".CS_CONTRACTING.",".CS_CONTRACTED.") AND credit_type_id IN  (".NC_UCHIKIN.",".NC_ZANKIN.")";
+		$data = $this->query($sql);
+
+		return !empty($data[0][0]['amount']) > 0 ? $data[0][0]['amount'] : 0;
+	}
+
 
 	/**
 	 * 顧客名を全角かなで検索して、顧客コードを取得する
