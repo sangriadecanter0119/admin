@@ -45,7 +45,7 @@ class CustomerWeddingReserveController extends AppController
 
     $final = $this->FinalSheetTrn->find('all',array('conditions'=>array('customer_id'=>$customer_id),'order'=>array('reg_dt desc','upd_dt desc')));
     /* ファイナルシートテーブルが存在しなければ未成約なので見積画面にリダイレクトする  */
-    if(count($final) == 0){ $this->redirect('/customer_estimate'); }
+    if(count($final) == 0){ $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customer_estimate'); }
 
     //新郎新婦の名前をセット
     $this->set(	"broom",($customer['CustomerMstView']['prm_lastname_flg'] == 0 ? $customer['CustomerMstView']['grmls_kj'] : $customer['CustomerMstView']['brdls_kj']).$customer['CustomerMstView']['grmfs_kj'] );
@@ -139,7 +139,8 @@ class CustomerWeddingReserveController extends AppController
     }
     else
    {
-      $this->redirect('/customer_estimate');
+      //$this->redirect('/customer_estimate');
+      $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customer_estimate');
     }
 
     //新郎新婦の名前をセット

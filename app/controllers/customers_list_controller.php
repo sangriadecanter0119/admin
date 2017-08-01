@@ -305,7 +305,7 @@ class CustomersListController extends AppController
  function goToCustomerInfo($customer_id)
  {
  	$this->Session->write('customer_id',$customer_id);
- 	$this->redirect('/customer_info');
+    $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customer_info');
  }
 
  /**

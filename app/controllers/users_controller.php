@@ -10,7 +10,8 @@ class UsersController extends AppController
 
  function index()
  {
-    $this->redirect(array('action' => 'login'));
+    //$this->redirect(array('action' => 'login'));
+    $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/users/login');
  }
 
  /**
@@ -23,7 +24,9 @@ class UsersController extends AppController
 
    //セッションのリファラにデータが入っているとログアウト時の
    //リダイレクトの制御がきかないので削除する
-   $this->Session->delete('Auth.redirect');
+   if($this->Session->check('Auth.redirect')){
+      $this->Session->delete('Auth.redirect');
+   }
  }
 
  /**
@@ -34,8 +37,7 @@ class UsersController extends AppController
  {
  	$this->Session->setFlash(array('auth','ログアウトしました。'));
     $this->Auth->logout();
-    $this->redirect(array('action' => 'login'));
-
+    $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/users/login');
  }
 
  /**
@@ -194,7 +196,8 @@ class UsersController extends AppController
  function beforeFilter()
  {
  	$this->Auth->loginError = "ログイン情報に誤りがあります。";
- 	$this->Auth->loginRedirect = array('controller' => 'Users',  'action' => 'loginStart');
+ 	//$this->Auth->loginRedirect = array('controller' => 'Users',  'action' => 'loginStart');
+ 	$this->Auth->loginRedirect = 'https://'.$_SERVER['HTTP_HOST'].'/admin/users/loginStart';
 
   //初回ログイン用
   //$this->Auth->allow('add');
@@ -214,7 +217,8 @@ class UsersController extends AppController
  	$this->LoginHistoryTrn->Add($this->Auth->user('id'));
 
  	//初期画面へ移動
- 	$this->redirect(array('controller' => 'customersList',  'action' => 'index'));
+ 	//$this->redirect(array('controller' => 'customersList',  'action' => 'index'));
+ 	$this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customersList');
  }
 
 }

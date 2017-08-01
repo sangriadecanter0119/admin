@@ -10,7 +10,8 @@ class CustomersSchedulesController extends AppController
 
  function index()
  {
- 	$this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar"));
+ 	//$this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar"));
+ 	$this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/CustomersSchedules/calendar');
  }
 
  function feed()
@@ -205,7 +206,8 @@ class CustomersSchedulesController extends AppController
         $this->data['CustomerScheduleTrn']['reg_nm']=$this->Auth->user('username');
         $this->data['CustomerScheduleTrn']['reg_dt']=date('Y/m/d h:i:s');
         $this->CustomerScheduleTrn->save($this->data);
-        $this->redirect(array('controller' => "CustomersSchedules", 'action' => "index"));
+        //$this->redirect(array('controller' => "CustomersSchedules", 'action' => "index"));
+        $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/CustomersSchedules/index');
     }
   }
 
@@ -262,10 +264,14 @@ class CustomersSchedulesController extends AppController
                                                array('CustomerScheduleTrn.id =' => $this->data['CustomerScheduleTrn']['id']));
 
 
-        $this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar",
+        /*$this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar",
              substr($this->data['CustomerScheduleTrn']['start_dt'],0,4),
              substr($this->data['CustomerScheduleTrn']['start_dt'],5,2),
-             substr($this->data['CustomerScheduleTrn']['start_dt'],8,2)));
+             substr($this->data['CustomerScheduleTrn']['start_dt'],8,2)));*/
+        $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/CustomersSchedules/calendar/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],0,4).'/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],5,2).'/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],8,2));
     }
   }
 
@@ -278,7 +284,8 @@ class CustomersSchedulesController extends AppController
         }
 
         $this->CustomerScheduleTrn->delete($id);
-        $this->redirect(array('controller' => "CustomersSchedules", 'action' => "index"));
+        //$this->redirect(array('controller' => "CustomersSchedules", 'action' => "index"));
+        $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/CustomersSchedules"/index');
   }
 
  function move ($id=null,$dayDelta,$minDelta,$allDay)
@@ -300,10 +307,14 @@ class CustomersSchedulesController extends AppController
 
         $this->CustomerScheduleTrn->save($ev); //4 - Save the event with the new data
         //5 - redirect and reload
-        $this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar",
+        /*$this->redirect(array('controller' => "CustomersSchedules", 'action' => "calendar",
              substr($ev['CustomerScheduleTrn']['start_dt'],0,4),
              substr($ev['CustomerScheduleTrn']['start_dt'],5,2),
-             substr($ev['CustomerScheduleTrn']['start_dt'],8,2)));
+             substr($ev['CustomerScheduleTrn']['start_dt'],8,2)));*/
+        $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/CustomersSchedules/calendar/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],0,4).'/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],5,2).'/'.
+        		substr($this->data['CustomerScheduleTrn']['start_dt'],8,2));
       }
   }
 

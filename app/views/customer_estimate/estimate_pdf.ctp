@@ -31,7 +31,7 @@ $obj->setPrintHeader( false );
 $obj->setPrintFooter( false );
 //set auto page breaks
 //$obj->SetAutoPageBreak(false, PDF_MARGIN_BOTTOM);
-
+$obj->SetAutoPageBreak(false);
 
 /**
  * 日本語フォントを指定
