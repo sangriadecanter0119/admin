@@ -501,7 +501,7 @@ JSPROG
 <li><a href="<?php echo $html->url('.') ?>">戻る</a></li>
 <li><a href="<?php echo $html->url('export/excel_business/').$final_sheet_id ?>" id="export_final_sheet">EXCEL出力【業務用】</a></li>
 <li><a href="<?php echo $html->url('export/excel_customer/').$final_sheet_id ?>" id="">EXCEL出力【顧客用】</a></li>
-<!-- <li><a href="<?php echo $html->url('export/excel_business_test/').$final_sheet_id ?>" id="">EXCEL出力【TEST】</a></li> -->
+<li><a href="<?php echo $html->url('export/excel_business_test/').$final_sheet_id ?>" id="">EXCEL出力【TEST】</a></li>
 <li><a href="<?php echo $html->url('fileForm').'/common'    ?>" id='exedit_allFile' class='file_edit_link'>ALL FILE</a></li>
 <li><a href="#" id="snapshot">スナップショット</a></li>
 </ul>
