@@ -377,7 +377,7 @@ function setBasicData($sheet,$contract,$customer,$row_cnt,$common){
     $sheet->setCellValue( 'I'  . $row_cnt, "Mr. ".$contract['ContractTrnView']['grmfs_rm']." ".$contract['ContractTrnView']['grmls_rm']);
     $sheet->setCellValue( 'S'  . $row_cnt, "Ms. ".$contract['ContractTrnView']['brdfs_rm']." ".$contract['ContractTrnView']['brdls_rm']);
     $sheet->setCellValue( 'A'  . $row_cnt, $common->evalForShortDate($contract['ContractTrnView']['wedding_dt']));
-    $sheet->setCellValue( 'AC' . $row_cnt, $customer['CustomerMst']['grm_cell_no']);
+    $sheet->setCellValue( 'AC' . $row_cnt, $customer['CustomerMstView']['grm_cell_no']);
 
     /* 曜日の抽出 */
     $wedding_dt = $common->evalForShortDate($contract['ContractTrnView']['wedding_dt']);
@@ -464,26 +464,26 @@ function setPersonalData($sheet,$customer,$row_cnt,$common){
 	$sheet->mergeCells('Y'. $row_cnt.':AB'.$row_cnt);
 	$sheet->mergeCells('AC'. $row_cnt.':AH'.$row_cnt);
 	/* メインに選択されている方の住所を表示 */
-    if(GROOM == $customer['CustomerMst']['prm_address_flg']){
-       	 $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMst']['grm_address_rm'].'  '.$customer['CustomerMst']['grm_zip_cd'].'  JAPAN');
+    if(GROOM == $customer['CustomerMstView']['prm_address_flg']){
+       	 $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMstView']['grm_address_rm'].'  '.$customer['CustomerMstView']['grm_zip_cd'].'  JAPAN');
     }else{
-    	 $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMst']['brd_address_rm'].'  '.$customer['CustomerMst']['brd_zip_cd'].'  JAPAN');
+    	 $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMstView']['brd_address_rm'].'  '.$customer['CustomerMstView']['brd_zip_cd'].'  JAPAN');
     }
-    $sheet->setCellValue( 'U' . $row_cnt,$common->evalForShortDate($customer['CustomerMst']['grmbirth_dt']));
-    $sheet->setCellValue( 'Y' . $row_cnt,$common->evalForShortDate($customer['CustomerMst']['brdbirth_dt']));
+    $sheet->setCellValue( 'U' . $row_cnt,$common->evalForShortDate($customer['CustomerMstView']['grmbirth_dt']));
+    $sheet->setCellValue( 'Y' . $row_cnt,$common->evalForShortDate($customer['CustomerMstView']['brdbirth_dt']));
     //$sheet->setCellValue( 'AC' . $row_cnt,);
     $row_cnt += 2;
     $sheet->mergeCells('A'. $row_cnt.':K'.$row_cnt);
     $sheet->mergeCells('L'. $row_cnt.':V'.$row_cnt);
     $sheet->mergeCells('W'. $row_cnt.':AB'.$row_cnt);
     $sheet->mergeCells('AC'. $row_cnt.':AH'.$row_cnt);
-    $sheet->setCellValue( 'A'  . $row_cnt,$customer['CustomerMst']['grm_email']);
-    $sheet->setCellValue( 'L'  . $row_cnt,$customer['CustomerMst']['brd_email']);
-    $sheet->setCellValue( 'W'  . $row_cnt,$customer['CustomerMst']['grm_cell_no']);
-    $sheet->setCellValue( 'AC' . $row_cnt,$customer['CustomerMst']['brd_cell_no']);
+    $sheet->setCellValue( 'A'  . $row_cnt,$customer['CustomerMstView']['grm_email']);
+    $sheet->setCellValue( 'L'  . $row_cnt,$customer['CustomerMstView']['brd_email']);
+    $sheet->setCellValue( 'W'  . $row_cnt,$customer['CustomerMstView']['grm_cell_no']);
+    $sheet->setCellValue( 'AC' . $row_cnt,$customer['CustomerMstView']['brd_cell_no']);
     $row_cnt +=2;
     $sheet->mergeCells('A'. $row_cnt.':AH'.$row_cnt);
-    $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMst']['note']);
+    $sheet->setCellValue( 'A' . $row_cnt,$customer['CustomerMstView']['note']);
 
 	return $row_cnt;
 }

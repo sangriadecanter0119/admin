@@ -46,7 +46,7 @@ class CustomerWeddingReserveController extends AppController
 
     $final = $this->FinalSheetTrn->find('all',array('conditions'=>array('customer_id'=>$customer_id),'order'=>array('reg_dt desc','upd_dt desc')));
     /* ファイナルシートテーブルが存在しなければ未成約なので見積画面にリダイレクトする  */
-    if(count($final) == 0){ $this->redirect('/customer_estimate'); }
+    if(count($final) == 0){ $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customer_estimate'); }
 
     //新郎新婦の名前をセット
     $this->set(	"broom",($customer['CustomerMstView']['prm_lastname_flg'] == 0 ? $customer['CustomerMstView']['grmls_kj'] : $customer['CustomerMstView']['brdls_kj']).$customer['CustomerMstView']['grmfs_kj'] );
@@ -140,7 +140,8 @@ class CustomerWeddingReserveController extends AppController
     }
     else
    {
-      $this->redirect('/customer_estimate');
+      //$this->redirect('/customer_estimate');
+      $this->redirect('https://'.$_SERVER['HTTP_HOST'].'/admin/customer_estimate');
     }
 
     //新郎新婦の名前をセット
@@ -472,7 +473,7 @@ class CustomerWeddingReserveController extends AppController
     $render_name = null;
 
     $customer_id = $this->Session->read('customer_id');
- 	$customer = $this->CustomerMst->findById($customer_id);
+ 	$customer = $this->CustomerMstView->findById($customer_id);
     $this->set(	"customer",$customer);
     $contract = $this->ContractTrnView->find('all',array('conditions'=>array('customer_id'=>$customer_id)));
 
@@ -491,7 +492,7 @@ class CustomerWeddingReserveController extends AppController
    		         $save_filename = "FinalCustomer".$file_name.".xlsx";
                  $render_name = "excel_customer";
    	       	     break;
-   	case "EXCEL_BUSINESS_TEST":
+        case "EXCEL_BUSINESS_TEST":
    	  	     	 $temp_filename = "final_test_template.xlsx";
    	       	     $save_filename = "Final_Test_".$file_name.".xlsx";
    	       	     $render_name = "excel_test";
@@ -542,19 +543,17 @@ class CustomerWeddingReserveController extends AppController
       $this->set('av',$this->AvTrnView->find('all',array('conditions'=>array('final_sheet_id'=>$final_sheet_id))));
       $this->set('album',$this->AlbumTrnView->find('all',array('conditions'=>array('final_sheet_id'=>$final_sheet_id),'order'=>'id,album_dtl_id')));
       $this->set('paper',$this->PaperTrnView->find('all',array('conditions'=>array('final_sheet_id'=>$final_sheet_id))));
-      //画像ファイルとベンダーリストの取得
+       //画像ファイルとベンダーリストの取得
       if(strtoupper($file_type) == "EXCEL_BUSINESS"){
         $this->set('customer_files',$this->_getAllFileByCustomerId());
         $this->set("vendor_list", $this->FinalSheetService->getVendorList($final_sheet_id));
       }
-      if(strtoupper($file_type) == "EXCEL_BUSINESS_TEST"){
+      elseif(strtoupper($file_type) == "EXCEL_BUSINESS_TEST"){
       	$this->set('customer_files',$this->_getAllFileByCustomerId());
       	$this->set("vendor_list", $this->FinalSheetService->getVendorList($final_sheet_id));
 
       	$estimate = $this->EstimateTrn->find('first',array('conditions'=>array('customer_id'=>$customer_id,'adopt_flg'=>1,'del_kbn'=>0)));
-
       	$this->set("estimate_dtl", $this->EstimateDtlTrnView->find('all',array('conditions'=>array('estimate_id'=>$estimate['EstimateTrn']['id']),'order'=>array('no'=>'asc'))));
-
       }
     }
    $this->layout = false;
