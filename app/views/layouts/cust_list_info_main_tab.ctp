@@ -62,6 +62,7 @@
                 <td><a class="<?php echo $sub_menu_customers_contract_list; ?>"   href="<?php echo $html->url('/customersContractList') ?>">顧客挙式・約定一覧</a></td>
                 <td><a class="<?php echo $sub_menu_attendant_state; ?>"           href="<?php echo $html->url('/attendantState') ?>">担当者別各月状況一覧</a></td>
 	            <td><a class="<?php echo $sub_menu_customers_by_each_attendant_list; ?>"  href="<?php echo $html->url('/CustomersByEachAttendantList') ?>">担当者別顧客一覧</a></td>
+	            <td><a class="<?php echo $sub_menu_wedding_reservations; ?>"      href="<?php echo $html->url('/weddingReservations') ?>" >挙式場予約状況</a></td>
          </tr>
     </table>
 	<div class="clearer"></div>

@@ -31,7 +31,6 @@ $obj->setPrintHeader( false );
 $obj->setPrintFooter( false );
 //set auto page breaks
 //$obj->SetAutoPageBreak(false, PDF_MARGIN_BOTTOM);
-$obj->SetAutoPageBreak(false);
 
 /**
  * 日本語フォントを指定
@@ -165,10 +164,10 @@ $html.= '<div><table border="1" cellspacing="0" cellpadding="2">
     for($i=0;$i < count($estimate_dtl);$i++)
     {
        if($estimate_dtl[$i]['EstimateDtlTrnView']['del_kbn']==false){
-         $html .= '<tr><td>'                    . $estimate_dtl[$i]['EstimateDtlTrnView']['goods_ctg_nm']            . '</td>'.
-                      '<td>'                    . '【'. $estimate_dtl[$i]['EstimateDtlTrnView']['goods_kbn_nm'].'】'.'<br />&nbsp;&nbsp;'.str_replace ("\n", "<br />&nbsp;&nbsp;", $estimate_dtl[$i]['EstimateDtlTrnView']['sales_goods_nm']).'</td>'.
-                      '<td align="right">￥'    . number_format($estimate_dtl[$i]['EstimateDtlTrnView']['yen_price']). '</td>'.
-                      '<td align="right">'      . (int)$estimate_dtl[$i]['EstimateDtlTrnView']['num']                 . '</td>'.
+         $html .= '<tr><td>'                 . $estimate_dtl[$i]['EstimateDtlTrnView']['goods_ctg_nm']            . '</td>'.
+                      '<td>'                 . '【'. $estimate_dtl[$i]['EstimateDtlTrnView']['goods_kbn_nm'].'】'.'<br />&nbsp;&nbsp;'.str_replace ("\n", "<br />&nbsp;&nbsp;", $estimate_dtl[$i]['EstimateDtlTrnView']['sales_goods_nm']).'</td>'.
+                      '<td align="right">￥' . number_format($estimate_dtl[$i]['EstimateDtlTrnView']['yen_price'])        . '</td>'.
+                      '<td align="right">'   . (int)$estimate_dtl[$i]['EstimateDtlTrnView']['num']                       . '</td>'.
                       '<td align="right">￥' . number_format($estimate_dtl[$i]['EstimateDtlTrnView']['yen_price'] * (int)$estimate_dtl[$i]['EstimateDtlTrnView']['num']) . '</td></tr>';
        }
     }

@@ -345,6 +345,7 @@ class CustomersSchedulesController extends AppController
  	$this->set("sub_menu_customers_schedules","current");
  	$this->set("sub_menu_customers_contract_list","");
  	$this->set("sub_menu_attendant_state","");
+ 	$this->set("sub_menu_wedding_reservations","");
 
  	$this->set("sub_title","顧客スケジュール");
  	$this->set("user",$this->Auth->user());

@@ -978,15 +978,16 @@ $(function(){
 	     $("#foreign_unit_cost"+ current_line_no).removeClass("changedField");
 	  }
 
-	  //単価(邦貨)
-	  unit_price = unit_price * sales_rate;
+	  //単価(邦貨) *単価をここで四捨五入する
+	  unit_price = Common.removeComma(Common.addYenComma(unit_price * sales_rate));
 	  //全価(邦貨)
 	  amount_price = unit_price * num;
-	  //原価(邦貨)
-	  unit_cost =  unit_cost * cost_rate;
 
+	  //原価(邦貨) *原価をここで四捨五入する
+	  unit_cost =   Common.removeComma(Common.addYenComma(unit_cost * cost_rate));
 	  //全原価(邦貨)
 	  amount_cost = unit_cost * num;
+
 	  //利益(邦貨)
 	  net = amount_price - amount_cost;
 	  //aw share(邦貨)

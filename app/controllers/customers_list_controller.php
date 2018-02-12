@@ -229,6 +229,7 @@ class CustomersListController extends AppController
  	$this->set("sub_menu_customers_by_each_attendant_list","");
  	$this->set("sub_menu_customers_contract_list","");
  	$this->set("sub_menu_attendant_state","");
+ 	$this->set("sub_menu_wedding_reservations","");
 
  	$this->set("sub_title","顧客一覧");
  	$this->set("user",$this->Auth->user());
@@ -294,6 +295,7 @@ class CustomersListController extends AppController
  	  $this->set("sub_menu_customers_by_each_attendant_list","");
  	  $this->set("sub_menu_customers_contract_list","");
  	  $this->set("sub_menu_attendant_state","");
+ 	  $this->set("sub_menu_wedding_reservations","");
 
  	  $this->set("sub_title","顧客追加");
  	  $this->set("user",$this->Auth->user());

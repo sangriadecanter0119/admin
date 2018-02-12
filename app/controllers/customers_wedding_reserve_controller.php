@@ -134,6 +134,7 @@ class CustomersWeddingReserveController extends AppController
  	$this->set("sub_menu_customers_by_each_attendant_list","");
  	$this->set("sub_menu_customers_contract_list","");
  	$this->set("sub_menu_attendant_state","");
+ 	$this->set("sub_menu_wedding_reservations","");
 
  	$this->set("sub_title","挙式予約状況");
  	$this->set("user",$this->Auth->user());

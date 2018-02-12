@@ -70,10 +70,10 @@ class CustomersByEachAttendantListController extends AppController
  	//翌月以降(翌月は含まない)の挙式データ
  	$this->set('future_wedding_data',$this->CustomerMst->GetCustomersByMoreThanWedding(date('Y-m', strtotime(date("Y-m").' +1 month')),$first_contact_person,$process_person));
 
- 	/* 検索年月を設定 */   
+ 	/* 検索年月を設定 */
     $months = array();
     array_push($months, date("Y-m"));
-   	for($i=1;$i <= 24;$i++){   	   
+   	for($i=1;$i <= 24;$i++){
         array_push($months, date("Y-m", strtotime("-".$i." month")));
     }
  	$this->set("search_dt_list",$months);
@@ -98,6 +98,7 @@ class CustomersByEachAttendantListController extends AppController
  	$this->set("sub_menu_customers_by_each_attendant_list","current");
  	$this->set("sub_menu_customers_contract_list","");
  	$this->set("sub_menu_attendant_state","");
+ 	$this->set("sub_menu_wedding_reservations","");
 
     $this->set("sub_title","見積提示済み顧客一覧");
     $this->set("user",$this->Auth->user());

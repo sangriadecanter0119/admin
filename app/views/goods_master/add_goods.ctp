@@ -112,7 +112,19 @@ $(function(){
 	  var cost9  = isFinite($("#cost9").val()) && $("#cost9").val() != ""  ? parseFloat($("#cost9").val())  : 0;
 	  var cost10 = isFinite($("#cost10").val()) && $("#cost10").val() != "" ? parseFloat($("#cost10").val()) : 0;
 
-	  var costTotal = cost1 + cost2 + cost3 + cost4 + cost5 + cost6 + cost7 + cost8 + cost9 + cost10;
+      cost1  = new BigNumber(cost1);
+	  cost2  = new BigNumber(cost2);
+	  cost3  = new BigNumber(cost3);
+	  cost4  = new BigNumber(cost4);
+	  cost5  = new BigNumber(cost5);
+	  cost6  = new BigNumber(cost6);
+	  cost7  = new BigNumber(cost7);
+	  cost8  = new BigNumber(cost8);
+	  cost9  = new BigNumber(cost9);
+	  cost10 = new BigNumber(cost10);
+
+	  var costTotal = cost1.plus(cost2).plus(cost3).plus(cost4).plus(cost5).
+	                  plus(cost6).plus(cost7).plus(cost8).plus(cost9).plus(cost10);
 	  var netTax = new BigNumber(tax).plus(1).times(costTotal).toPrecision();
 
       var costIncluded = new BigNumber(serviceRate).plus(1).times(netTax).round(2).toPrecision();
@@ -349,9 +361,9 @@ echo $html->scriptBlock($script,array('inline'=>false,'safe'=>true));
              <th>Tax(%)</th>
              <td><input type="text" name="data[GoodsMst][tax]" id="tax" class="validate[custom[number],max[100],maxSize[5]] inputnumeric culculate digit" value="" /></td>
              <th>Service Rate(%)</th>
-             <td><input type="text" name="data[GoodsMst][service_rate]" id="service_rate" class="validate[custom[number],max[100],maxSize[5]] inputnumeric culculate number digit" value="" /></td>
+             <td><input type="text" name="data[GoodsMst][service_rate]" id="service_rate" class="validate[custom[number],maxSize[5]] inputnumeric culculate number digit" value="" /></td>
              <th>Profit Rate(%)</th>
-             <td><input type="text" name="data[GoodsMst][profit_rate]" id="profit_rate" class="validate[custom[number],max[100],maxSize[5]] inputnumeric culculate number digit" value="" /></td>
+             <td><input type="text" name="data[GoodsMst][profit_rate]" id="profit_rate" class="validate[custom[number],maxSize[5]] inputnumeric culculate number digit" value="" /></td>
           </tr>
 
           <tr>
