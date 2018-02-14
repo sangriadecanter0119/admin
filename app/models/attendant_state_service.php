@@ -21,6 +21,8 @@ class AttendantStateService extends AppModel {
   	    for($i=0;$i < count($data);$i++){
   	    	$estimate_amount = $estimate->getCustomerEstimateSummary($data[$i]["ContractTrnView"]["customer_id"]);
   	    	$data[$i]["ContractTrnView"]["estimate_amount"] = $estimate_amount["total"];
+  	    	$data[$i]["ContractTrnView"]["estimate_profit"] = $estimate_amount["profit"];
+    		$data[$i]["ContractTrnView"]["estimate_profit_rate"] = $estimate_amount["profit_rate"];
   	    }
   	    return $data;
     }
@@ -44,6 +46,8 @@ class AttendantStateService extends AppModel {
     	for($i=0;$i < count($data);$i++){
     		$estimate_amount = $estimate->getCustomerEstimateSummary($data[$i]["ContractTrnView"]["customer_id"]);
     		$data[$i]["ContractTrnView"]["estimate_amount"] = $estimate_amount["total"];
+    		$data[$i]["ContractTrnView"]["estimate_profit"] = $estimate_amount["profit"];
+    		$data[$i]["ContractTrnView"]["estimate_profit_rate"] = $estimate_amount["profit_rate"];
     	}
     	return $data;
     }

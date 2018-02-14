@@ -747,15 +747,18 @@ class EstimateService extends AppModel {
     	$discount1 = 0;
     	$discount2 = 0;
     	$total = 0;
+    	$costTotal = 0;
 
     	for($i=0; $i < count($estimate_line_data);$i++){
 
     		$tmp = 0;
 
     		if($estimate_line_data[$i]['EstimateDtlTrn']['currency_kbn'] == FOREIGN){
-    			$tmp = $estimate_line_data[$i]['EstimateDtlTrn']['num'] * ($estimate_line_data[$i]['EstimateDtlTrn']['sales_price'] * $estimate_line_data[$i]['EstimateDtlTrn']['sales_exchange_rate']);
+    			$tmp = $estimate_line_data[$i]['EstimateDtlTrn']['num'] * round(($estimate_line_data[$i]['EstimateDtlTrn']['sales_price'] * $estimate_line_data[$i]['EstimateDtlTrn']['sales_exchange_rate']));
+    			$costTotal += $estimate_line_data[$i]['EstimateDtlTrn']['num'] * round(($estimate_line_data[$i]['EstimateDtlTrn']['sales_cost'] * $estimate_line_data[$i]['EstimateDtlTrn']['cost_exchange_rate']));
     		}else{
     			$tmp = $estimate_line_data[$i]['EstimateDtlTrn']['num'] * $estimate_line_data[$i]['EstimateDtlTrn']['sales_price'];
+    			$costTotal += $estimate_line_data[$i]['EstimateDtlTrn']['num'] * $estimate_line_data[$i]['EstimateDtlTrn']['sales_cost'];
     		}
     		$subtotal += $tmp;
 
@@ -767,17 +770,22 @@ class EstimateService extends AppModel {
     	}
 
     	$subtotal = round($subtotal);
+    	$costTotal = round($costTotal);
     	$tax = round($subtotal_for_tax * $estimate_header_data['EstimateTrn']['hawaii_tax_rate']);
     	$service_fee = round($subtotal * $estimate_header_data['EstimateTrn']['service_rate']);
     	$discount1 = round(($subtotal + $tax + $service_fee) *  $estimate_header_data['EstimateTrn']['discount_rate']);
     	$discount2 = $estimate_header_data['EstimateTrn']['discount'];
 
+    	$sum = $subtotal + $tax + $service_fee - $discount1 - $discount2;
     	return array('subtotal'=>$subtotal,
     			'tax'=>$tax,
     			'service_fee'=>$service_fee,
     			'discount_rate_fee'=>$discount1,
     			'discount_fee'=>$discount2,
-    			'total'=> $subtotal + $tax + $service_fee - $discount1 - $discount2
+    			'cost_total'=>$costTotal,
+    			'total'=> $sum,
+    			'profit' =>$subtotal - $costTotal,
+    			'profit_rate'=> $subtotal > 0 ? round((($subtotal - $costTotal) / $subtotal) * 100 , 2) : 0
     	);
     }
 
@@ -803,7 +811,9 @@ class EstimateService extends AppModel {
     		$tmp = 0;
 
     		if($estimate_line_data[$i]['EstimateDtlTrn']['currency_kbn'] == DOMESTIC){
-    			$tmp = ($estimate_line_data[$i]['EstimateDtlTrn']['num'] * ($estimate_line_data[$i]['EstimateDtlTrn']['sales_price']) / $estimate_line_data[$i]['EstimateDtlTrn']['sales_exchange_rate']);
+    			if($estimate_line_data[$i]['EstimateDtlTrn']['sales_exchange_rate'] > 0){
+    				$tmp = ($estimate_line_data[$i]['EstimateDtlTrn']['num'] * ($estimate_line_data[$i]['EstimateDtlTrn']['sales_price']) / $estimate_line_data[$i]['EstimateDtlTrn']['sales_exchange_rate']);
+    			}
     		}else{
     			$tmp = $estimate_line_data[$i]['EstimateDtlTrn']['num'] * $estimate_line_data[$i]['EstimateDtlTrn']['sales_price'];
     		}
